@@ -1,19 +1,27 @@
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.SQLException;
 
 import java.util.Date;
 import java.util.ArrayList;
 
+import java.text.SimpleDateFormat;
+
+import java.io.IOException;
 import java.io.File;
+
+import jxl.*;
+import jxl.read.biff.BiffException;
 
 public class PayrollSystemModel {
 
+	private SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private Connection con;
 	
 	public PayrollSystemModel(Connection con){
 		this.con = con;
-		private SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 	}
 	
 	public boolean addPersonnel(File fileDirectory) {
@@ -165,7 +173,9 @@ public class PayrollSystemModel {
         System.out.println(personnels.size());
 
         //ADD TO DATABASE
-        for( Personnel personnel: personnels ){
+		Statement stmt = null;
+		String sql;
+        /*for( Personnel personnel: personnels ){
             try{
                 sql="INSERT INTO `Payroll System`.`Personnel`\n" +
                 "(`Name`,\n" +
@@ -197,25 +207,8 @@ public class PayrollSystemModel {
                 stmt=con.prepareStatement(sql);
                 stmt.execute(sql);
             } catch ( SQLException ex ){
-                sql ="UPDATE `Payroll System`.`Personnel`\n" +
-                "SET\n" +
-                "`Name` = '"+ personnel.getName() +"',\n" +
-                "`Assignment` = '"+personnel.getAssignment()+"',\n" +
-                "`Position` = '"+personnel.getPosition()+"',\n" +
-                "`EducationalAttainment` = '"+personnel.getEducationalAttainment()+"',\n" +
-                "`EmployeeStatus` = '"+personnel.getEmployeeStatus()+"',\n" +
-                "`DailyRate` = '"+personnel.getDailyRate()+"',\n" +
-                "`ColaRate` = '"+personnel.getColaRate()+"',\n" +
-                "`MonthlyRate` = '"+personnel.getMonthlyRate()+"',\n" +
-                "`SSS` = '"+personnel.getSSS()+"',\n" +
-                "`PHIC` = '"+personnel.getPHIC()+"',\n" +
-                "`HDMF` = '"+personnel.getHDMF()+"',\n" +
-                "`TaxStatus` = '"+personnel.getTaxStatus()+"'\n" +
-                "WHERE `TIN` = \""+personnel.getTIN()+"\";";
-                stmt=con.prepareStatement(sql);
-                stmt.execute(sql);
             }
-        }
+        }*/
 		return true;
 	}
 	
@@ -338,8 +331,9 @@ public class PayrollSystemModel {
 		}
 
         //ADD TO DATABASE
-
-        for(Personnel personnel: personnels){
+		Statement stmt = null;
+		String sql;
+        /*for(Personnel personnel: personnels){
             if(personnel.getDTR()!=null){
                 
                 try{
@@ -370,26 +364,10 @@ public class PayrollSystemModel {
                     stmt=con.prepareStatement(sql);
                     stmt.execute(sql);
 
-                } catch(SQLException ex) {
-                    sql="UPDATE `Payroll System`.`DTR`\n" +
-                    "SET\n" +
-                    "`RHW` = " + personnel.getDTR().getRegularHoursWorks() + ",\n" +
-                    "`ROT` = "+personnel.getDTR().getRegularOvertime()+",\n" +
-                    "`RNSD` = "+personnel.getDTR().getRegularNightShiftDifferential()+",\n" +
-                    "`SH` = "+personnel.getDTR().getSpecialHoliday()+",\n" +
-                    "`SHOT` = "+personnel.getDTR().getSpecialHolidayOvertime()+",\n" +
-                    "`SHNSD` = "+personnel.getDTR().getSpecialHolidayNightShiftDifferential()+",\n" +
-                    "`LH` = "+personnel.getDTR().getLegalHoliday()+",\n" +
-                    "`LHOT` = "+personnel.getDTR().getLegalHolidayOvertime()+",\n" +
-                    "`LHNSD` = "+personnel.getDTR().getLegalHolidayNightShiftDifferential()+"\n" +
-                    "WHERE `PeriodStartDate` = \"" + sdf.format(personnel.getDTR().getPeriodStartDate()) + "\" AND"
-                            + " `Personnel` = \""+personnel.getTIN()+"\";";
-                    stmt=con.prepareStatement(sql);
-                    stmt.execute(sql);
-                
+                } catch(SQLException ex) {     
                 }
             }
-        }
+        }*/
 	}
 	
 	public void removePersonnel(String client){
@@ -410,7 +388,7 @@ public class PayrollSystemModel {
             "('"+ adjustment +"',\n" +
             "'"+ reason +"',\n" +
             "'"+ periodStartDate +"',\n" +
-            "'"+ TIN +"');";
+            "'"+ tin +"');";
         
         stmt=con.prepareStatement(sql);
         stmt.execute(sql);
@@ -419,7 +397,7 @@ public class PayrollSystemModel {
 	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate){
 		Statement stmt = null;
         String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
-            "WHERE `TIN` = \""+ TIN+"\" AND `PeriodStartDate` =\""+ periodStartDate+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
+            "WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ periodStartDate+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
         stmt=con.prepareStatement(sql);
         stmt.execute(sql);
 	}
