@@ -176,6 +176,17 @@ public class PayrollSystemModel {
 		Statement stmt = null;
 		String sql;
         for( Personnel personnel: personnels ){
+        	try{
+                sql="INSERT INTO `Payroll System`.`Client`\n" +
+                "(`Name`)\n" +
+                "VALUES\n" +
+                "(\""+personnel.getAssignment() +"\");";
+                stmt=con.prepareStatement(sql);
+                stmt.execute(sql);
+                
+            } catch (SQLException ex) {
+            }
+            
             try{
                 sql="INSERT INTO `Payroll System`.`Personnel`\n" +
                 "(`Name`,\n" +
