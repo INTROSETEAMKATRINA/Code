@@ -80,4 +80,13 @@ public class Personnel {
 	public void setDTR(DTR dtr){
 		this.dtr = dtr;
 	}
+        public String getTIN(){
+                return tin;
+        }
+        public String getEmployeeStatus(){
+                return employeeStatus;
+        }
+        public float getMonthlyRate(){
+                return monthlyRate;
+        }
 }

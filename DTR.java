@@ -89,4 +89,8 @@ public class DTR {
 	public void setPeriodStartDate(Date periodStartDate){
 		this.periodStartDate = periodStartDate;
 	}
+        public String getTIN(){
+                return tin;
+        }
+        
 }

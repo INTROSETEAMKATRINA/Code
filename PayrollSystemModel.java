@@ -25,12 +25,12 @@ public class PayrollSystemModel {
 	}
 	
 	public boolean addPersonnel(File fileDirectory) {
-		try{
+            ArrayList<Personnel> personnels = new ArrayList<Personnel>();;
+            try{
 			File file = fileDirectory;
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
 
-			ArrayList<Personnel> personnels = new ArrayList<Personnel>();;
 			String name,position,assignment,employeeStatus,tin,taxStatus;
 			float sss, sssLoan, phic, hdmf, hdmfLoan, payrollAdvance, houseRental, uniformAndOthers;
 			float dailyRate, colaRate, monthlyRate;
@@ -175,50 +175,42 @@ public class PayrollSystemModel {
         //ADD TO DATABASE
 		Statement stmt = null;
 		String sql;
-        /*for( Personnel personnel: personnels ){
+        for( Personnel personnel: personnels ){
             try{
                 sql="INSERT INTO `Payroll System`.`Personnel`\n" +
                 "(`Name`,\n" +
                 "`Assignment`,\n" +
                 "`Position`,\n" +
-                "`EducationalAttainment`,\n" +
                 "`EmployeeStatus`,\n" +
                 "`DailyRate`,\n" +
                 "`ColaRate`,\n" +
                 "`MonthlyRate`,\n" +
-                "`SSS`,\n" +
                 "`TIN`,\n" +
-                "`PHIC`,\n" +
-                "`HDMF`,\n" +
                 "`TaxStatus`)\n" +
                 "VALUES ('"+ personnel.getName() +"',"
                         + " '"+personnel.getAssignment()+"',"
                         + " '"+personnel.getPosition()+"',"
-                        + " '"+personnel.getEducationalAttainment()+"',"
                         + " '"+personnel.getEmployeeStatus()+"',"
                         + " '"+personnel.getDailyRate()+"',"
                         + " '"+personnel.getColaRate()+"',"
                         + " '"+personnel.getMonthlyRate()+"',"
-                        + " '"+personnel.getSSS()+"',"
                         + " '"+personnel.getTIN()+"',"
-                        + " '"+personnel.getPHIC()+"',"
-                        + " '"+personnel.getHDMF()+"',"
                         + " '"+personnel.getTaxStatus()+"');";
                 stmt=con.prepareStatement(sql);
                 stmt.execute(sql);
-            } catch ( SQLException ex ){
+            } catch (SQLException ex){
             }
-        }*/
+        }
 		return true;
 	}
 	
 	public void addDTR(File fileDirectory) {
-		try{
+                ArrayList<DTR> dtrs = new ArrayList<DTR>();
+                try{
 			File file = fileDirectory;
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
 
-			ArrayList<DTR> dtrs = new ArrayList<DTR>();;
 			String name,tin;
 			float regularHoursWorks, regularOvertime, regularNightShiftDifferential,
 				  specialHoliday, specialHolidayOvertime, specialHolidayNightShiftDifferential,
@@ -329,12 +321,10 @@ public class PayrollSystemModel {
 
 		}catch(Exception e){
 		}
-
         //ADD TO DATABASE
 		Statement stmt = null;
 		String sql;
-        /*for(Personnel personnel: personnels){
-            if(personnel.getDTR()!=null){
+            for(DTR dtr: dtrs){
                 
                 try{
                     sql= "INSERT INTO `Payroll System`.`DTR`\n" +
@@ -350,24 +340,23 @@ public class PayrollSystemModel {
                     "`PeriodStartDate`,\n" +
                     "`Personnel`)\n" +
                     "VALUES\n" +
-                    "('"+ personnel.getDTR().getRegularHoursWorks() +"',\n" +
-                    "'"+ personnel.getDTR().getRegularOvertime() +"',\n" +
-                    "'"+ personnel.getDTR().getRegularNightShiftDifferential() +"',\n" +
-                    "'"+ personnel.getDTR().getSpecialHoliday() +"',\n" +
-                    "'"+ personnel.getDTR().getSpecialHolidayOvertime() +"',\n" +
-                    "'"+ personnel.getDTR().getSpecialHolidayNightShiftDifferential() +"',\n" +
-                    "'"+ personnel.getDTR().getLegalHoliday() +"',\n" +
-                    "'"+ personnel.getDTR().getLegalHolidayOvertime() +"',\n" +
-                    "'"+ personnel.getDTR().getLegalHolidayNightShiftDifferential() +"',\n" +
-                    "'"+ sdf.format(personnel.getDTR().getPeriodStartDate()) +"',\n" +
-                    "'"+ personnel.getTIN() +"');";
+                    "('"+ dtr.getRegularHoursWorks() +"',\n" +
+                    "'"+ dtr.getRegularOvertime() +"',\n" +
+                    "'"+ dtr.getRegularNightShiftDifferential() +"',\n" +
+                    "'"+ dtr.getSpecialHoliday() +"',\n" +
+                    "'"+ dtr.getSpecialHolidayOvertime() +"',\n" +
+                    "'"+ dtr.getSpecialHolidayNightShiftDifferential() +"',\n" +
+                    "'"+ dtr.getLegalHoliday() +"',\n" +
+                    "'"+ dtr.getLegalHolidayOvertime() +"',\n" +
+                    "'"+ dtr.getLegalHolidayNightShiftDifferential() +"',\n" +
+                    "'"+ sdf.format(dtr.getPeriodStartDate()) +"',\n" +
+                    "'"+ dtr.getTIN() +"');";
                     stmt=con.prepareStatement(sql);
                     stmt.execute(sql);
 
                 } catch(SQLException ex) {     
                 }
             }
-        }*/
 	}
 	
 	public void removePersonnel(String client){
@@ -377,9 +366,11 @@ public class PayrollSystemModel {
 		
 	}
 
-	public void addAdjustment(String reason, float adjustment, String tin, Date periodStartDate){
-	    Statement stmt = null;
-        String sql="INSERT INTO `Payroll System`.`AdjustmentsAndDeductions`\n" +
+	public void addAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
+            Statement stmt = null;
+	    try { 
+
+            String sql="INSERT INTO `Payroll System`.`AdjustmentsAndDeductions`\n" +
             "(`amount`,\n" +
             "`type`,\n" +
             "`PeriodStartDate`,\n" +
@@ -387,19 +378,25 @@ public class PayrollSystemModel {
             "VALUES\n" +
             "('"+ adjustment +"',\n" +
             "'"+ reason +"',\n" +
-            "'"+ periodStartDate +"',\n" +
+            "'"+ sdf.format(periodStartDate) +"',\n" +
             "'"+ tin +"');";
         
-        stmt=con.prepareStatement(sql);
-        stmt.execute(sql);
+            stmt=con.prepareStatement(sql);
+            stmt.execute(sql);
+            } catch (SQLException ex) {
+            
+            }
 	}
 	
-	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate){
-		Statement stmt = null;
-        String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
-            "WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ periodStartDate+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
-        stmt=con.prepareStatement(sql);
-        stmt.execute(sql);
+	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
+            Statement stmt = null;
+            try{            
+            String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
+            "WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ sdf.format(periodStartDate)+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
+            stmt=con.prepareStatement(sql);
+            stmt.execute(sql);
+            } catch (SQLException ex) {
+            }
 	}
 	
 	public int changePassword(String oldPass, String newPass){
