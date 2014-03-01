@@ -229,16 +229,30 @@ public class PayrollSystemModel {
                         + " '"+personnel.getTaxStatus()+"');";
                 stmt=con.prepareStatement(sql);
                 stmt.execute(sql);
-
-                this.addAdjustment("SSS", personnel.getSSS(), personnel.getTIN(), periodStartDate);
-                this.addAdjustment("SSS Loan", personnel.getSSS(), personnel.getTIN(), periodStartDate);
-                this.addAdjustment("PHIC", personnel.getPHIC(), personnel.getTIN(), periodStartDate);
-                this.addAdjustment("HDMF", personnel.getHDMF(), personnel.getTIN(), periodStartDate);
-                this.addAdjustment("HDMF Loan", personnel.getHDMFLoan(), personnel.getTIN(), periodStartDate);
-                this.addAdjustment("Payroll Advance", personnel.getPayrollAdvance(), personnel.getTIN(), periodStartDate);
-                this.addAdjustment("House Rental", personnel.getHouseRental(), personnel.getTIN(), periodStartDate);
-                this.addAdjustment("Uniform and Others", personnel.getUniformAndOthers(), personnel.getTIN(), periodStartDate);
-
+                if(personnel.getSSS()!=0){
+                    this.addAdjustment("SSS", personnel.getSSS(), personnel.getTIN(), periodStartDate);
+                }
+                if(personnel.getSSSLoan()!=0){                
+                    this.addAdjustment("SSS Loan", personnel.getSSSLoan(), personnel.getTIN(), periodStartDate);
+                }
+                if(personnel.getPHIC()!=0){
+                    this.addAdjustment("PHIC", personnel.getPHIC(), personnel.getTIN(), periodStartDate);
+                }
+                if(personnel.getHDMF()!=0){
+                    this.addAdjustment("HDMF", personnel.getHDMF(), personnel.getTIN(), periodStartDate);
+                }
+                if(personnel.getHDMFLoan()!=0){
+                    this.addAdjustment("HDMF Loan", personnel.getHDMFLoan(), personnel.getTIN(), periodStartDate);
+                }
+                if(personnel.getPayrollAdvance()!=0){
+                    this.addAdjustment("Payroll Advance", personnel.getPayrollAdvance(), personnel.getTIN(), periodStartDate);
+                }
+                if(personnel.getHouseRental()!=0){
+                    this.addAdjustment("House Rental", personnel.getHouseRental(), personnel.getTIN(), periodStartDate);
+                }
+                if(personnel.getUniformAndOthers()!=0){
+                    this.addAdjustment("Uniform and Others", personnel.getUniformAndOthers(), personnel.getTIN(), periodStartDate);
+                }
             } catch (SQLException ex){
             }
         }
