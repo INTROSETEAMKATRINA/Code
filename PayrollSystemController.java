@@ -48,7 +48,7 @@ public class PayrollSystemController{
 		addAdjustments = new AddAdjustmentsView(model);
 		viewSummaryReport = new ViewSummaryReportView(model);
 		changePassword = new ChangePasswordView();
-		generatePayslips = new GeneratePayslipsView();
+		generatePayslips = new GeneratePayslipsView(model);
 		view.setAddPersonnelListener(new addPersonnelListener());
 		view.setAddDTRListener(new addDTRListener());
 		view.setAddAdjustmentListener(new addAdjustmentListener());
@@ -65,6 +65,7 @@ public class PayrollSystemController{
 		removeAdjustments.setCancelListener(new cancelRemoveAdjustmentButtonListener());
 		removeAdjustments.setClientListener(new clientListRemoveAdjustmentListener());
 		removeAdjustments.setPersonnelListener(new personnelListRemoveAdjustmentListener());
+		generatePayslips.setSelectFileListener(new fileSaverGeneratePayslipsButtonListener());
 	}
 
 	//Main Menu Buttons Listeners
@@ -87,7 +88,8 @@ public class PayrollSystemController{
 		public void actionPerformed(ActionEvent e) {
 			File f = view.fileChooser();
 			if(f!=null)
-				model.addDTR(f, periodStartDate);
+				if(model.addDTR(f, periodStartDate))
+					view.showSuccess();
 			else
 				System.out.println("No file chosen");
 		}
@@ -126,6 +128,7 @@ public class PayrollSystemController{
 	//Generate payslips button in main menu
 	class generatePayslipsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
+			generatePayslips.updateClientList();
 			generatePayslips.setVisible(true);
 		}
 	}
@@ -280,13 +283,13 @@ public class PayrollSystemController{
 	class fileSaverGeneratePayslipsButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			generatePayslips.setFileDirectory(generatePayslips.fileSaver());
-			/* place in fileSaver() in view
-				//Create a file chooser
-				JFileChooser fc = new JFileChooser();
-				//In response to a button click:
-				int returnVal = fc.showSaveDialog(this);
-				return fc.getSelectedFile();
-			*/
+		}
+	}
+	
+	//client list combo box listener to automatically change avaiable dates
+	class clientListGeneratePayslipsListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			generatePayslips.updateDateList();
 		}
 	}
 }
