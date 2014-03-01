@@ -4,11 +4,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -18,21 +19,25 @@ import javax.swing.JFileChooser;
 
 import java.io.File;
 
-public class GeneratePayslipsView extends JPanel {
+import java.util.ArrayList;
 
+public class GeneratePayslipsView extends JFrame {
+
+	private PayrollSystemModel model;
+	
 	private File file;
 	
-	private JComboBox timePerCBox;
-	private JComboBox clientCBox;
+	private JComboBox<String> timePerCBox;
+	private JComboBox<String> clientCBox;
 	
-	private JComboBox extCBox;
-	private JTextField saveTxtField;
 	
 	private JButton selSaveBtn;
 	
 	private JTextPane statusTxtPane;
 	private JScrollPane statusPane;
 	
+	private JLabel extensionLbl;
+	private JLabel saveTxtLbl;
 	private JLabel titleLbl;
 	private JLabel timeperiodLbl;
 	private JLabel selectClientLbl;
@@ -46,18 +51,19 @@ public class GeneratePayslipsView extends JPanel {
 	private JScrollPane personnelPane;
 	private JTable personnelTable;
 	
-	public GeneratePayslipsView()
-	{
+	public GeneratePayslipsView(PayrollSystemModel model){
+		this.model = model;
+		
 		titleLbl = new JLabel("Generate Payslips");
 		
 		statusTxtPane = new JTextPane();
 		statusPane = new JScrollPane(statusTxtPane);
 		
-		timePerCBox = new JComboBox();
-		clientCBox = new JComboBox();
+		timePerCBox = new JComboBox<String>();
+		clientCBox = new JComboBox<String>();
 		
-		extCBox = new JComboBox();
-		saveTxtField = new JTextField();
+		extensionLbl = new JLabel(".csv");
+		saveTxtLbl = new JLabel();
 		selSaveBtn = new JButton("...");
 		
 		timeperiodLbl = new JLabel("Select Time Period: ");
@@ -75,14 +81,15 @@ public class GeneratePayslipsView extends JPanel {
 		modifyUI();
 	}
 	
-	private void modifyUI()
-	{
-setLayout(new GridBagLayout());	
+	private void modifyUI(){
+		setSize(1064, 720);
+		setLocationRelativeTo(null);
+		setLayout(new GridBagLayout());	
 		
 		titleLbl.setFont(new Font("Helvetica", Font.PLAIN, 32));
 		personnelLbl.setFont(new Font("Helvetica", Font.PLAIN, 16));
 		
-		saveTxtField.setPreferredSize(new Dimension(250,30));
+		saveTxtLbl.setPreferredSize(new Dimension(250,30));
 		
 		personnelTable.setPreferredScrollableViewportSize(new Dimension(500, 200));
 		personnelTable.setFillsViewportHeight(true);
@@ -97,8 +104,8 @@ setLayout(new GridBagLayout());
 		clientCBox.setBorder(new LineBorder(Color.GRAY));
 		timePerCBox.setPreferredSize(new Dimension(300,30));
 		timePerCBox.setBorder(new LineBorder(Color.GRAY));
-		extCBox.setPreferredSize(new Dimension(80,30));
-		extCBox.setBorder(new LineBorder(Color.GRAY));
+		extensionLbl.setPreferredSize(new Dimension(80,30));
+		extensionLbl.setBorder(new LineBorder(Color.GRAY));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -149,7 +156,7 @@ setLayout(new GridBagLayout());
 		gbc.gridwidth = 1;
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		add(saveTxtField,gbc);
+		add(saveTxtLbl,gbc);
 		
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets = new Insets(0,0,5,0);
@@ -157,43 +164,6 @@ setLayout(new GridBagLayout());
 		gbc.gridx = 2;
 		gbc.gridy = 2;
 		add(selSaveBtn,gbc);
-		
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.insets = new Insets(0,0,5,0);
-		gbc.gridwidth = 1;
-		gbc.gridx = 3;
-		gbc.gridy = 2;
-		add(extLbl,gbc);
-		
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.insets = new Insets(0,0,5,0);
-		gbc.gridwidth = 1;
-		gbc.gridx = 4;
-		gbc.gridy = 2;
-		add(extCBox,gbc);
-		
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.insets = new Insets(30,0,5,0);
-		gbc.gridwidth = 5;
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		add(personnelLbl,gbc);
-		
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0,0,5,0);
-		gbc.gridwidth = 5;
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		add(personnelPane,gbc);
-
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0,0,0,0);
-		gbc.gridwidth = 5;
-		gbc.gridx = 0;
-		gbc.gridy = 5;
-		add(statusPane,gbc);
 		
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.NONE;
@@ -212,16 +182,41 @@ setLayout(new GridBagLayout());
 		add(backBtn,gbc);
 	}
 	
+	public void setSelectFileListener(ActionListener list){
+		selSaveBtn.addActionListener(list);
+	}
+	
+	public void setClientListener(ActionListener list){
+		clientCBox.addActionListener(list);
+	}
+	
 	public File fileSaver(){
 		//Create a file chooser
 		JFileChooser fc = new JFileChooser();
 		//In response to a button click:
 		int returnVal = fc.showSaveDialog(this);
-		return fc.getSelectedFile();
+		return new File(fc.getSelectedFile()+".csv");
 	}
 	
-	public String getClient(){return new String();}
+	public String getClient(){return (String)clientCBox.getSelectedItem();}
 	public void showSuccess(){}
-	public void setFileDirectory(File f){}
+	public void setFileDirectory(File f){
+		file = f;
+		saveTxtLbl.setText(file.getPath());
+	}
 	public File getFileDirectory(){return file;}
+	
+	public void updateClientList(){
+		clientCBox.removeAllItems();
+		ArrayList<String> clients = model.getClientList();
+		for(String t : clients)
+			clientCBox.addItem(t);
+	}
+	
+	public void updateDateList(){
+		timePerCBox.removeAllItems();
+		//ArrayList<String> dates = model.getDateList();
+		//for(String t : dates)
+		//	timePerCBox.addItem(t);		
+	}
 }
