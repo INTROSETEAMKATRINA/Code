@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 
 import java.sql.Connection;
@@ -232,6 +232,8 @@ public class PayrollSystemView extends JFrame {
 	public File fileChooser(){
 		JFileChooser fc = null;
 		fc = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel files", "xls");
+		fc.setFileFilter(filter);
 		//In response to a button click:
 		int returnVal = fc.showOpenDialog(this);
 			return fc.getSelectedFile();
