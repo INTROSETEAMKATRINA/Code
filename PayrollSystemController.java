@@ -25,7 +25,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 
 public class PayrollSystemController{
-	
+
 	private Connection con;
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 	private Date periodStartDate;
@@ -36,7 +36,7 @@ public class PayrollSystemController{
 	private ViewSummaryReportView viewSummaryReport;
 	private ChangePasswordView changePassword;
 	private GeneratePayslipsView generatePayslips;
-	
+
 	public PayrollSystemController(PayrollSystemModel model, PayrollSystemView view, Connection con){
 		this.model = model;
 		this.view = view;
@@ -48,7 +48,7 @@ public class PayrollSystemController{
 		addAdjustments = new AddAdjustmentsView(model);
 		viewSummaryReport = new ViewSummaryReportView(model);
 		changePassword = new ChangePasswordView();
-		generatePayslips = new GeneratePayslipsView(model);
+		generatePayslips = new GeneratePayslipsView();
 		view.setAddPersonnelListener(new addPersonnelListener());
 		view.setAddDTRListener(new addDTRListener());
 		view.setAddAdjustmentListener(new addAdjustmentListener());
@@ -65,11 +65,10 @@ public class PayrollSystemController{
 		removeAdjustments.setCancelListener(new cancelRemoveAdjustmentButtonListener());
 		removeAdjustments.setClientListener(new clientListRemoveAdjustmentListener());
 		removeAdjustments.setPersonnelListener(new personnelListRemoveAdjustmentListener());
-		generatePayslips.setSelectFileListener(new fileSaverGeneratePayslipsButtonListener());
 	}
-	
+
 	//Main Menu Buttons Listeners
-	
+
 	//Add Personnel Button in Main Menu
 	class addPersonnelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
@@ -82,56 +81,55 @@ public class PayrollSystemController{
 				System.out.println("No file chosen");
 		}
 	}
-	
+
 	//Add DTR button in main menu
 	class addDTRListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			File f = view.fileChooser();
 			if(f!=null)
-				model.addDTR(f);
+				model.addDTR(f, periodStartDate);
 			else
 				System.out.println("No file chosen");
 		}
 	}
-	
+
 	//Add adjustment button in main menu
-	class addAdjustmentListener implements ActionListener{	
+	class addAdjustmentListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			addAdjustments.updateClientList();
 			addAdjustments.setVisible(true);
 		}
 	}
-	
+
 	//Remove adjustment button in main menu
-	class removeAdjustmentListener implements ActionListener{	
+	class removeAdjustmentListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			removeAdjustments.updateClientList();
 			removeAdjustments.setVisible(true);
 		}
 	}
-	
+
 	//Change password button in main menu
-	class changePasswordListener implements ActionListener{	
+	class changePasswordListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			changePassword.setVisible(true);
 		}
 	}
-	
+
 	//View summary report button in main menu
-	class viewSummaryReportListener implements ActionListener{	
+	class viewSummaryReportListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			viewSummaryReport.setVisible(true);
 		}
 	}
-	
+
 	//Generate payslips button in main menu
 	class generatePayslipsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			generatePayslips.updateClientList();
 			generatePayslips.setVisible(true);
 		}
 	}
-	
+
 	//Listeners in Adjustments view
 	//Add adjustments button in add adjustments view
 	class addAdjustmentButtonListener implements ActionListener{
@@ -149,7 +147,7 @@ public class PayrollSystemController{
 				addAdjustments.showWrongInput();
 		}
 	}
-	
+
 	//Cancel add adjustments in add adjustments view
 	class cancelAddAdjustmentButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
@@ -157,14 +155,14 @@ public class PayrollSystemController{
 			addAdjustments.setVisible(false);
 		}
 	}
-	
+
 	//client list combo box listener in add adjustments view
 	class clientListAddAdjustmentListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			addAdjustments.updatePersonnelList();
 		}
 	}
-	
+
 	//listeners in remove adjustments view
 	//remove adjustments in remove adjustments view
 	class removeAdjustmentButtonListener implements ActionListener{
@@ -182,28 +180,28 @@ public class PayrollSystemController{
 				removeAdjustments.showNoAdjustments();
 		}
 	}
-	
+
 	//cancel remove adjustments in remove adjustments view
 	class cancelRemoveAdjustmentButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			removeAdjustments.setVisible(false);
 		}
 	}
-	
+
 	//client list combo box in remove adjustments view
 	class clientListRemoveAdjustmentListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			removeAdjustments.updatePersonnelList();
 		}
 	}
-	
+
 	//personnel list combo box in remove adjustments view
 	class personnelListRemoveAdjustmentListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			removeAdjustments.updateAdjustmentsList();
 		}
 	}
-	
+
 	//listeners in view summary report view
 	//view button listener in view summary report view
 	class viewSummaryReportButtonListener implements ActionListener{
@@ -214,14 +212,14 @@ public class PayrollSystemController{
 										  periodStartDate));
 		}
 	}
-	
+
 	//listeners in change password view
 	//change password button in change password view
 	class changePasswordButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			try{
 				if(changePassword.askConfirmation()){
-					Statement st = con.createStatement();	
+					Statement st = con.createStatement();
 					ResultSet rs = st.executeQuery("select password from password");
 					rs.next();
 					String oldPass = changePassword.getOldPass();
@@ -249,7 +247,7 @@ public class PayrollSystemController{
 			}
 		}
 	}
-	
+
 	//cancel change password button in change password view
 	class cancelChangePasswordButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
@@ -257,7 +255,7 @@ public class PayrollSystemController{
 			changePassword.setVisible(false);
 		}
 	}
-	
+
 	//listeners in generate payslips view
 	//generate payslips in generate payslips view
 	class generatePayslipsButtonListener implements ActionListener{
@@ -269,7 +267,7 @@ public class PayrollSystemController{
 			generatePayslips.setVisible(false);
 		}
 	}
-	
+
 	//cancel generate payslips in generate payslips view
 	class cancelGeneratePayslipsButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
@@ -277,18 +275,18 @@ public class PayrollSystemController{
 			generatePayslips.setVisible(false);
 		}
 	}
-	
+
 	//choose where to save listener in generate payslips view
 	class fileSaverGeneratePayslipsButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			generatePayslips.setFileDirectory(generatePayslips.fileSaver());
-		}
-	}
-	
-	//client list combo box listener to automatically change avaiable dates
-	class clientListGeneratePayslipsListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			generatePayslips.updateDateList();
+			/* place in fileSaver() in view
+				//Create a file chooser
+				JFileChooser fc = new JFileChooser();
+				//In response to a button click:
+				int returnVal = fc.showSaveDialog(this);
+				return fc.getSelectedFile();
+			*/
 		}
 	}
 }

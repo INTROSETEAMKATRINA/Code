@@ -55,7 +55,7 @@ public class PayrollSystemModel {
 				System.out.println(e);
 			}
 
-			if(psd != periodStartDate){
+			if(!psd.equals(periodStartDate)){
 				return false;
 			}
 
@@ -271,7 +271,7 @@ public class PayrollSystemModel {
 				//e.printStackTrace();
 			}
 
-			if(psd != periodStartDate){
+			if(!psd.equals(periodStartDate)){
 				return false;
 			}
 
