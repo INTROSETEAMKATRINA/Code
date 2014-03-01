@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,7 +16,11 @@ import javax.swing.JTextField;
 import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
+import java.util.ArrayList;
+
 public class AddAdjustmentsView extends JFrame {
+	
+	private PayrollSystemModel model;
 	
 	private JLabel selectClientLbl;
 	private JLabel selectPersLbl;
@@ -30,10 +36,11 @@ public class AddAdjustmentsView extends JFrame {
 	private JButton applyBtn;
 	private JButton addBtn;
 
-	private JComboBox personnelCBox;
-	private JComboBox clientCBox;
+	private JComboBox<String> personnelCBox;
+	private JComboBox<String> clientCBox;
 	
-	public AddAdjustmentsView(){
+	public AddAdjustmentsView(PayrollSystemModel model){
+		this.model = model;
 		
 		cancelBtn = new JButton("Cancel");
 		applyBtn = new JButton("Apply");
@@ -50,8 +57,8 @@ public class AddAdjustmentsView extends JFrame {
 		amountTextFld = new JTextField();
 		reasonTextFld = new JTextField();
 		
-		personnelCBox = new JComboBox();
-		clientCBox = new JComboBox();
+		personnelCBox = new JComboBox<String>();
+		clientCBox = new JComboBox<String>();
 		
 		modifyUI();
 	}
@@ -186,25 +193,52 @@ public class AddAdjustmentsView extends JFrame {
 		return false;
 	}
 	
-	public void setAddListener(){}
+	public void setAddListener(ActionListener list){addBtn.addActionListener(list);}
 	
-	public void setCancelListener(){}
+	public void setCancelListener(ActionListener list){cancelBtn.addActionListener(list);}
 	
-	public String getTypeAdjustment(){ return null; }
+	public void setClientListener(ActionListener list){clientCBox.addActionListener(list);}
 	
-	public float getAdjustment(){ return 0f; }
+	public String getTypeAdjustment(){ return reasonTextFld.getText(); }
 	
-	public String getClient(){ return null; }
+	public float getAdjustment(){
+		try{
+			return Float.parseFloat(amountTextFld.getText());
+		}catch(Exception e){
+			return 0;
+		}
+	}
 	
-	public String getTIN(){ return null; }
+	public String getClient(){ return (String)clientCBox.getSelectedItem(); }
+	
+	public String getTIN(){ return model.getTIN((String)personnelCBox.getSelectedItem()); }
 	
 	public void showSuccess(){
+		JOptionPane.showMessageDialog(null, "Successfully added adjustment!", "Successfully added adjustment!", JOptionPane.PLAIN_MESSAGE); 
+	}
+	
+	public void showWrongInput(){
+		JOptionPane.showMessageDialog(null, "Wrong input!", "Wrong input!", JOptionPane.ERROR_MESSAGE); 
 	}
 	
 	public void clear(){
+		amountTextFld.setText("");
+		reasonTextFld.setText("");
 	}
 	
 	public void updatePersonnelList(){
+		personnelCBox.removeAllItems();
+		ArrayList<String> personnel = model.getPersonnelList((String)clientCBox.getSelectedItem());
+		for(String t : personnel)
+			personnelCBox.addItem(t);
+		
+	}
+	
+	public void updateClientList(){
+		clientCBox.removeAllItems();
+		ArrayList<String> clients = model.getClientList();
+		for(String t : clients)
+			clientCBox.addItem(t);
 	}
 	
 }

@@ -16,12 +16,16 @@ import jxl.read.biff.BiffException;
 
 public class PayrollSystemModel {
 
-	private SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 	private Connection con;
-
+	private Date periodStartDate;
+	
 	public PayrollSystemModel(Connection con){
 		this.con = con;
+	}
 
+	public void setPeriodStartDate(Date psd){
+		periodStartDate = psd;
 	}
 
 	public boolean addPersonnel(File fileDirectory, Date periodStartDate) {
@@ -416,18 +420,19 @@ public class PayrollSystemModel {
             stmt=con.prepareStatement(sql);
             stmt.execute(sql);
             } catch (SQLException ex) {
-
+				System.out.println(ex);
             }
 	}
 
 	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
             Statement stmt = null;
-            try{
-            String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
-            "WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ sdf.format(periodStartDate)+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
-            stmt=con.prepareStatement(sql);
-            stmt.execute(sql);
+            try{            
+				String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
+				"WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ sdf.format(periodStartDate)+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
+				stmt=con.prepareStatement(sql);
+				stmt.execute(sql);
             } catch (SQLException ex) {
+				System.out.println(ex);
             }
 	}
 
@@ -460,4 +465,67 @@ public class PayrollSystemModel {
 	public ArrayList<String> getSummaryReport(String client, String report, Date periodStartDate){
 		return new ArrayList<String>();
 	}
+	
+	public ArrayList<String> getClientList(){
+		Statement stmt = null;
+		ArrayList<String> clients = new ArrayList<>();
+            try{          
+				String sql="Select * FROM `client` order by name";
+				Statement st = con.createStatement();	
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					clients.add(rs.getString("Name"));
+				}
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
+		return clients;
+	}
+	
+	public ArrayList<String> getPersonnelList(String client){
+		Statement stmt = null;
+		ArrayList<String> personnel = new ArrayList<>();
+            try{          
+				String sql="Select * FROM `personnel` where assignment = '"+client+"' order by name";
+				Statement st = con.createStatement();	
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					personnel.add(rs.getString("Name"));
+				}
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
+		return personnel;
+	}
+	
+	public ArrayList<String> getAdjustmentsList(String tin){
+		Statement stmt = null;
+		ArrayList<String> adjustments = new ArrayList<>();
+            try{          
+				String sql="Select * FROM `adjustmentsanddeductions` where `tin` = '"+tin+"' and `periodstartdate` = '"+sdf.format(periodStartDate)+"'";
+				Statement st = con.createStatement();	
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					adjustments.add(rs.getString("type")+" ~ "+rs.getString("amount"));
+				}
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
+		return adjustments;
+	}
+	
+	
+	public String getTIN(String personnelName){
+		try{
+			String sql="Select `TIN` FROM `personnel` where name = '"+personnelName+"'";
+			Statement st = con.createStatement();	
+			ResultSet rs = st.executeQuery(sql);
+			rs.next();
+			return rs.getString("TIN");
+		}catch(Exception ex){
+			System.out.println(ex);
+		}
+		return "";
+	}
+	
 }

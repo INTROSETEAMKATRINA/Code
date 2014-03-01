@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.List;
+import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -37,9 +39,9 @@ public class RemoveAdjustmentsView extends JFrame {
 	private JButton removeBtn;
 	private JButton applyBtn;
 
-	private JComboBox personnelCBox;
-	private JComboBox clientCBox;
-	
+	private JComboBox<String> personnelCBox;
+	private JComboBox<String> clientCBox;
+	private JComboBox<String> adjCBox;
 	public RemoveAdjustmentsView(PayrollSystemModel model)
 	{
 		this.model = model;
@@ -80,9 +82,9 @@ public class RemoveAdjustmentsView extends JFrame {
 		selectPersLbl = new JLabel("Select Personnel: ");
 		selectAdjLbl = new JLabel("Select Adjustment: ");
 		
-		personnelCBox = new JComboBox();
-		clientCBox = new JComboBox();
-		
+		personnelCBox = new JComboBox<String>();
+		clientCBox = new JComboBox<String>();
+		adjCBox = new JComboBox<String>();
 		modifyUI();
 	}
 	
@@ -103,8 +105,10 @@ public class RemoveAdjustmentsView extends JFrame {
 		
 		personnelCBox.setPreferredSize(new Dimension(500,30));
 		clientCBox.setPreferredSize(new Dimension(500,30));
+		adjCBox.setPreferredSize(new Dimension(500,30));
 		personnelCBox.setBorder(new LineBorder(Color.GRAY));
 		clientCBox.setBorder(new LineBorder(Color.GRAY));
+		adjCBox.setBorder(new LineBorder(Color.GRAY));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -156,7 +160,7 @@ public class RemoveAdjustmentsView extends JFrame {
 		gbc.gridwidth = 3;
 		gbc.gridx = 1;
 		gbc.gridy = 3;
-		add(scrollPane,gbc);
+		add(adjCBox,gbc);
 		
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.EAST;
@@ -199,16 +203,62 @@ public class RemoveAdjustmentsView extends JFrame {
 		}
 		return false;
 	}
-	public String getPersonnel(){ return null; }
-	public void setRemoveListener(){}
-	public void setCancelListener(){}
-	public float getAdjustment(){
-		return 0f;
-	}
-	public void showSuccess(){}
-	public void updatePersonnelList(){}
-	public void updateAdjustmentsList(){}
-	public String getTIN(){ return new String();}
-	public String getTypeAdjustment(){return "";}
 	
+	public void setRemoveListener(ActionListener list){removeBtn.addActionListener(list);}
+	public void setCancelListener(ActionListener list){cancelBtn.addActionListener(list);}
+	public void setClientListener(ActionListener list){clientCBox.addActionListener(list);}
+	public void setPersonnelListener(ActionListener list){personnelCBox.addActionListener(list);}
+	public void showSuccess(){
+		JOptionPane.showMessageDialog(null, "Successfully removed adjustment!", "Successfully removed adjustment!", JOptionPane.PLAIN_MESSAGE); 
+	}
+
+	public void showNoAdjustments(){
+		JOptionPane.showMessageDialog(null, "No adjustments to be removed!", "No adjustments to be removed!", JOptionPane.ERROR_MESSAGE); 
+	}	
+	public void updatePersonnelList(){
+		personnelCBox.removeAllItems();
+		ArrayList<String> personnel = model.getPersonnelList((String)clientCBox.getSelectedItem());
+		for(String t : personnel)
+			personnelCBox.addItem(t);
+	}
+	
+	public void updateClientList(){
+		clientCBox.removeAllItems();
+		ArrayList<String> clients = model.getClientList();
+		for(String t : clients)
+			clientCBox.addItem(t);
+	}
+	
+	public void updateAdjustmentsList(){
+		adjCBox.removeAllItems();
+		ArrayList<String> adjustments = model.getAdjustmentsList(getTIN());
+		for(String t : adjustments)
+			adjCBox.addItem(t);
+	}
+	
+	public String getClient(){ return (String)clientCBox.getSelectedItem(); }
+	
+	public String getTIN(){ return model.getTIN((String)personnelCBox.getSelectedItem()); }
+	
+	public String getTypeAdjustment(){
+		String s = (String)adjCBox.getSelectedItem();
+		int i;
+		for(i = 0;i<s.length();i++)
+			if(s.charAt(i)=='~')
+				break;
+		return s.substring(0,i-1);
+	}
+	public float getAdjustment(){
+		String s = (String)adjCBox.getSelectedItem();
+		int i;
+		for(i = 0;i<s.length();i++)
+			if(s.charAt(i)=='~')
+				break;
+		return Float.parseFloat(s.substring(i+2,s.length()));
+	}
+	
+	public int getNumAdjustments(){
+		return adjCBox.getItemCount();
+	}
+
 }

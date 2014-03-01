@@ -20,9 +20,14 @@ import java.sql.ResultSet;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import java.io.File;
+
+import java.text.SimpleDateFormat;
+
 public class PayrollSystemController{
 	
 	private Connection con;
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 	private Date periodStartDate;
 	private PayrollSystemModel model;
 	private PayrollSystemView view;
@@ -36,8 +41,11 @@ public class PayrollSystemController{
 		this.model = model;
 		this.view = view;
 		this.con = con;
+		try{periodStartDate = sdf.parse("2012-01-13");}
+		catch(Exception ex){}
+		model.setPeriodStartDate(periodStartDate);
 		removeAdjustments = new RemoveAdjustmentsView(model);
-		addAdjustments = new AddAdjustmentsView();
+		addAdjustments = new AddAdjustmentsView(model);
 		viewSummaryReport = new ViewSummaryReportView(model);
 		changePassword = new ChangePasswordView();
 		generatePayslips = new GeneratePayslipsView();
@@ -50,6 +58,13 @@ public class PayrollSystemController{
 		view.setChangePasswordListener(new changePasswordListener());
 		changePassword.setChangeListener(new changePasswordButtonListener());
 		changePassword.setCancelListener(new cancelChangePasswordButtonListener());
+		addAdjustments.setClientListener(new clientListAddAdjustmentListener());
+		addAdjustments.setAddListener(new addAdjustmentButtonListener());
+		addAdjustments.setCancelListener(new cancelAddAdjustmentButtonListener());
+		removeAdjustments.setRemoveListener(new removeAdjustmentButtonListener());
+		removeAdjustments.setCancelListener(new cancelRemoveAdjustmentButtonListener());
+		removeAdjustments.setClientListener(new clientListRemoveAdjustmentListener());
+		removeAdjustments.setPersonnelListener(new personnelListRemoveAdjustmentListener());
 	}
 	
 	//Main Menu Buttons Listeners
@@ -57,28 +72,31 @@ public class PayrollSystemController{
 	//Add Personnel Button in Main Menu
 	class addPersonnelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			model.addPersonnel(view.fileChooser(), periodStartDate);
-			
-			/* place in fileChooserFunctionin View
-				JFileChooser fc = new JFileChooser();
-				//In response to a button click:
-				int returnVal = fc.showOpenDialog(this);
-				return fc.getSelectedFile();
-				}
-			*/
+			File f = view.fileChooser();
+			if(f!=null){
+				if(model.addPersonnel(f, periodStartDate))
+					view.showSuccess();
+			}
+			else
+				System.out.println("No file chosen");
 		}
 	}
 	
 	//Add DTR button in main menu
 	class addDTRListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			model.addDTR(view.fileChooser());
+			File f = view.fileChooser();
+			if(f!=null)
+				model.addDTR(f);
+			else
+				System.out.println("No file chosen");
 		}
 	}
 	
 	//Add adjustment button in main menu
 	class addAdjustmentListener implements ActionListener{	
 		public void actionPerformed(ActionEvent e){
+			addAdjustments.updateClientList();
 			addAdjustments.setVisible(true);
 		}
 	}
@@ -86,6 +104,7 @@ public class PayrollSystemController{
 	//Remove adjustment button in main menu
 	class removeAdjustmentListener implements ActionListener{	
 		public void actionPerformed(ActionEvent e){
+			removeAdjustments.updateClientList();
 			removeAdjustments.setVisible(true);
 		}
 	}
@@ -115,15 +134,17 @@ public class PayrollSystemController{
 	//Add adjustments button in add adjustments view
 	class addAdjustmentButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			if(addAdjustments.askConfirmation()){
-				model.addAdjustment(addAdjustments.getTypeAdjustment(),
-									addAdjustments.getAdjustment(),
-									addAdjustments.getTIN(),
-									periodStartDate);
-				addAdjustments.showSuccess();
-				addAdjustments.clear();
-				addAdjustments.setVisible(false);
-			}
+			String type = addAdjustments.getTypeAdjustment();
+			float adjustment = addAdjustments.getAdjustment();
+			String tin = addAdjustments.getTIN();
+			if(type.length()!=0 && adjustment !=0 && tin.length() != 0){
+				if(addAdjustments.askConfirmation()){
+					model.addAdjustment(type, adjustment, tin, periodStartDate);
+					addAdjustments.showSuccess();
+					addAdjustments.clear();
+				}
+			}else
+				addAdjustments.showWrongInput();
 		}
 	}
 	
@@ -146,14 +167,17 @@ public class PayrollSystemController{
 	//remove adjustments in remove adjustments view
 	class removeAdjustmentButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			if(removeAdjustments.askConfirmation()){
-				model.removeAdjustment(removeAdjustments.getTypeAdjustment(),
-									   removeAdjustments.getAdjustment(),
-									   removeAdjustments.getTIN(),
-									   periodStartDate);
-				removeAdjustments.showSuccess();
-				removeAdjustments.setVisible(false);
-			}
+			if(removeAdjustments.getNumAdjustments()>0){
+				String type = removeAdjustments.getTypeAdjustment();
+				float adjustment = removeAdjustments.getAdjustment();
+				String tin = removeAdjustments.getTIN();
+				if(removeAdjustments.askConfirmation()){
+					model.removeAdjustment(type, adjustment, tin, periodStartDate);
+					removeAdjustments.updateAdjustmentsList();
+					removeAdjustments.showSuccess();
+				}
+			}else
+				removeAdjustments.showNoAdjustments();
 		}
 	}
 	

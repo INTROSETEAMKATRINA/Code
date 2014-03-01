@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import java.io.File;
 
@@ -234,5 +235,9 @@ public class PayrollSystemView extends JFrame {
 		//In response to a button click:
 		int returnVal = fc.showOpenDialog(this);
 			return fc.getSelectedFile();
+	}
+	
+	public void showSuccess(){
+		JOptionPane.showMessageDialog(null, "Excel successfully added!", "Excel successfully added!", JOptionPane.PLAIN_MESSAGE); 
 	}
 }
