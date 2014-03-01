@@ -19,7 +19,7 @@ public class PayrollSystemModel {
 	private SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 	private Connection con;
 	private Date periodStartDate;
-	
+
 	public PayrollSystemModel(Connection con){
 		this.con = con;
 	}
@@ -29,8 +29,8 @@ public class PayrollSystemModel {
 	}
 
 	public boolean addPersonnel(File fileDirectory, Date periodStartDate) {
-            ArrayList<Personnel> personnels = new ArrayList<Personnel>();;
-            try{
+    	ArrayList<Personnel> personnels = new ArrayList<Personnel>();;
+        try{
 			File file = fileDirectory;
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
@@ -38,13 +38,26 @@ public class PayrollSystemModel {
 			String name,position,assignment,employeeStatus,tin,taxStatus;
 			float sss, sssLoan, phic, hdmf, hdmfLoan, payrollAdvance, houseRental, uniformAndOthers;
 			float dailyRate, colaRate, monthlyRate;
-
-			//getCell(column,row)
+			Date psd;
 			int row,column;
 
 			row = 0;
 			column = 1;
+
 			assignment = sheet.getCell(column,row).getContents();
+
+			psd = null;
+			row++;
+			try{
+				sdf.setLenient(false);
+				psd = sdf.parse(sheet.getCell(column,row).getContents());
+			}catch(Exception e){
+				System.out.println(e);
+			}
+
+			if(psd != periodStartDate){
+				return false;
+			}
 
 			row += 2;
 			column = 0;
@@ -177,7 +190,6 @@ public class PayrollSystemModel {
 			System.out.println(e);
 			//e.printStackTrace();
 		}
-        System.out.println(personnels.size());
 
         //ADD TO DATABASE
         Statement stmt = null;
@@ -233,9 +245,10 @@ public class PayrollSystemModel {
 		return true;
 	}
 
-	public boolean addDTR(File fileDirectory) {
-                ArrayList<DTR> dtrs = new ArrayList<DTR>();
-                try{
+	public boolean addDTR(File fileDirectory, Date periodStartDate) {
+    	ArrayList<DTR> dtrs = new ArrayList<DTR>();
+
+        try{
 			File file = fileDirectory;
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
@@ -244,28 +257,21 @@ public class PayrollSystemModel {
 			float regularHoursWorks, regularOvertime, regularNightShiftDifferential,
 				  specialHoliday, specialHolidayOvertime, specialHolidayNightShiftDifferential,
 				  legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential;
-			Date  periodStartDate;
-			SimpleDateFormat[] possibleFormats = new SimpleDateFormat[] {
-			        new SimpleDateFormat("yyyy-MM-dd"),
-			        new SimpleDateFormat("yyyy/MM/dd"),
-			        new SimpleDateFormat("MM/dd/yyyy"),
-			        new SimpleDateFormat("MM-dd-yyyy") };
+			Date psd;
 			int row,column;
 
 			row = 0;
 			column = 1;
-			periodStartDate = null;
-			for(SimpleDateFormat format : possibleFormats){
-
-				try{
-					format.setLenient(false);
-					periodStartDate = format.parse(sheet.getCell(column,row).getContents());
-				}catch(Exception e){
-					System.out.println(e);
-					//e.printStackTrace();
-				}
+			psd= null;
+			try{
+				sdf.setLenient(false);
+				psd = sdf.parse(sheet.getCell(column,row).getContents());
+			}catch(Exception e){
+				System.out.println(e);
+				//e.printStackTrace();
 			}
-			if(periodStartDate == null){
+
+			if(psd != periodStartDate){
 				return false;
 			}
 
@@ -426,7 +432,7 @@ public class PayrollSystemModel {
 
 	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
             Statement stmt = null;
-            try{            
+            try{
 				String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
 				"WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ sdf.format(periodStartDate)+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
 				stmt=con.prepareStatement(sql);
@@ -465,13 +471,13 @@ public class PayrollSystemModel {
 	public ArrayList<String> getSummaryReport(String client, String report, Date periodStartDate){
 		return new ArrayList<String>();
 	}
-	
+
 	public ArrayList<String> getClientList(){
 		Statement stmt = null;
 		ArrayList<String> clients = new ArrayList<>();
-            try{          
+            try{
 				String sql="Select * FROM `client` order by name";
-				Statement st = con.createStatement();	
+				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				while(rs.next()){
 					clients.add(rs.getString("Name"));
@@ -481,13 +487,13 @@ public class PayrollSystemModel {
             }
 		return clients;
 	}
-	
+
 	public ArrayList<String> getPersonnelList(String client){
 		Statement stmt = null;
 		ArrayList<String> personnel = new ArrayList<>();
-            try{          
+            try{
 				String sql="Select * FROM `personnel` where assignment = '"+client+"' order by name";
-				Statement st = con.createStatement();	
+				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				while(rs.next()){
 					personnel.add(rs.getString("Name"));
@@ -497,13 +503,13 @@ public class PayrollSystemModel {
             }
 		return personnel;
 	}
-	
+
 	public ArrayList<String> getAdjustmentsList(String tin){
 		Statement stmt = null;
 		ArrayList<String> adjustments = new ArrayList<>();
-            try{          
+            try{
 				String sql="Select * FROM `adjustmentsanddeductions` where `tin` = '"+tin+"' and `periodstartdate` = '"+sdf.format(periodStartDate)+"'";
-				Statement st = con.createStatement();	
+				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				while(rs.next()){
 					adjustments.add(rs.getString("type")+" ~ "+rs.getString("amount"));
@@ -513,12 +519,12 @@ public class PayrollSystemModel {
             }
 		return adjustments;
 	}
-	
-	
+
+
 	public String getTIN(String personnelName){
 		try{
 			String sql="Select `TIN` FROM `personnel` where name = '"+personnelName+"'";
-			Statement st = con.createStatement();	
+			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			return rs.getString("TIN");
@@ -527,5 +533,5 @@ public class PayrollSystemModel {
 		}
 		return "";
 	}
-	
+
 }
