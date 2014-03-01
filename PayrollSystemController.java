@@ -77,6 +77,8 @@ public class PayrollSystemController{
 			if(f!=null){
 				if(model.addPersonnel(f, periodStartDate))
 					view.showSuccess();
+				else
+					view.showProblemWithFile();
 			}
 			else
 				System.out.println("No file chosen");
@@ -90,6 +92,8 @@ public class PayrollSystemController{
 			if(f!=null)
 				if(model.addDTR(f, periodStartDate))
 					view.showSuccess();
+				else
+					view.showProblemWithFile();
 			else
 				System.out.println("No file chosen");
 		}

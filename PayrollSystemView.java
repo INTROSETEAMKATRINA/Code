@@ -242,4 +242,8 @@ public class PayrollSystemView extends JFrame {
 	public void showSuccess(){
 		JOptionPane.showMessageDialog(null, "Excel successfully added!", "Excel successfully added!", JOptionPane.PLAIN_MESSAGE); 
 	}
+	
+	public void showProblemWithFile(){
+		JOptionPane.showMessageDialog(null, "ERROR INPUT FILE!", "ERROR INPUT FILE!", JOptionPane.ERROR_MESSAGE); 
+	}
 }

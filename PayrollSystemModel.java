@@ -63,7 +63,7 @@ public class PayrollSystemModel {
 				System.out.println(e);
 			}
 
-			if(!psd.equals(periodStartDate)){
+			if(!sdf.format(psd).equals(sdf.format(periodStartDate))){
 				return false;
 			}
 
