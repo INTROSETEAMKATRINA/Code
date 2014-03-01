@@ -18,12 +18,12 @@ public class PayrollSystemModel {
 
 	private SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private Connection con;
-	
+
 	public PayrollSystemModel(Connection con){
 		this.con = con;
-		
+
 	}
-	
+
 	public boolean addPersonnel(File fileDirectory, Date periodStartDate) {
             ArrayList<Personnel> personnels = new ArrayList<Personnel>();;
             try{
@@ -84,9 +84,12 @@ public class PayrollSystemModel {
 					}
 
 					column++;
-					tin 		= sheet.getCell(column,row).getContents();
+					tin = sheet.getCell(column,row).getContents();
+					if(tin.length() == 0){
+						return false;
+					}
 					column++;
-					taxStatus 	= sheet.getCell(column,row).getContents();
+					taxStatus = sheet.getCell(column,row).getContents();
 
 					sss = 0;
 					column++;
@@ -175,7 +178,7 @@ public class PayrollSystemModel {
         //ADD TO DATABASE
         Statement stmt = null;
         String sql;
-            
+
         try{
             sql="INSERT INTO `Payroll System`.`Client`\n" +
             "(`Name`)\n" +
@@ -185,8 +188,8 @@ public class PayrollSystemModel {
             stmt.execute(sql);
 
         } catch (SQLException ex) {
-        }                
-        
+        }
+
         for( Personnel personnel: personnels ){
             try{
                 sql="INSERT INTO `Payroll System`.`Personnel`\n" +
@@ -210,7 +213,7 @@ public class PayrollSystemModel {
                         + " '"+personnel.getTaxStatus()+"');";
                 stmt=con.prepareStatement(sql);
                 stmt.execute(sql);
-            
+
                 this.addAdjustment("SSS", personnel.getSSS(), personnel.getTIN(), periodStartDate);
                 this.addAdjustment("SSS Loan", personnel.getSSS(), personnel.getTIN(), periodStartDate);
                 this.addAdjustment("PHIC", personnel.getPHIC(), personnel.getTIN(), periodStartDate);
@@ -219,14 +222,14 @@ public class PayrollSystemModel {
                 this.addAdjustment("Payroll Advance", personnel.getPayrollAdvance(), personnel.getTIN(), periodStartDate);
                 this.addAdjustment("House Rental", personnel.getHouseRental(), personnel.getTIN(), periodStartDate);
                 this.addAdjustment("Uniform and Others", personnel.getUniformAndOthers(), personnel.getTIN(), periodStartDate);
-            
+
             } catch (SQLException ex){
             }
         }
 		return true;
 	}
-	
-	public void addDTR(File fileDirectory) {
+
+	public boolean addDTR(File fileDirectory) {
                 ArrayList<DTR> dtrs = new ArrayList<DTR>();
                 try{
 			File file = fileDirectory;
@@ -258,6 +261,9 @@ public class PayrollSystemModel {
 					//e.printStackTrace();
 				}
 			}
+			if(periodStartDate == null){
+				return false;
+			}
 
 			row += 2;
 			column = 0;
@@ -269,6 +275,9 @@ public class PayrollSystemModel {
 
 					column++;
 					tin = sheet.getCell(column,row).getContents();
+					if(tin.length() == 0){
+						return false;
+					}
 
 					regularHoursWorks = 0;
 					column++;
@@ -347,7 +356,7 @@ public class PayrollSystemModel {
 		Statement stmt = null;
 		String sql;
             for(DTR dtr: dtrs){
-                
+
                 try{
                     sql= "INSERT INTO `Payroll System`.`DTR`\n" +
                     "(`RHW`,\n" +
@@ -376,21 +385,22 @@ public class PayrollSystemModel {
                     stmt=con.prepareStatement(sql);
                     stmt.execute(sql);
 
-                } catch(SQLException ex) {     
+                } catch(SQLException ex) {
                 }
             }
+    	return true;
 	}
-	
+
 	public void removePersonnel(String client){
 	}
-	
+
 	public void getPersonnel(String client){ //returns ResultSet
-		
+
 	}
 
 	public void addAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
             Statement stmt = null;
-	    try { 
+	    try {
 
             String sql="INSERT INTO `Payroll System`.`AdjustmentsAndDeductions`\n" +
             "(`amount`,\n" +
@@ -402,17 +412,17 @@ public class PayrollSystemModel {
             "'"+ reason +"',\n" +
             "'"+ sdf.format(periodStartDate) +"',\n" +
             "'"+ tin +"');";
-        
+
             stmt=con.prepareStatement(sql);
             stmt.execute(sql);
             } catch (SQLException ex) {
-            
+
             }
 	}
-	
+
 	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
             Statement stmt = null;
-            try{            
+            try{
             String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
             "WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ sdf.format(periodStartDate)+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
             stmt=con.prepareStatement(sql);
@@ -420,33 +430,33 @@ public class PayrollSystemModel {
             } catch (SQLException ex) {
             }
 	}
-	
+
 	public int changePassword(String oldPass, String newPass){
 		int x = 0;
 		try{
-			Statement st = con.createStatement();	
+			Statement st = con.createStatement();
 			x = st.executeUpdate("update password set password = '"+newPass+"' where password = '"+oldPass+"'");
 		}catch(Exception e){
 			System.out.println(e);
 		}
 		return x;
 	}
-	
+
 	public void modifyTaxTable(String fileDirectory){
 	}
-	
+
 	public void modfyClientVariables(float specialHoliday, float legalHoliday){
 	}
-	
+
 	public void generatePayslips(File directory, String client){
 	}
-	
+
 	public void generateSummaryReport(File directory, String client){
 	}
-	
+
 	public void backupDate(){
 	}
-	
+
 	public ArrayList<String> getSummaryReport(String client, String report, Date periodStartDate){
 		return new ArrayList<String>();
 	}
