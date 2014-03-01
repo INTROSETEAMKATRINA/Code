@@ -212,6 +212,7 @@ public class PayrollSystemModel {
             stmt.execute(sql);
 
         } catch (SQLException ex) {
+			System.out.println(ex);
         }
 
         for( Personnel personnel: personnels ){
@@ -263,6 +264,7 @@ public class PayrollSystemModel {
                     this.addAdjustment("Uniform and Others", personnel.getUniformAndOthers(), pTIN, periodStartDate);
                 }
             } catch (SQLException ex){
+				System.out.println(ex);
             }
         }
 		return true;
@@ -299,7 +301,7 @@ public class PayrollSystemModel {
 				System.out.println(e);
 			}
 
-			if(!psd.equals(periodStartDate)){
+			if(!sdf.format(psd).equals(sdf.format(periodStartDate))){
 				return false;
 			}
 
@@ -322,6 +324,7 @@ public class PayrollSystemModel {
 					try{
 						regularHoursWorks = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 					regularOvertime = 0;
@@ -329,6 +332,7 @@ public class PayrollSystemModel {
 					try{
 						regularOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 					regularNightShiftDifferential = 0;
@@ -336,13 +340,15 @@ public class PayrollSystemModel {
 					try{
 						regularNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 				  	specialHoliday = 0;
 				  	column++;
 				  	try{
 						specialHoliday = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
+					}catch(Exception e){	
+						System.out.println(e);
 					}
 
 				  	specialHolidayOvertime = 0;
@@ -350,6 +356,7 @@ public class PayrollSystemModel {
 				  	try{
 						specialHolidayOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 				  	specialHolidayNightShiftDifferential = 0;
@@ -357,6 +364,7 @@ public class PayrollSystemModel {
 				  	try{
 						specialHolidayNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 				  	legalHoliday = 0;
@@ -364,6 +372,7 @@ public class PayrollSystemModel {
 				  	try{
 						legalHoliday = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 				  	legalHolidayOvertime = 0;
@@ -371,6 +380,7 @@ public class PayrollSystemModel {
 				  	try{
 						legalHolidayOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 				  	legalHolidayNightShiftDifferential = 0;
@@ -378,6 +388,7 @@ public class PayrollSystemModel {
 				  	try{
 						legalHolidayNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
+						System.out.println(e);
 					}
 
 				    dtrs.add(new DTR(name, tin, regularHoursWorks, regularOvertime, regularNightShiftDifferential,
@@ -394,7 +405,7 @@ public class PayrollSystemModel {
 		Statement stmt = null;
 		String sql;
             for(DTR dtr: dtrs){
-
+				
                 try{
                     sql= "INSERT INTO `Payroll System`.`DTR`\n" +
                     "(`RHW`,\n" +
@@ -407,7 +418,7 @@ public class PayrollSystemModel {
                     "`LHOT`,\n" +
                     "`LHNSD`,\n" +
                     "`PeriodStartDate`,\n" +
-                    "`Personnel`)\n" +
+                    "`TIN`)\n" +
                     "VALUES\n" +
                     "('"+ dtr.getRegularHoursWorks() +"',\n" +
                     "'"+ dtr.getRegularOvertime() +"',\n" +
@@ -424,6 +435,7 @@ public class PayrollSystemModel {
                     stmt.execute(sql);
 
                 } catch(SQLException ex) {
+					System.out.println(ex);
                 }
             }
     	return true;

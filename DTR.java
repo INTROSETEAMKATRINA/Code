@@ -18,6 +18,8 @@ public class DTR {
 			   float specialHoliday, float specialHolidayOvertime, float specialHolidayNightShiftDifferential,
 			   float legalHoliday, float legalHolidayOvertime, float legalHolidayNightShiftDifferential,
 			   Date periodStartDate){
+		this.name = name;
+		this.tin = tin;
 		this.regularHoursWorks = regularHoursWorks;
 		this.regularOvertime = regularOvertime;
 		this.regularNightShiftDifferential = regularNightShiftDifferential;
