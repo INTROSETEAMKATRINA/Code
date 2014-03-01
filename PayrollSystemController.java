@@ -57,7 +57,7 @@ public class PayrollSystemController{
 	//Add Personnel Button in Main Menu
 	class addPersonnelListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			model.addPersonnel(view.fileChooser());
+			model.addPersonnel(view.fileChooser(), periodStartDate);
 			
 			/* place in fileChooserFunctionin View
 				JFileChooser fc = new JFileChooser();

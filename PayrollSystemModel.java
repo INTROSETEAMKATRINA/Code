@@ -24,7 +24,7 @@ public class PayrollSystemModel {
 		
 	}
 	
-	public boolean addPersonnel(File fileDirectory) {
+	public boolean addPersonnel(File fileDirectory, Date periodStartDate) {
             ArrayList<Personnel> personnels = new ArrayList<Personnel>();;
             try{
 			File file = fileDirectory;
@@ -173,20 +173,21 @@ public class PayrollSystemModel {
         System.out.println(personnels.size());
 
         //ADD TO DATABASE
-		Statement stmt = null;
-		String sql;
-        for( Personnel personnel: personnels ){
-        	try{
-                sql="INSERT INTO `Payroll System`.`Client`\n" +
-                "(`Name`)\n" +
-                "VALUES\n" +
-                "(\""+personnel.getAssignment() +"\");";
-                stmt=con.prepareStatement(sql);
-                stmt.execute(sql);
-                
-            } catch (SQLException ex) {
-            }
+        Statement stmt = null;
+        String sql;
             
+        try{
+            sql="INSERT INTO `Payroll System`.`Client`\n" +
+            "(`Name`)\n" +
+            "VALUES\n" +
+            "(\""+personnels.get(0).getAssignment() +"\");";
+            stmt=con.prepareStatement(sql);
+            stmt.execute(sql);
+
+        } catch (SQLException ex) {
+        }                
+        
+        for( Personnel personnel: personnels ){
             try{
                 sql="INSERT INTO `Payroll System`.`Personnel`\n" +
                 "(`Name`,\n" +
@@ -209,6 +210,16 @@ public class PayrollSystemModel {
                         + " '"+personnel.getTaxStatus()+"');";
                 stmt=con.prepareStatement(sql);
                 stmt.execute(sql);
+            
+                this.addAdjustment("SSS", personnel.getSSS(), personnel.getTIN(), periodStartDate);
+                this.addAdjustment("SSS Loan", personnel.getSSS(), personnel.getTIN(), periodStartDate);
+                this.addAdjustment("PHIC", personnel.getPHIC(), personnel.getTIN(), periodStartDate);
+                this.addAdjustment("HDMF", personnel.getHDMF(), personnel.getTIN(), periodStartDate);
+                this.addAdjustment("HDMF Loan", personnel.getHDMFLoan(), personnel.getTIN(), periodStartDate);
+                this.addAdjustment("Payroll Advance", personnel.getPayrollAdvance(), personnel.getTIN(), periodStartDate);
+                this.addAdjustment("House Rental", personnel.getHouseRental(), personnel.getTIN(), periodStartDate);
+                this.addAdjustment("Uniform and Others", personnel.getUniformAndOthers(), personnel.getTIN(), periodStartDate);
+            
             } catch (SQLException ex){
             }
         }

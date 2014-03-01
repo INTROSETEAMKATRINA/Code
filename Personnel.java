@@ -89,4 +89,32 @@ public class Personnel {
         public float getMonthlyRate(){
                 return monthlyRate;
         }
+        public float getSSS(){
+                return sss;
+        }
+        public float getSSSLoan(){
+                return sssLoan;
+        }
+        public float getPHIC(){
+                return phic;
+        }
+        public float getHDMF(){
+                return hdmf;
+        }
+        public float getHDMFLoan(){
+                return hdmfLoan;
+        }
+        public float getPayrollAdvance(){
+                return payrollAdvance;
+        }
+        public float getHouseRental(){
+                return houseRental;
+        }
+        public float getUniformAndOthers(){
+                return uniformAndOthers;
+        }
+        
+        
+        
+        
 }
