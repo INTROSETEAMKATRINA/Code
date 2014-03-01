@@ -29,7 +29,8 @@ public class PayrollSystemModel {
 	}
 
 	public boolean addPersonnel(File fileDirectory, Date periodStartDate) {
-    	ArrayList<Personnel> personnels = new ArrayList<Personnel>();;
+    	ArrayList<Personnel> personnels = new ArrayList<Personnel>();
+
         try{
 			File file = fileDirectory;
 			Workbook workbook = Workbook.getWorkbook(file);
@@ -48,9 +49,16 @@ public class PayrollSystemModel {
 
 			psd = null;
 			row++;
+
 			try{
-				sdf.setLenient(false);
-				psd = sdf.parse(sheet.getCell(column,row).getContents());
+				Cell cell = sheet.getCell(column,row);
+				if(cell.getType() == CellType.DATE){
+					DateCell date = (DateCell)cell;
+					psd = sdf.parse(sdf.format(date.getDate()));
+				}
+				else{
+					return false;
+				}
 			}catch(Exception e){
 				System.out.println(e);
 			}
@@ -60,10 +68,10 @@ public class PayrollSystemModel {
 			}
 
 			row += 2;
-			column = 0;
 
 			while(row < sheet.getRows()){
 
+				column = 0;
 				name = sheet.getCell(column,row).getContents();
 
 				if(name.length() > 0){
@@ -76,7 +84,7 @@ public class PayrollSystemModel {
 					dailyRate = 0;
 					column++;
 					try{
-						dailyRate 	= Float.parseFloat(sheet.getCell(column,row).getContents());
+						dailyRate = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
 						System.out.println(e);
 						//e.printStackTrace();
@@ -85,7 +93,7 @@ public class PayrollSystemModel {
 					colaRate = 0;
 					column++;
 					try{
-						colaRate 	= Float.parseFloat(sheet.getCell(column,row).getContents());
+						colaRate = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
 						System.out.println(e);
 						//e.printStackTrace();
@@ -279,11 +287,16 @@ public class PayrollSystemModel {
 			column = 1;
 			psd= null;
 			try{
-				sdf.setLenient(false);
-				psd = sdf.parse(sheet.getCell(column,row).getContents());
+				Cell cell = sheet.getCell(column,row);
+				if(cell.getType() == CellType.DATE){
+					DateCell date = (DateCell)cell;
+					psd = sdf.parse(sdf.format(date.getDate()));
+				}
+				else{
+					return false;
+				}
 			}catch(Exception e){
 				System.out.println(e);
-				//e.printStackTrace();
 			}
 
 			if(!psd.equals(periodStartDate)){
