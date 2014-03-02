@@ -12,6 +12,7 @@
 import javax.swing.*;
 
 import java.util.Date;
+import java.util.Scanner;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -41,8 +42,15 @@ public class PayrollSystemController{
 		this.model = model;
 		this.view = view;
 		this.con = con;
-		try{periodStartDate = sdf.parse("2012-01-13");}
-		catch(Exception ex){}
+		try{
+			Scanner in = new Scanner(this.getClass().getResourceAsStream("/periodStartDate.txt"));
+			String s = in.next();
+			periodStartDate = sdf.parse(s);
+			System.out.println(sdf.format(periodStartDate));
+		}
+		catch(Exception ex){
+			System.out.println("ERROR!");
+		}
 		model.setPeriodStartDate(periodStartDate);
 		removeAdjustments = new RemoveAdjustmentsView(model);
 		addAdjustments = new AddAdjustmentsView(model);
