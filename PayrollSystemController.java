@@ -75,6 +75,8 @@ public class PayrollSystemController{
 		removeAdjustments.setPersonnelListener(new personnelListRemoveAdjustmentListener());
 		generatePayslips.setSelectFileListener(new fileSaverGeneratePayslipsButtonListener());
 		generatePayslips.setClientListener(new clientListGeneratePayslipsListener());
+		generatePayslips.setGenerateListener(new generatePayslipsButtonListener());
+		generatePayslips.setCancelListener(new cancelGeneratePayslipsButtonListener());
 	}
 
 	//Main Menu Buttons Listeners
@@ -276,11 +278,21 @@ public class PayrollSystemController{
 	//generate payslips in generate payslips view
 	class generatePayslipsButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			model.generatePayslips(generatePayslips.getFileDirectory(),
-								   generatePayslips.getClient());
-			generatePayslips.showSuccess();
-			generatePayslips.setFileDirectory(null);
-			generatePayslips.setVisible(false);
+			File f = generatePayslips.getFileDirectory();
+			String client = generatePayslips.getClient();
+			String psd = generatePayslips.getPeriodStartDate();
+			if(model.checkPeriodForDTR(client,psd)){
+				if(f!=null){
+					model.generatePayslips(f, client, psd);
+					generatePayslips.showSuccess();
+					generatePayslips.setFileDirectory(null);
+				}else{
+					generatePayslips.showError(1);
+				}
+			}
+			else{
+				generatePayslips.showError(0);
+			}
 		}
 	}
 

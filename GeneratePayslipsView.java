@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import java.io.File;
 
@@ -190,6 +191,14 @@ public class GeneratePayslipsView extends JFrame {
 		clientCBox.addActionListener(list);
 	}
 	
+	public void setGenerateListener(ActionListener list){
+		generateBtn.addActionListener(list);
+	}
+	
+	public void setCancelListener(ActionListener list){
+		backBtn.addActionListener(list);
+	}
+	
 	public File fileSaver(){
 		//Create a file chooser
 		JFileChooser fc = new JFileChooser();
@@ -200,11 +209,32 @@ public class GeneratePayslipsView extends JFrame {
 	
 	public String getClient(){return (String)clientCBox.getSelectedItem();}
 	public void showSuccess(){}
+	
 	public void setFileDirectory(File f){
 		file = f;
-		saveTxtLbl.setText(file.getPath());
+		if(f!=null){
+			saveTxtLbl.setText(file.getPath());
+		}else{
+			saveTxtLbl.setText("");
+		}
 	}
+	
+	public String getPeriodStartDate(){
+		return (String) timePerCBox.getSelectedItem();
+	}
+	
 	public File getFileDirectory(){return file;}
+	
+	public void showError(int i){
+		String error = "";
+		if(i == 0){
+			error = "No personnel DTR in client!";
+		}else if(i==1){
+			error = "No file chosen!";
+		}
+		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
+	}
+	
 	
 	public void updateClientList(){
 		clientCBox.removeAllItems();

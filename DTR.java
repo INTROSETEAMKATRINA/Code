@@ -3,7 +3,7 @@ import java.util.Date;
 public class DTR {
 	private String name;
 	private String tin;
-	private float regularHoursWorks;
+	private float regularDaysWorks;
 	private float regularOvertime;
 	private float regularNightShiftDifferential;
 	private float specialHoliday;
@@ -14,13 +14,13 @@ public class DTR {
 	private float legalHolidayNightShiftDifferential;
 	private Date  periodStartDate;
 
-	public DTR(String name, String tin, float regularHoursWorks, float regularOvertime, float regularNightShiftDifferential,
+	public DTR(String name, String tin, float regularDaysWorks, float regularOvertime, float regularNightShiftDifferential,
 			   float specialHoliday, float specialHolidayOvertime, float specialHolidayNightShiftDifferential,
 			   float legalHoliday, float legalHolidayOvertime, float legalHolidayNightShiftDifferential,
 			   Date periodStartDate){
 		this.name = name;
 		this.tin = tin;
-		this.regularHoursWorks = regularHoursWorks;
+		this.regularDaysWorks = regularDaysWorks;
 		this.regularOvertime = regularOvertime;
 		this.regularNightShiftDifferential = regularNightShiftDifferential;
 		this.specialHoliday = specialHoliday;
@@ -31,11 +31,11 @@ public class DTR {
 		this.legalHolidayNightShiftDifferential = legalHolidayNightShiftDifferential;
 		this.periodStartDate = periodStartDate;
 	}
-	public float getRegularHoursWorks(){
-		return regularHoursWorks;
+	public float getRegularDaysWorks(){
+		return regularDaysWorks;
 	}
 	public void setRegularHoursWorks(float regularHoursWorks){
-		this.regularHoursWorks = regularHoursWorks;
+		this.regularDaysWorks = regularDaysWorks;
 	}
 	public float getRegularOvertime(){
 		return regularOvertime;

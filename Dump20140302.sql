@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `Payroll System` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `Payroll System`;
--- MySQL dump 10.13  Distrib 5.6.13, for osx10.6 (i386)
+CREATE DATABASE  IF NOT EXISTS `payroll system` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `payroll system`;
+-- MySQL dump 10.13  Distrib 5.6.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: Payroll System
+-- Host: localhost    Database: payroll system
 -- ------------------------------------------------------
 -- Server version	5.6.12
 
@@ -18,31 +18,39 @@ USE `Payroll System`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `AdjustmentsAndDeductions`
+-- Table structure for table `adjustmentsanddeductions`
 --
 
-DROP TABLE IF EXISTS `AdjustmentsAndDeductions`;
+DROP TABLE IF EXISTS `adjustmentsanddeductions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `AdjustmentsAndDeductions` (
+CREATE TABLE `adjustmentsanddeductions` (
   `amount` decimal(10,2) NOT NULL,
   `type` varchar(30) NOT NULL,
   `PeriodStartDate` date NOT NULL,
   `TIN` varchar(20) NOT NULL,
   PRIMARY KEY (`PeriodStartDate`,`TIN`,`type`,`amount`),
-  KEY `PersonnelAdjustmentsAndDeductions_idx` (`TIN`),
-  CONSTRAINT `TINAdjustmentsAndDeductions` FOREIGN KEY (`TIN`) REFERENCES `Personnel` (`TIN`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `PersonnelAdjustmentsAndDeductions_idx` (`TIN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Client`
+-- Dumping data for table `adjustmentsanddeductions`
 --
 
-DROP TABLE IF EXISTS `Client`;
+LOCK TABLES `adjustmentsanddeductions` WRITE;
+/*!40000 ALTER TABLE `adjustmentsanddeductions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `adjustmentsanddeductions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `client`
+--
+
+DROP TABLE IF EXISTS `client`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Client` (
+CREATE TABLE `client` (
   `Name` varchar(30) NOT NULL,
   `SHVariable` decimal(10,2) DEFAULT NULL,
   `LHVariable` decimal(10,2) DEFAULT NULL,
@@ -51,14 +59,23 @@ CREATE TABLE `Client` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `DTR`
+-- Dumping data for table `client`
 --
 
-DROP TABLE IF EXISTS `DTR`;
+LOCK TABLES `client` WRITE;
+/*!40000 ALTER TABLE `client` DISABLE KEYS */;
+/*!40000 ALTER TABLE `client` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dtr`
+--
+
+DROP TABLE IF EXISTS `dtr`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `DTR` (
-  `RHW` decimal(10,2) DEFAULT NULL,
+CREATE TABLE `dtr` (
+  `RDW` decimal(10,2) DEFAULT NULL,
   `ROT` decimal(10,2) DEFAULT NULL,
   `RNSD` decimal(10,2) DEFAULT NULL,
   `SH` decimal(10,2) DEFAULT NULL,
@@ -69,32 +86,50 @@ CREATE TABLE `DTR` (
   `LHNSD` decimal(10,2) DEFAULT NULL,
   `PeriodStartDate` date NOT NULL,
   `TIN` varchar(20) NOT NULL,
-  PRIMARY KEY (`TIN`,`PeriodStartDate`),
-  CONSTRAINT `TINDTR` FOREIGN KEY (`TIN`) REFERENCES `Personnel` (`TIN`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`TIN`,`PeriodStartDate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Password`
+-- Dumping data for table `dtr`
 --
 
-DROP TABLE IF EXISTS `Password`;
+LOCK TABLES `dtr` WRITE;
+/*!40000 ALTER TABLE `dtr` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dtr` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `password`
+--
+
+DROP TABLE IF EXISTS `password`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Password` (
+CREATE TABLE `password` (
   `Password` varchar(20) NOT NULL,
   PRIMARY KEY (`Password`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Payslip`
+-- Dumping data for table `password`
 --
 
-DROP TABLE IF EXISTS `Payslip`;
+LOCK TABLES `password` WRITE;
+/*!40000 ALTER TABLE `password` DISABLE KEYS */;
+INSERT INTO `password` VALUES ('gallant2010');
+/*!40000 ALTER TABLE `password` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payslip`
+--
+
+DROP TABLE IF EXISTS `payslip`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Payslip` (
+CREATE TABLE `payslip` (
   `Assignment` varchar(30) NOT NULL,
   `Name` varchar(50) NOT NULL,
   `PeriodStartDate` date NOT NULL,
@@ -134,19 +169,27 @@ CREATE TABLE `Payslip` (
   `UniformAndOthers` decimal(10,2) DEFAULT NULL,
   `NetPay` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`TIN`,`PeriodStartDate`),
-  KEY `TIN_idx` (`TIN`),
-  CONSTRAINT `TINPayslip` FOREIGN KEY (`TIN`) REFERENCES `Personnel` (`TIN`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `TIN_idx` (`TIN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Personnel`
+-- Dumping data for table `payslip`
 --
 
-DROP TABLE IF EXISTS `Personnel`;
+LOCK TABLES `payslip` WRITE;
+/*!40000 ALTER TABLE `payslip` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payslip` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `personnel`
+--
+
+DROP TABLE IF EXISTS `personnel`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Personnel` (
+CREATE TABLE `personnel` (
   `Name` varchar(50) DEFAULT NULL,
   `Assignment` varchar(30) DEFAULT NULL,
   `Position` varchar(30) DEFAULT NULL,
@@ -157,19 +200,27 @@ CREATE TABLE `Personnel` (
   `TIN` varchar(20) NOT NULL,
   `TaxStatus` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`TIN`),
-  KEY `ClientPersonnel_idx` (`Assignment`),
-  CONSTRAINT `ClientPersonnel` FOREIGN KEY (`Assignment`) REFERENCES `Client` (`Name`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `ClientPersonnel_idx` (`Assignment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `TaxTable`
+-- Dumping data for table `personnel`
 --
 
-DROP TABLE IF EXISTS `TaxTable`;
+LOCK TABLES `personnel` WRITE;
+/*!40000 ALTER TABLE `personnel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `personnel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `taxtable`
+--
+
+DROP TABLE IF EXISTS `taxtable`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TaxTable` (
+CREATE TABLE `taxtable` (
   `Length` varchar(20) DEFAULT NULL,
   `TaxStatus` varchar(20) DEFAULT NULL,
   `Bracket1` decimal(10,2) DEFAULT NULL,
@@ -182,6 +233,15 @@ CREATE TABLE `TaxTable` (
   `Bracket8` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `taxtable`
+--
+
+LOCK TABLES `taxtable` WRITE;
+/*!40000 ALTER TABLE `taxtable` DISABLE KEYS */;
+/*!40000 ALTER TABLE `taxtable` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -192,4 +252,4 @@ CREATE TABLE `TaxTable` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-02-28 21:56:23
+-- Dump completed on 2014-03-02 14:27:39

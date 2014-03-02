@@ -30,13 +30,13 @@ public class PayrollSystemModel {
 
 	public boolean addPersonnel(File fileDirectory, Date periodStartDate) {
     	ArrayList<Personnel> personnels = new ArrayList<Personnel>();
-
+		String assignment = "";
         try{
 			File file = fileDirectory;
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
 
-			String name,position,assignment,employeeStatus,tin,taxStatus;
+			String name,position,employeeStatus,tin,taxStatus;
 			float sss, sssLoan, phic, hdmf, hdmfLoan, payrollAdvance, houseRental, uniformAndOthers;
 			float dailyRate, colaRate, monthlyRate;
 			Date psd;
@@ -174,7 +174,7 @@ public class PayrollSystemModel {
 			}
 		}catch(Exception e){
 			System.out.println(e);
-			//e.printStackTrace();
+			return false;
 		}
 
         //ADD TO DATABASE
@@ -185,12 +185,14 @@ public class PayrollSystemModel {
             sql="INSERT INTO `Payroll System`.`Client`\n" +
             "(`Name`)\n" +
             "VALUES\n" +
-            "(\""+personnels.get(0).getAssignment() +"\");";
+            "(\""+assignment+"\");";
             stmt=con.prepareStatement(sql);
             stmt.execute(sql);
 
         } catch (SQLException ex) {
-			System.out.println(ex);
+			if(ex.getErrorCode()!=1062){
+				System.out.println(ex);
+			}
         }
 
         for( Personnel personnel: personnels ){
@@ -278,7 +280,7 @@ public class PayrollSystemModel {
 			Sheet sheet = workbook.getSheet(0);
 
 			String name,tin;
-			float regularHoursWorks, regularOvertime, regularNightShiftDifferential,
+			float regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 				  specialHoliday, specialHolidayOvertime, specialHolidayNightShiftDifferential,
 				  legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential;
 			Date psd;
@@ -320,9 +322,9 @@ public class PayrollSystemModel {
 
 					column++;
 					try{
-						regularHoursWorks = Float.parseFloat(sheet.getCell(column,row).getContents());
+						regularDaysWorks = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						regularHoursWorks = 0;
+						regularDaysWorks = 0;
 					}
 
 					column++;
@@ -381,7 +383,7 @@ public class PayrollSystemModel {
 					  	legalHolidayNightShiftDifferential = 0;
 					}
 
-				    dtrs.add(new DTR(name, tin, regularHoursWorks, regularOvertime, regularNightShiftDifferential,
+				    dtrs.add(new DTR(name, tin, regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 			   								 specialHoliday, specialHolidayOvertime,specialHolidayNightShiftDifferential,
 			   								 legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential,
 			   								 periodStartDate));
@@ -398,7 +400,7 @@ public class PayrollSystemModel {
 				
                 try{
                     sql= "INSERT INTO `Payroll System`.`DTR`\n" +
-                    "(`RHW`,\n" +
+                    "(`RDW`,\n" +
                     "`ROT`,\n" +
                     "`RNSD`,\n" +
                     "`SH`,\n" +
@@ -410,7 +412,7 @@ public class PayrollSystemModel {
                     "`PeriodStartDate`,\n" +
                     "`TIN`)\n" +
                     "VALUES\n" +
-                    "('"+ dtr.getRegularHoursWorks() +"',\n" +
+                    "('"+ dtr.getRegularDaysWorks() +"',\n" +
                     "'"+ dtr.getRegularOvertime() +"',\n" +
                     "'"+ dtr.getRegularNightShiftDifferential() +"',\n" +
                     "'"+ dtr.getSpecialHoliday() +"',\n" +
@@ -429,7 +431,7 @@ public class PayrollSystemModel {
                         try{
                             sql="UPDATE `Payroll System`.`DTR`\n" +
                                 "SET\n" +
-                                "`RHW` = " + dtr.getRegularHoursWorks() + ",\n" +
+                                "`RDW` = " + dtr.getRegularDaysWorks() + ",\n" +
                                 "`ROT` = "+dtr.getRegularOvertime()+",\n" +
                                 "`RNSD` = "+dtr.getRegularNightShiftDifferential()+",\n" +
                                 "`SH` = "+dtr.getSpecialHoliday()+",\n" +
@@ -506,7 +508,19 @@ public class PayrollSystemModel {
 	public void modfyClientVariables(float specialHoliday, float legalHoliday){
 	}
 
-	public void generatePayslips(File directory, String client){
+	public void generatePayslips(File directory, String client, String psd){
+		Statement stmt = null;
+            try{
+				String sql = "Select * FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
+							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"'";
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					
+				}
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
 	}
 
 	public void generateSummaryReport(File directory, String client){
@@ -596,6 +610,23 @@ public class PayrollSystemModel {
 				System.out.println(ex);
             }
 		return dates;
+	}
+	
+	public boolean checkPeriodForDTR(String client, String psd){
+		Statement stmt = null;
+            try{
+				String sql = "Select * FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
+							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"'";
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					return true;
+				}
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
+		return false;
+		
 	}
 	
 }
