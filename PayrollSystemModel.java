@@ -461,23 +461,19 @@ public class PayrollSystemModel {
 	}
 
 	public void addAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
-            Statement stmt = null;
+        Statement stmt = null;
 	    try {
-                String sql="INSERT INTO `Payroll System`.`AdjustmentsAndDeductions`\n" +
-                "(`amount`,\n" +
-                "`type`,\n" +
-                "`PeriodStartDate`,\n" +
-                "`TIN`)\n" +
-                "VALUES\n" +
-                "('"+ adjustment +"',\n" +
-                "'"+ reason +"',\n" +
-                "'"+ sdf.format(periodStartDate) +"',\n" +
-                "'"+ tin +"');";
+			String sql="INSERT INTO `Payroll System`.`AdjustmentsAndDeductions`\n" +
+			"(`amount`, `type`, `PeriodStartDate`,\n `TIN`) VALUES\n" +
+			"('"+ adjustment +"',\n" +
+			"'"+ reason +"',\n" +
+			"'"+ sdf.format(periodStartDate) +"',\n" +
+			"'"+ tin +"');";
 
-                stmt=con.prepareStatement(sql);
-                stmt.execute(sql);
-            } catch (SQLException ex) {
-                System.out.println(ex);
+			stmt=con.prepareStatement(sql);
+			stmt.execute(sql);
+        } catch (SQLException ex) {
+			System.out.println(ex);
             }
 	}
 
