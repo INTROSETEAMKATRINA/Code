@@ -81,31 +81,25 @@ public class PayrollSystemModel {
 					column++;
 					employeeStatus = sheet.getCell(column,row).getContents();
 
-					dailyRate = 0;
 					column++;
 					try{
 						dailyRate = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						dailyRate = 0;
 					}
 
-					colaRate = 0;
 					column++;
 					try{
 						colaRate = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						colaRate = 0;
 					}
 
-					monthlyRate = 0;
 					column++;
 					try{
 						monthlyRate = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						monthlyRate = 0;
 					}
 
 					column++;
@@ -116,76 +110,60 @@ public class PayrollSystemModel {
 					column++;
 					taxStatus = sheet.getCell(column,row).getContents();
 
-					sss = 0;
 					column++;
 					try{
 						sss = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						sss = 0;
 					}
 
-					sssLoan = 0;
 					column++;
 					try{
 						sssLoan = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						sssLoan = 0;
 					}
 
-					phic = 0;
 					column++;
 					try{
 						phic = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						phic = 0;
 					}
-
-					hdmf = 0;
+					
 					column++;
 					try{
 						hdmf = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						hdmf = 0;
 					}
 
-					hdmfLoan = 0;
 					column++;
 					try{
 						hdmfLoan = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						hdmfLoan = 0;
 					}
 
-					payrollAdvance = 0;
 					column++;
 					try{
 						payrollAdvance = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						payrollAdvance = 0;
 					}
 
-					houseRental = 0;
 					column++;
 					try{
 						houseRental = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						houseRental = 0;
 					}
 
-					uniformAndOthers = 0;
 					column++;
 					try{
 						uniformAndOthers = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
-						//e.printStackTrace();
+						uniformAndOthers = 0;
 					}
 
 					personnels.add(new Personnel(name, position, assignment,employeeStatus, tin, taxStatus,
@@ -319,76 +297,67 @@ public class PayrollSystemModel {
 						return false;
 					}
 
-					regularHoursWorks = 0;
 					column++;
 					try{
 						regularHoursWorks = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+						regularHoursWorks = 0;
 					}
 
-					regularOvertime = 0;
 					column++;
 					try{
 						regularOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+						regularOvertime = 0;
 					}
 
-					regularNightShiftDifferential = 0;
 					column++;
 					try{
 						regularNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+						regularNightShiftDifferential = 0;
 					}
 
-				  	specialHoliday = 0;
 				  	column++;
 				  	try{
 						specialHoliday = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){	
-						System.out.println(e);
+					  	specialHoliday = 0;
 					}
 
-				  	specialHolidayOvertime = 0;
 				  	column++;
 				  	try{
 						specialHolidayOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+					  	specialHolidayOvertime = 0;
 					}
 
-				  	specialHolidayNightShiftDifferential = 0;
 				  	column++;
 				  	try{
 						specialHolidayNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+					  	specialHolidayNightShiftDifferential = 0;
 					}
 
-				  	legalHoliday = 0;
 				  	column++;
 				  	try{
 						legalHoliday = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+					  	legalHoliday = 0;
 					}
 
-				  	legalHolidayOvertime = 0;
 				  	column++;
 				  	try{
 						legalHolidayOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+					  	legalHolidayOvertime = 0;
 					}
 
-				  	legalHolidayNightShiftDifferential = 0;
 				  	column++;
 				  	try{
 						legalHolidayNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
-						System.out.println(e);
+					  	legalHolidayNightShiftDifferential = 0;
 					}
 
 				    dtrs.add(new DTR(name, tin, regularHoursWorks, regularOvertime, regularNightShiftDifferential,
