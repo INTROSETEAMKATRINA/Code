@@ -212,7 +212,7 @@ class Payslip{
 	public float getHouseRental(){
 		return houseRental;
 	}
-	public float getuniformAndOthers(){
+	public float getUniformAndOthers(){
 		return uniformAndOthers;
 	}
 	public float getNetPay(){
@@ -229,5 +229,9 @@ class Payslip{
 	}
 	public float getSpecialHolidayOnRestDayPay(){
 		return specialHolidayOnRestDayPay;
+	}
+	public float getTotalDeductions(){
+		return sss + hdmf + wTax + phic + sssLoan + hdmfLoan +
+			payrollAdvance + houseRental + uniformAndOthers;
 	}
 }

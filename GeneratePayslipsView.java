@@ -233,6 +233,8 @@ public class GeneratePayslipsView extends JFrame {
 			error = "No personnel DTR in client!";
 		}else if(i==1){
 			error = "No file chosen!";
+		}else if(i==2){
+			error = "File is in use!";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}

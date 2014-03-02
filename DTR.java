@@ -40,7 +40,7 @@ public class DTR {
 	public float getRegularDaysWorks(){
 		return regularDaysWorks;
 	}
-	public void setRegularHoursWorks(float regularHoursWorks){
+	public void setRegularDaysWorks(float regularDaysWorks){
 		this.regularDaysWorks = regularDaysWorks;
 	}
 	public float getRegularOvertime(){

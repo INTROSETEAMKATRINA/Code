@@ -7,9 +7,10 @@ import java.util.Date;
 import java.util.ArrayList;
 
 import java.text.SimpleDateFormat;
-
+import java.text.DecimalFormat;
 import java.io.IOException;
 import java.io.File;
+import java.io.PrintWriter;
 
 import jxl.*;
 import jxl.read.biff.BiffException;
@@ -55,8 +56,7 @@ public class PayrollSystemModel {
 				if(cell.getType() == CellType.DATE){
 					DateCell date = (DateCell)cell;
 					psd = sdf.parse(sdf.format(date.getDate()));
-				}
-				else{
+				}else{
 					return false;
 				}
 			}catch(Exception e){
@@ -247,23 +247,50 @@ public class PayrollSystemModel {
 		
                 if(ex.getErrorCode()==1062){
                     try{
-                            sql ="UPDATE `Payroll System`.`Personnel`\n" +
-                            "SET\n" +
-                            "`Name` = '"+ personnel.getName() +"',\n" +
-                            "`Assignment` = '"+personnel.getAssignment()+"',\n" +
-                            "`Position` = '"+personnel.getPosition()+"',\n" +
-                            "`EmployeeStatus` = '"+personnel.getEmployeeStatus()+"',\n" +
-                            "`DailyRate` = '"+personnel.getDailyRate()+"',\n" +
-                            "`ColaRate` = '"+personnel.getColaRate()+"',\n" +
-                            "`MonthlyRate` = '"+personnel.getMonthlyRate()+"',\n" +
-                            "`TaxStatus` = '"+personnel.getTaxStatus()+"'\n" +
-                            "WHERE `TIN` = \""+personnel.getTIN()+"\";";
-                            stmt=con.prepareStatement(sql);
-                            stmt.execute(sql);
-                    } catch (SQLException ex1) {
+						String pTIN = personnel.getTIN();
+						
+                        sql ="UPDATE `Payroll System`.`Personnel`\n" +
+                        "SET\n" +
+                        "`Name` = '"+ personnel.getName() +"',\n" +
+                        "`Assignment` = '"+personnel.getAssignment()+"',\n" +
+                        "`Position` = '"+personnel.getPosition()+"',\n" +
+                        "`EmployeeStatus` = '"+personnel.getEmployeeStatus()+"',\n" +
+                        "`DailyRate` = '"+personnel.getDailyRate()+"',\n" +
+                        "`ColaRate` = '"+personnel.getColaRate()+"',\n" +
+                        "`MonthlyRate` = '"+personnel.getMonthlyRate()+"',\n" +
+                        "`TaxStatus` = '"+personnel.getTaxStatus()+"'\n" +
+                        "WHERE `TIN` = \""+personnel.getTIN()+"\";";
+                        stmt=con.prepareStatement(sql);
+                        stmt.execute(sql);
+						
+					if(personnel.getSSS()!=0){
+						this.addAdjustment("SSS", personnel.getSSS(), pTIN, periodStartDate);
+					}
+					if(personnel.getSSSLoan()!=0){                
+						this.addAdjustment("SSS Loan", personnel.getSSSLoan(), pTIN, periodStartDate);
+					}
+					if(personnel.getPHIC()!=0){
+						this.addAdjustment("PHIC", personnel.getPHIC(), pTIN, periodStartDate);
+					}
+					if(personnel.getHDMF()!=0){
+						this.addAdjustment("HDMF", personnel.getHDMF(), pTIN, periodStartDate);
+					}
+					if(personnel.getHDMFLoan()!=0){
+						this.addAdjustment("HDMF Loan", personnel.getHDMFLoan(), pTIN, periodStartDate);
+					}
+					if(personnel.getPayrollAdvance()!=0){
+						this.addAdjustment("Payroll Advance", personnel.getPayrollAdvance(), pTIN, periodStartDate);
+					}
+					if(personnel.getHouseRental()!=0){
+						this.addAdjustment("House Rental", personnel.getHouseRental(), pTIN, periodStartDate);
+					}
+					if(personnel.getUniformAndOthers()!=0){
+						this.addAdjustment("Uniform and Others", personnel.getUniformAndOthers(), pTIN, periodStartDate);
+					}                    
+					} catch (SQLException ex1) {
 						System.out.println(ex);
                     }
-                } else {
+                }else{
                     System.out.println(ex);
                 }                
                                 
@@ -296,8 +323,7 @@ public class PayrollSystemModel {
 				if(cell.getType() == CellType.DATE){
 					DateCell date = (DateCell)cell;
 					psd = sdf.parse(sdf.format(date.getDate()));
-				}
-				else{
+				}else{
 					return false;
 				}
 			}catch(Exception e){
@@ -309,9 +335,10 @@ public class PayrollSystemModel {
 			}
 
 			row += 2;
-			column = 0;
+			
 			while(row < sheet.getRows()){
-
+			
+				column = 0;
 				name = sheet.getCell(column,row).getContents();
 
 				if(name.length() > 0){
@@ -405,7 +432,7 @@ public class PayrollSystemModel {
 					}catch(Exception e){
 					  	late = 0;
 					}
-					
+									
 				    dtrs.add(new DTR(name, tin, regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 			   								 specialHoliday, specialHolidayOvertime,specialHolidayNightShiftDifferential,
 			   								 legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential,
@@ -420,7 +447,6 @@ public class PayrollSystemModel {
 		Statement stmt = null;
 		String sql;
             for(DTR dtr: dtrs){
-				
                 try{
                     sql= "INSERT INTO `Payroll System`.`DTR`\n" +
                     "(`RDW`,\n" +
@@ -480,7 +506,7 @@ public class PayrollSystemModel {
                         } catch(SQLException ex1){
 							System.out.println(ex);
                         }
-                    } else{
+                    }else{
                         System.out.println(ex);
                     }
                 }
@@ -509,7 +535,7 @@ public class PayrollSystemModel {
 			stmt.execute(sql);
         } catch (SQLException ex) {
 			System.out.println(ex);
-            }
+		}
 	}
 
 	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
@@ -541,12 +567,12 @@ public class PayrollSystemModel {
 	public void modfyClientVariables(float specialHoliday, float legalHoliday){
 	}
 
-	public void generatePayslips(File directory, String client, String psd){
+	public int generatePayslips(File directory, String client, String psd){
 		Statement stmt = null;
 		ArrayList<Payslip> payslips = new ArrayList<>();
             try{
 				String sql = "Select * FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
-							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"'";
+							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"' order by personnel.name";
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				float rotVar = 1.25f;
@@ -601,34 +627,34 @@ public class PayrollSystemModel {
 					float transpoAllow = 0;
 					String type;
 					while(rs2.next()){
-						type = rs.getString("type");
+						type = rs2.getString("type");
 						switch(type){
 							case "SSS":
-								sss = rs.getFloat("amount");
+								sss = rs2.getFloat("amount");
 								break;
 							case "PHIC":
-								phic = rs.getFloat("amount");
+								phic = rs2.getFloat("amount");
 								break;
 							case "SSS Loan":
-								sssLoan = rs.getFloat("amount");
+								sssLoan = rs2.getFloat("amount");
 								break;
 							case "HDMF":
-								hdmf = rs.getFloat("amount");
+								hdmf = rs2.getFloat("amount");
 								break;
 							case "HDMF Loan":
-								hdmfLoan = rs.getFloat("amount");
+								hdmfLoan = rs2.getFloat("amount");
 								break;
 							case "Payroll Advance":
-								payrollAdvance = rs.getFloat("amount");
+								payrollAdvance = rs2.getFloat("amount");
 								break;
 							case "House Rental":
-								houseRental = rs.getFloat("amount");
+								houseRental = rs2.getFloat("amount");
 								break;
 							case "Uniform and Others":
-								uniformAndOthers = rs.getFloat("amount");
+								uniformAndOthers = rs2.getFloat("amount");
 								break;
 							default:
-								adjustments += rs.getFloat("amount");
+								adjustments += rs2.getFloat("amount");
 								break;
 						}
 					}
@@ -665,8 +691,8 @@ public class PayrollSystemModel {
 					float grossPay = regularPay + legalHolidayPay + specialHolidayPay + 
 									adjustments + legalHolidayOnRestDayPay + specialHolidayOnRestDayPay;
 					float netPay = grossPay - totalDeductions;
-
-					new Payslip(assignment,  name, periodStartDate,
+					
+					payslips.add(new Payslip(assignment,  name, periodStartDate,
 					position, regularDaysWork, dailyRate,
 					grossPay, late, regularPay,
 					regularOvertime, regularOvertimePay,
@@ -685,11 +711,198 @@ public class PayrollSystemModel {
 					transpoAllow, adjustments, wTax,
 					sss, phic, hdmf, sssLoan,
 					hdmfLoan, payrollAdvance, houseRental,
-					uniformAndOthers, netPay);
+					uniformAndOthers, netPay));
 				}
             } catch (Exception ex) {
 				System.out.println(ex);
             }
+		boolean second = false;
+		PrintWriter writer = null;
+		try{
+			writer = new PrintWriter(directory, "UTF-8");
+		}catch(Exception ex){
+			System.out.println(ex);
+			return 1;
+		}
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+		for(Payslip p : payslips){
+			writer.print("\"888 GALLANT MANPOWER AND MANAGEMENT SERVICES INCORPORATED\",,,,,,,,,\""+p.getAssignment()+"\"");
+			writer.println(",,\"888 GALLANT MANPOWER AND MANAGEMENT SERVICES INCORPORATED\",,,,,,,,,\""+p.getAssignment()+"\",");
+			writer.print("\"558 Quirino Avenue Brgy. Tambo Paranaque City\",,,,,,,,,,,");
+			writer.println("\"558 Quirino Avenue Brgy. Tambo Paranaque City\",,,,,,,,,,");
+			String date = sdf.format(p.getPeriodStartDate());
+			String printDate = "";
+			int month = Integer.parseInt(date.substring(5,7));
+			int day = Integer.parseInt(date.substring(8,10));
+			int year = Integer.parseInt(date.substring(0,4));
+			int sDay = 15;
+			switch(month){
+				case 1:printDate += "Jan. ";
+					sDay = day == 1? 15:31;
+					break;
+				case 2:printDate += "Feb. ";
+					if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)){
+						sDay = day == 1? 15:29;
+					}else{
+						sDay = day == 1? 15:28;
+					}
+					break;
+				case 3:printDate += "March ";
+					sDay = day == 1? 15:31;
+					break;
+				case 4:printDate += "April ";
+					sDay = day == 1? 15:30;
+					break;
+				case 5:printDate += "May ";
+					sDay = day == 1? 15:31;
+					break;
+				case 6:printDate += "June ";
+					sDay = day == 1? 15:30;
+					break;
+				case 7:printDate += "July ";
+					sDay = day == 1? 15:31;
+					break;
+				case 8:printDate += "Aug. ";
+					sDay = day == 1? 15:31;
+					break;
+				case 9:printDate += "Sept. ";
+					sDay = day == 1? 15:30;
+					break;
+				case 10:printDate += "Oct. ";
+					sDay = day == 1? 15:31;
+					break;
+				case 11:printDate += "Nov. ";
+					sDay = day == 1? 15:30;
+					break;
+				case 12:printDate += "Dec. ";
+					sDay = day == 1? 15:31;
+					break;
+					
+			}
+			printDate += day + "-" + sDay;
+			printDate += ", ";
+			printDate += year;
+			writer.print("\"For the period of " + printDate + "\",,,,,,,,,,,");
+			
+			writer.print("\"For the period of " + printDate + "\"");
+			writer.println();
+			
+			writer.print("\""+p.getName()+"\"");
+			writer.print(",,,");
+			writer.print("\""+p.getPosition()+"\""+",,,,,,,,");
+			writer.print("\""+p.getName()+"\"");
+			writer.print(",,,");
+			writer.println("\""+p.getPosition()+"\"");
+			
+			writer.println();
+			
+			writer.print("\"Days Worked\",," + p.getRegularDaysWork());
+			writer.print(",\"L/H NSD Hrs\",," + p.getLegalHolidayNightShiftDifferential());
+			writer.print(",\"W/Tax\",,"+"\""+df.format(p.getWTax())+"\"" );
+			writer.print(",,");
+			writer.print(",\"Gross Pay\",,"+"\""+df.format(p.getGrossPay())+"\"" );
+			writer.println(",\"W/Tax\",,"+"\""+df.format(p.getWTax())+"\"" );
+		
+			writer.print("\"Daily Rate\",," + p.getDailyRate());
+			writer.print(",\"L/H NSD Pay\",," + "\""+df.format(p.getLegalHolidayNightShiftDifferentialPay())+"\"" );
+			writer.print(",\"SSS\",,"+p.getSSS());
+			writer.print(",,");
+			writer.print(",\"Tardiness\",," + "\""+df.format(p.getLate() * p.getDailyRate()/8/60)+"\"" );
+			writer.println(",\"SSS\",,"+p.getSSS());
+			
+			writer.print("\"Gross Pay\",," + "\""+df.format(p.getGrossPay())+"\"" );
+			writer.print(",\"SH/RD Worked\",," + p.getSpecialHoliday());
+			writer.print(",\"PHIC\",,"+p.getPHIC());
+			writer.print(",,");
+			writer.print(",\"Regular OT\",,"+p.getRegularOvertime());
+			writer.println(",\"PHIC\",,"+p.getPHIC());
+			
+			writer.print("\"Late\",," + p.getLate());
+			writer.print(",\"SH/RD Pay\",," + "\""+df.format(p.getSpecialHolidayPay())+"\"" );
+			writer.print(",\"HDMF\",,"+p.getHDMF());
+			writer.print(",,");
+			writer.print(",\"NSD Pay\",,"+"\""+df.format(p.getRegularNightShiftDifferentialPay())+"\"" );
+			writer.println(",\"HDMF\",,"+p.getHDMF());
+			
+			writer.print("\"Tardiness\",," + "\""+df.format(p.getLate() * p.getDailyRate()/8/60)+"\"" );
+			writer.print(",\"SH on RD Hrs\",," + p.getSpecialHolidayOnRestDay());
+			writer.print(",\"SSS Loan\",,"+p.getSSSLoan());
+			writer.print(",,");
+			writer.print(",\"Legal Holiday Pay\",,"+"\""+df.format(p.getLegalHolidayPay())+"\"" );
+			writer.println(",\"SSS Loan\",,"+p.getSSSLoan());
+			
+			writer.print("\"Regular Pay\",," + "\""+df.format(p.getRegularPay())+"\"" );
+			writer.print(",\"SH on RD Pay\",," + "\""+df.format(p.getSpecialHolidayOnRestDayPay())+"\"" );
+			writer.print(",\"HDMF Loan\",,"+p.getHDMFLoan());
+			writer.print(",,");
+			writer.print(",\"L/H on RD Pay\",,"+"\""+df.format(p.getLegalHolidayOnRestDayPay())+"\"" );
+			writer.println(",\"HDMF Loan\",,"+p.getHDMFLoan());
+			
+			writer.print("\"OT Hour\",," + p.getRegularOvertime());
+			writer.print(",\"SH/RD OT Hrs\",," + p.getSpecialHolidayOvertime());
+			writer.print(",\"Payroll Advance\",,"+p.getPayrollAdvance());
+			writer.print(",,");
+			writer.print(",\"L/H OT Pay\",,"+"\""+df.format(p.getLegalHolidayOvertimePay())+"\"" );
+			writer.println(",\"Payroll Advance\",,"+p.getPayrollAdvance());
+			
+			writer.print("\"OT Pay\",," + "\""+df.format(p.getRegularOvertimePay())+"\"");
+			writer.print(",\"SH/RD OT Pay\",," + "\""+df.format(p.getSpecialHolidayOvertimePay())+ "\"");
+			writer.print(",\"House Rental\",,"+p.getHouseRental());
+			writer.print(",,");
+			writer.print(",\"L/H NSD Pay\",,"+"\""+df.format(p.getLegalHolidayNightShiftDifferentialPay())+"\"");
+			writer.println(",\"House Rental\",,"+p.getHouseRental());
+			
+			writer.print("\"NSD Hour\",," + p.getRegularNightShiftDifferential());
+			writer.print(",\"SH/RD NSD Hrs\",," + p.getSpecialHolidayNightShiftDifferential());
+			writer.print(",\"Uniform & Others\",,"+p.getUniformAndOthers());
+			writer.print(",,");
+			writer.print(",\"SH RD Pay\",,"+"\""+df.format(p.getSpecialHolidayOnRestDayPay())+"\"" );
+			writer.println(",\"Uniform & Others\",,"+p.getUniformAndOthers());
+			
+			writer.print("\"NSD Pay\",," + "\""+df.format(p.getRegularNightShiftDifferentialPay())+"\"");
+			writer.print(",\"SH/RD NSD Pay\",," + p.getSpecialHolidayNightShiftDifferentialPay());
+			writer.print(",\"Total Deductions\",,"+"\""+df.format(p.getTotalDeductions())+"\"");
+			writer.print(",,");
+			writer.print(",\"SH on RD Pay\",,"+"\""+df.format(p.getRegularNightShiftDifferentialPay())+"\"");
+			writer.println(",\"Total Deductions\",,"+"\""+df.format(p.getTotalDeductions())+"\"");
+			
+			writer.print("\"L/H Hrs Worked\",," + p.getLegalHoliday());
+			writer.println(",,,,,,,,,\"SH/RD OT Pay\",,"+"\""+df.format( p.getSpecialHolidayOvertimePay())+"\"");
+			
+			writer.print("\"L/H Pay\",," + "\""+df.format(p.getLegalHolidayPay())+"\"");
+			writer.println(",,,,,,,,,\"SH/RD NSD Pay\",,"+"\""+df.format(p.getSpecialHolidayNightShiftDifferentialPay())+"\"" );
+			
+			writer.print("\"L/H on RD Hrs Worked\",," +p.getRegularNightShiftDifferential());
+			writer.print(",\"Adjustments\",," + "\""+df.format(p.getAdjustments())+"\"");
+			writer.print(",,,,,");
+			writer.println(",\"Adjustments\",,"+"\""+df.format(p.getAdjustments())+"\"" );
+			
+			writer.println("\"L/H on RD Pay\",," + "\""+df.format(p.getRegularNightShiftDifferentialPay())+"\"");
+			
+			writer.print("\"L/H OT Hrs\",," + p.getLegalHolidayOvertime());
+			writer.print(",\"Gross Pay\",," +"\""+df.format(p.getGrossPay())+"\"");
+			writer.print(",\"Net Pay\",,"+"\""+df.format(p.getNetPay())+"\"");
+			writer.print(",,");
+			writer.print(",\"Gross Pay\",,"+"\""+df.format(p.getGrossPay())+"\"");
+			writer.println(",\"Net Pay\",,"+"\""+df.format(p.getNetPay())+"\"");
+			
+			writer.println("\"L/H on OT Pay\",," + "\""+df.format(p.getLegalHolidayOvertimePay())+"\"");
+			
+			writer.println();
+			
+			writer.println("\"I acknowledge to have received the amount stated above and have no further claims for services rendered.\"");
+			
+			writer.println();
+			writer.println("\"___________________________\""+",,,,,"+"\"___________________________\"");
+			
+			writer.println(",\"Signature\""+",,,,,"+"\"Date\"");		
+			
+			writer.println();
+			writer.println();
+		}
+		writer.close();
+		return 0;
 	}
 
 	public void generateSummaryReport(File directory, String client){

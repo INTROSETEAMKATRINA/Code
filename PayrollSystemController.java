@@ -47,8 +47,7 @@ public class PayrollSystemController{
 			String s = in.next();
 			periodStartDate = sdf.parse(s);
 			System.out.println(sdf.format(periodStartDate));
-		}
-		catch(Exception ex){
+		}catch(Exception ex){
 			System.out.println("ERROR!");
 		}
 		model.setPeriodStartDate(periodStartDate);
@@ -90,8 +89,7 @@ public class PayrollSystemController{
 					view.showSuccess();
 				else
 					view.showProblemWithFile();
-			}
-			else
+			}else
 				System.out.println("No file chosen");
 		}
 	}
@@ -259,8 +257,7 @@ public class PayrollSystemController{
 						changePassword.showWrongOldPassword();
 					}
 				}
-			}
-			catch(Exception ex){
+			}catch(Exception ex){
 				System.out.println(ex);
 			}
 		}
@@ -283,14 +280,16 @@ public class PayrollSystemController{
 			String psd = generatePayslips.getPeriodStartDate();
 			if(model.checkPeriodForDTR(client,psd)){
 				if(f!=null){
-					model.generatePayslips(f, client, psd);
-					generatePayslips.showSuccess();
-					generatePayslips.setFileDirectory(null);
+					if(model.generatePayslips(f, client, psd)==0){
+						generatePayslips.showSuccess();
+						generatePayslips.setFileDirectory(null);
+					}else{
+						generatePayslips.showError(2);
+					}
 				}else{
 					generatePayslips.showError(1);
 				}
-			}
-			else{
+			}else{
 				generatePayslips.showError(0);
 			}
 		}
