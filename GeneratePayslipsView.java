@@ -215,8 +215,8 @@ public class GeneratePayslipsView extends JFrame {
 	
 	public void updateDateList(){
 		timePerCBox.removeAllItems();
-		//ArrayList<String> dates = model.getDateList();
-		//for(String t : dates)
-		//	timePerCBox.addItem(t);		
+		ArrayList<String> dates = model.getDateList(getClient());
+		for(String t : dates)
+			timePerCBox.addItem(t);		
 	}
 }

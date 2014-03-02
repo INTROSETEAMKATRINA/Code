@@ -542,5 +542,22 @@ public class PayrollSystemModel {
 		}
 		return "";
 	}
-
+	
+	public ArrayList<String> getDateList(String client){
+		Statement stmt = null;
+		ArrayList<String> dates = new ArrayList<>();
+            try{
+				String sql = "Select distinct periodstartdate FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name "
+							+ " and dtr.tin = personnel.tin order by periodstartdate";
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					dates.add(rs.getString("periodstartdate"));
+				}
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
+		return dates;
+	}
+	
 }

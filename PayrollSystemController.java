@@ -66,6 +66,7 @@ public class PayrollSystemController{
 		removeAdjustments.setClientListener(new clientListRemoveAdjustmentListener());
 		removeAdjustments.setPersonnelListener(new personnelListRemoveAdjustmentListener());
 		generatePayslips.setSelectFileListener(new fileSaverGeneratePayslipsButtonListener());
+		generatePayslips.setClientListener(new clientListGeneratePayslipsListener());
 	}
 
 	//Main Menu Buttons Listeners
