@@ -242,7 +242,28 @@ public class PayrollSystemModel {
                     this.addAdjustment("Uniform and Others", personnel.getUniformAndOthers(), pTIN, periodStartDate);
                 }
             } catch (SQLException ex){
-				System.out.println(ex);
+		
+                if(ex.getErrorCode()==1062){
+                    try{
+                            sql ="UPDATE `Payroll System`.`Personnel`\n" +
+                            "SET\n" +
+                            "`Name` = '"+ personnel.getName() +"',\n" +
+                            "`Assignment` = '"+personnel.getAssignment()+"',\n" +
+                            "`Position` = '"+personnel.getPosition()+"',\n" +
+                            "`EmployeeStatus` = '"+personnel.getEmployeeStatus()+"',\n" +
+                            "`DailyRate` = '"+personnel.getDailyRate()+"',\n" +
+                            "`ColaRate` = '"+personnel.getColaRate()+"',\n" +
+                            "`MonthlyRate` = '"+personnel.getMonthlyRate()+"',\n" +
+                            "`TaxStatus` = '"+personnel.getTaxStatus()+"'\n" +
+                            "WHERE `TIN` = \""+personnel.getTIN()+"\";";
+                            stmt=con.prepareStatement(sql);
+                            stmt.execute(sql);
+                    } catch (SQLException ex1) {
+                    }
+                } else {
+                    System.out.println(ex);
+                }                
+                                
             }
         }
 		return true;
@@ -404,10 +425,32 @@ public class PayrollSystemModel {
                     stmt.execute(sql);
 
                 } catch(SQLException ex) {
-					System.out.println(ex);
+                    if(ex.getErrorCode()==1062){
+                        try{
+                            sql="UPDATE `Payroll System`.`DTR`\n" +
+                                "SET\n" +
+                                "`RHW` = " + dtr.getRegularHoursWorks() + ",\n" +
+                                "`ROT` = "+dtr.getRegularOvertime()+",\n" +
+                                "`RNSD` = "+dtr.getRegularNightShiftDifferential()+",\n" +
+                                "`SH` = "+dtr.getSpecialHoliday()+",\n" +
+                                "`SHOT` = "+dtr.getSpecialHolidayOvertime()+",\n" +
+                                "`SHNSD` = "+dtr.getSpecialHolidayNightShiftDifferential()+",\n" +
+                                "`LH` = "+dtr.getLegalHoliday()+",\n" +
+                                "`LHOT` = "+dtr.getLegalHolidayOvertime()+",\n" +
+                                "`LHNSD` = "+dtr.getLegalHolidayNightShiftDifferential()+"\n" +
+                                "WHERE `PeriodStartDate` = \"" + sdf.format(dtr.getPeriodStartDate()) + "\" AND"
+                                        + " `TIN` = \""+dtr.getTIN()+"\";";
+                                stmt=con.prepareStatement(sql);
+                                stmt.execute(sql);
+                        
+                        } catch(SQLException ex1){
+                        }
+                    } else{
+                        System.out.println(ex);
+                    }
                 }
             }
-    	return true;
+            return true;
 	}
 
 	public void removePersonnel(String client){
@@ -420,22 +463,21 @@ public class PayrollSystemModel {
 	public void addAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
             Statement stmt = null;
 	    try {
+                String sql="INSERT INTO `Payroll System`.`AdjustmentsAndDeductions`\n" +
+                "(`amount`,\n" +
+                "`type`,\n" +
+                "`PeriodStartDate`,\n" +
+                "`TIN`)\n" +
+                "VALUES\n" +
+                "('"+ adjustment +"',\n" +
+                "'"+ reason +"',\n" +
+                "'"+ sdf.format(periodStartDate) +"',\n" +
+                "'"+ tin +"');";
 
-            String sql="INSERT INTO `Payroll System`.`AdjustmentsAndDeductions`\n" +
-            "(`amount`,\n" +
-            "`type`,\n" +
-            "`PeriodStartDate`,\n" +
-            "`TIN`)\n" +
-            "VALUES\n" +
-            "('"+ adjustment +"',\n" +
-            "'"+ reason +"',\n" +
-            "'"+ sdf.format(periodStartDate) +"',\n" +
-            "'"+ tin +"');";
-
-            stmt=con.prepareStatement(sql);
-            stmt.execute(sql);
+                stmt=con.prepareStatement(sql);
+                stmt.execute(sql);
             } catch (SQLException ex) {
-				System.out.println(ex);
+                System.out.println(ex);
             }
 	}
 
