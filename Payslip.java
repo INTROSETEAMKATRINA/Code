@@ -21,12 +21,16 @@ class Payslip{
 	private float legalHolidayOvertimePay;
 	private float legalHolidayNightShiftDifferential;
 	private float legalHolidayNightShiftDifferentialPay;
+	private float legalHolidayOnRestDay;
+	private float legalHolidayOnRestDayPay;
 	private float specialHoliday;
 	private float specialHolidayPay;
 	private float specialHolidayOvertime;
 	private float specialHolidayOvertimePay;
 	private float specialHolidayNightShiftDifferential;
 	private float specialHolidayNightShiftDifferentialPay;
+	private float specialHolidayOnRestDay;
+	private float specialHolidayOnRestDayPay;
 	private float transpoAllow;
 	private float adjustments;
 	private float wTax;
@@ -50,10 +54,12 @@ class Payslip{
 	float legalHolidayOvertime, float legalHolidayOvertimePay,
 	float legalHolidayNightShiftDifferential,
 	float legalHolidayNightShiftDifferentialPay,
+	float legalHolidayOnRestDay, float legalHolidayOnRestDayPay,
 	float specialHoliday, float specialHolidayPay,
 	float specialHolidayOvertime, float specialHolidayOvertimePay,
 	float specialHolidayNightShiftDifferential,
 	float specialHolidayNightShiftDifferentialPay,
+	float specialHolidayOnRestDay, float specialHolidayOnRestDayPay,
 	float transpoAllow, float adjustments, float wTax,
 	float sss, float phic, float hdmf, float sssLoan,
 	float hdmfLoan, float payrollAdvance, float houseRental,
@@ -77,12 +83,16 @@ class Payslip{
 		this.legalHolidayOvertimePay = legalHolidayOvertimePay;
 		this.legalHolidayNightShiftDifferential = legalHolidayNightShiftDifferential;
 		this.legalHolidayNightShiftDifferentialPay = legalHolidayNightShiftDifferentialPay;
+		this.legalHolidayOnRestDay = legalHolidayOnRestDay;
+		this.legalHolidayOnRestDayPay = legalHolidayOnRestDayPay;
 		this.specialHoliday = specialHoliday;
 		this.specialHolidayPay = specialHolidayPay;
 		this.specialHolidayOvertime = specialHolidayOvertime;
 		this.specialHolidayOvertimePay = specialHolidayOvertimePay;
 		this.specialHolidayNightShiftDifferential = specialHolidayNightShiftDifferential;
 		this.specialHolidayNightShiftDifferentialPay = specialHolidayNightShiftDifferentialPay;
+		this.specialHolidayOnRestDay = specialHolidayOnRestDay;
+		this.specialHolidayOnRestDayPay = specialHolidayOnRestDayPay;
 		this.transpoAllow = transpoAllow;
 		this.adjustments = adjustments;
 		this.wTax = wTax;
@@ -208,5 +218,16 @@ class Payslip{
 	public float getNetPay(){
 		return netPay;
 	}
-	
+	public float getLegalHolidayOnRestDay(){
+		return legalHolidayOnRestDay;
+	}
+	public float getLegalHolidayOnRestDayPay(){
+		return legalHolidayOnRestDayPay;
+	}
+	public float getSpecialHolidayOnRestDay(){
+		return specialHolidayOnRestDay;
+	}
+	public float getSpecialHolidayOnRestDayPay(){
+		return specialHolidayOnRestDayPay;
+	}
 }

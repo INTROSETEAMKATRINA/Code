@@ -12,13 +12,15 @@ public class DTR {
 	private float legalHoliday;
 	private float legalHolidayOvertime;
 	private float legalHolidayNightShiftDifferential;
+	private float legalHolidayOnRestDay;
+	private float specialHolidayOnRestDay;
 	private float late;
 	private Date  periodStartDate;
 
 	public DTR(String name, String tin, float regularDaysWorks, float regularOvertime, float regularNightShiftDifferential,
 			   float specialHoliday, float specialHolidayOvertime, float specialHolidayNightShiftDifferential,
-			   float legalHoliday, float legalHolidayOvertime, float legalHolidayNightShiftDifferential, float late,
-			   Date periodStartDate){
+			   float legalHoliday, float legalHolidayOvertime, float legalHolidayNightShiftDifferential, 
+			   float legalHolidayOnRestDay, float specialHolidayOnRestDay, float late, Date periodStartDate){
 		this.name = name;
 		this.tin = tin;
 		this.regularDaysWorks = regularDaysWorks;
@@ -30,6 +32,8 @@ public class DTR {
 		this.legalHoliday = legalHoliday;
 		this.legalHolidayOvertime = legalHolidayOvertime;
 		this.legalHolidayNightShiftDifferential = legalHolidayNightShiftDifferential;
+		this.legalHolidayOnRestDay = legalHolidayOnRestDay;
+		this.specialHolidayOnRestDay = specialHolidayOnRestDay;
 		this.late = late;
 		this.periodStartDate = periodStartDate;
 	}
@@ -93,7 +97,14 @@ public class DTR {
 	public void setPeriodStartDate(Date periodStartDate){
 		this.periodStartDate = periodStartDate;
 	}
-       
+      
+	public float getLegalHolidayOnRestDay(){
+		return legalHolidayOnRestDay;
+	}
+	
+	public float getSpecialHolidayOnRestDay(){
+		return specialHolidayOnRestDay;
+	}
 	public String getTIN(){
         return tin;
     }

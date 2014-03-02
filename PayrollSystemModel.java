@@ -283,7 +283,8 @@ public class PayrollSystemModel {
 			String name,tin;
 			float regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 				  specialHoliday, specialHolidayOvertime, specialHolidayNightShiftDifferential,
-				  legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential, late;
+				  legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential,
+				  specialHolidayOnRestDay, legalHolidayOnRestDay, late;
 			Date psd;
 			int row,column;
 
@@ -386,6 +387,20 @@ public class PayrollSystemModel {
 					
 					column++;
 				  	try{
+						specialHolidayOnRestDay = Float.parseFloat(sheet.getCell(column,row).getContents());
+					}catch(Exception e){
+					  	specialHolidayOnRestDay = 0;
+					}
+					
+					column++;
+				  	try{
+						legalHolidayOnRestDay = Float.parseFloat(sheet.getCell(column,row).getContents());
+					}catch(Exception e){
+					  	legalHolidayOnRestDay = 0;
+					}
+					
+					column++;
+				  	try{
 						late = Float.parseFloat(sheet.getCell(column,row).getContents());
 					}catch(Exception e){
 					  	late = 0;
@@ -394,7 +409,7 @@ public class PayrollSystemModel {
 				    dtrs.add(new DTR(name, tin, regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 			   								 specialHoliday, specialHolidayOvertime,specialHolidayNightShiftDifferential,
 			   								 legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential,
-			   								 late, periodStartDate));
+			   								 legalHolidayOnRestDay, specialHolidayOnRestDay, late, periodStartDate));
 				}
 				row++;
 			}
@@ -418,6 +433,8 @@ public class PayrollSystemModel {
                     "`LHOT`,\n" +
                     "`LHNSD`,\n" +
                     "`PeriodStartDate`,\n" +
+					"`LHRD`,\n" +
+					"`SHRD`,\n" +
 					"`late`,\n" +
                     "`TIN`)\n" +
                     "VALUES\n" +
@@ -431,6 +448,8 @@ public class PayrollSystemModel {
                     "'"+ dtr.getLegalHolidayOvertime() +"',\n" +
                     "'"+ dtr.getLegalHolidayNightShiftDifferential() +"',\n" +
                     "'"+ sdf.format(dtr.getPeriodStartDate()) +"',\n" +
+					"'"+ dtr.getLegalHolidayOnRestDay() +"',\n" +
+					"'"+ dtr.getSpecialHolidayOnRestDay() +"',\n" +
 					"'"+ dtr.getLate() +"',\n" +
                     "'"+ dtr.getTIN() +"');";
                     stmt=con.prepareStatement(sql);
@@ -450,6 +469,8 @@ public class PayrollSystemModel {
                                 "`LH` = "+dtr.getLegalHoliday()+",\n" +
                                 "`LHOT` = "+dtr.getLegalHolidayOvertime()+",\n" +
                                 "`LHNSD` = "+dtr.getLegalHolidayNightShiftDifferential()+",\n" +
+								"`LHRD` = "+dtr.getLegalHolidayOnRestDay()+",\n" +
+								"`SHRD` = "+dtr.getSpecialHolidayOnRestDay()+",\n" +
 								"`late` = "+dtr.getLate()+"\n" +
                                 "WHERE `PeriodStartDate` = \"" + sdf.format(dtr.getPeriodStartDate()) + "\" AND"
                                         + " `TIN` = \""+dtr.getTIN()+"\";";
@@ -528,6 +549,19 @@ public class PayrollSystemModel {
 							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"'";
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
+				float rotVar = 1.25f;
+				float rnsdVar = .10f;
+				float lhRate = 30f;
+				float lhVar = 1.00f;
+				float lhOTVar = 1.30f;
+				float lhNSDVar = 1.00f*.10f;
+				float lhRDVar = 2.60f;
+				float shRate = 30f;
+				float shVar = .30f;
+				float shOTVar = .30f*.30f;
+				float shNSDVar = .30f*.10f;
+				float shRDVar = 1.5f;
+				
 				while(rs.next()){
 					String tin = rs.getString("TIN");
 					
@@ -549,10 +583,12 @@ public class PayrollSystemModel {
 					float legalHoliday = rs.getFloat("LH");
 					float legalHolidayOvertime = rs.getFloat("LHOT");
 					float legalHolidayNightShiftDifferential = rs.getFloat("LHNSD");
+					float legalHolidayOnRestDay = rs.getFloat("LHRD");
 					float specialHoliday = rs.getFloat("SH");
 					float specialHolidayOvertime = rs.getFloat("SHOT");
 					float specialHolidayNightShiftDifferential = rs.getFloat("SHNSD");
-					
+					float specialHolidayOnRestDay = rs.getFloat("SHRD");
+					float colaRate = rs.getFloat("ColaRate");
 					float sss = 0;
 					float phic = 0;
 					float hdmf = 0;
@@ -562,6 +598,7 @@ public class PayrollSystemModel {
 					float houseRental = 0;
 					float uniformAndOthers = 0;	
 					float adjustments = 0;
+					float transpoAllow = 0;
 					String type;
 					while(rs2.next()){
 						type = rs.getString("type");
@@ -595,23 +632,41 @@ public class PayrollSystemModel {
 								break;
 						}
 					}
-
-					float regularPay = rs.getFloat("RDW");
-					float regularOvertimePay = rs.getFloat("RDW");
-					float regularNightShiftDifferentialPay = rs.getFloat("RDW");
-					float legalHolidayPay = rs.getFloat("RDW");
-					float legalHolidayOvertimePay = rs.getFloat("RDW");
-					float legalHolidayNightShiftDifferentialPay = rs.getFloat("RDW");
-					float specialHolidayPay = rs.getFloat("RDW");
-					float specialHolidayOvertimePay = rs.getFloat("RDW");
-					float specialHolidayNightShiftDifferentialPay = rs.getFloat("RDW");
-					float wTax = rs.getFloat("RDW");
-					float netPay = rs.getFloat("RDW");				
 					
+					float totalDeductions = sss + phic + sssLoan + hdmf + 
+											hdmfLoan + payrollAdvance +
+											houseRental + uniformAndOthers;
+					
+					float hourlyRate = dailyRate/8;
+					float shHourlyRate = (dailyRate + shRate)/8;
+					float lhHourlyRate = (dailyRate + lhRate)/8;
+					float basicPay = regularDaysWork * dailyRate;
+					float deductionFromTardiness = dailyRate/8/60 * late;
+					float colaAllowance = colaRate/30 * regularDaysWork;
+					
+					float regularPay = basicPay + colaAllowance - deductionFromTardiness;
+					float regularOvertimePay = regularOvertime * rotVar * hourlyRate;
+					float regularNightShiftDifferentialPay = regularNightShiftDifferential * rnsdVar * hourlyRate;
+					float legalHolidayPay = legalHoliday * lhVar * lhHourlyRate;
+					float legalHolidayOvertimePay = legalHolidayOvertime * lhOTVar * lhHourlyRate;
+					float legalHolidayNightShiftDifferentialPay = legalHolidayNightShiftDifferential * lhNSDVar * lhHourlyRate;
+					float legalHolidayOnRestDayPay = legalHolidayOnRestDay * lhRDVar * lhHourlyRate;
+					float specialHolidayPay = specialHoliday * shVar * shHourlyRate;
+					float specialHolidayOvertimePay = specialHolidayOvertime * shOTVar * shHourlyRate;
+					float specialHolidayNightShiftDifferentialPay = specialHolidayNightShiftDifferential * shNSDVar * shHourlyRate;
+					float specialHolidayOnRestDayPay = specialHolidayOnRestDay * shHourlyRate * shRDVar;
+					float wTax = 0;
+					float otPay = regularOvertimePay + 
+								legalHolidayOvertimePay + 
+								specialHolidayOvertimePay;
+					float nsdPay = regularNightShiftDifferentialPay +
+									legalHolidayNightShiftDifferentialPay +
+									specialHolidayNightShiftDifferentialPay;
+					float grossPay = regularPay + legalHolidayPay + specialHolidayPay + 
+									adjustments + legalHolidayOnRestDayPay + specialHolidayOnRestDayPay;
+					float netPay = grossPay - totalDeductions;
 
-
-					float grossPay = rs.getFloat("RDW");
-					/*new Payslip(assignment,  name, periodStartDate,
+					new Payslip(assignment,  name, periodStartDate,
 					position, regularDaysWork, dailyRate,
 					grossPay, late, regularPay,
 					regularOvertime, regularOvertimePay,
@@ -621,14 +676,16 @@ public class PayrollSystemModel {
 					legalHolidayOvertime, legalHolidayOvertimePay,
 					legalHolidayNightShiftDifferential,
 					legalHolidayNightShiftDifferentialPay,
+					legalHolidayOnRestDay, legalHolidayOnRestDayPay,
 					specialHoliday, specialHolidayPay,
 					specialHolidayOvertime, specialHolidayOvertimePay,
 					specialHolidayNightShiftDifferential,
 					specialHolidayNightShiftDifferentialPay,
+					specialHolidayOnRestDay, specialHolidayOnRestDayPay,
 					transpoAllow, adjustments, wTax,
 					sss, phic, hdmf, sssLoan,
 					hdmfLoan, payrollAdvance, houseRental,
-					uniformAndOthers, netPay);*/
+					uniformAndOthers, netPay);
 				}
             } catch (Exception ex) {
 				System.out.println(ex);
