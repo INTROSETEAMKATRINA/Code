@@ -529,17 +529,87 @@ public class PayrollSystemModel {
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				while(rs.next()){
+					String tin = rs.getString("TIN");
+					
+					sql = "Select * FROM `adjustmentsanddeductions`,`personnel` where personnel.tin = adjustmentsanddeductions.tin" +
+								 " and personnel.tin = '"+tin+"' and periodstartdate = '"+psd+"'";
+					st = con.createStatement();
+					ResultSet rs2 = st.executeQuery(sql);
+					
+					
 					String assignment = rs.getString("assignment");
 					String name = rs.getString("personnel.name");
 					Date periodStartDate = rs.getDate("PeriodStartDate");
 					String position = rs.getString("Position");
 					float regularDaysWork = rs.getFloat("RDW");
 					float dailyRate = rs.getFloat("DailyRate");
+					float late = rs.getFloat("late");
+					float regularOvertime = rs.getFloat("RDW");
+					float regularNightShiftDifferential = rs.getFloat("RNSD");
+					float legalHoliday = rs.getFloat("LH");
+					float legalHolidayOvertime = rs.getFloat("LHOT");
+					float legalHolidayNightShiftDifferential = rs.getFloat("LHNSD");
+					float specialHoliday = rs.getFloat("SH");
+					float specialHolidayOvertime = rs.getFloat("SHOT");
+					float specialHolidayNightShiftDifferential = rs.getFloat("SHNSD");
 					
-					//float regularDaysWork = rs.getFloat("RDW");
-					//float regularDaysWork = rs.getFloat("RDW");
+					float sss = 0;
+					float phic = 0;
+					float hdmf = 0;
+					float sssLoan = 0;
+					float hdmfLoan = 0;
+					float payrollAdvance = 0;
+					float houseRental = 0;
+					float uniformAndOthers = 0;	
+					float adjustments = 0;
+					String type;
+					while(rs2.next()){
+						type = rs.getString("type");
+						switch(type){
+							case "SSS":
+								sss = rs.getFloat("amount");
+								break;
+							case "PHIC":
+								phic = rs.getFloat("amount");
+								break;
+							case "SSS Loan":
+								sssLoan = rs.getFloat("amount");
+								break;
+							case "HDMF":
+								hdmf = rs.getFloat("amount");
+								break;
+							case "HDMF Loan":
+								hdmfLoan = rs.getFloat("amount");
+								break;
+							case "Payroll Advance":
+								payrollAdvance = rs.getFloat("amount");
+								break;
+							case "House Rental":
+								houseRental = rs.getFloat("amount");
+								break;
+							case "Uniform and Others":
+								uniformAndOthers = rs.getFloat("amount");
+								break;
+							default:
+								adjustments += rs.getFloat("amount");
+								break;
+						}
+					}
+
+					float regularPay = rs.getFloat("RDW");
+					float regularOvertimePay = rs.getFloat("RDW");
+					float regularNightShiftDifferentialPay = rs.getFloat("RDW");
+					float legalHolidayPay = rs.getFloat("RDW");
+					float legalHolidayOvertimePay = rs.getFloat("RDW");
+					float legalHolidayNightShiftDifferentialPay = rs.getFloat("RDW");
+					float specialHolidayPay = rs.getFloat("RDW");
+					float specialHolidayOvertimePay = rs.getFloat("RDW");
+					float specialHolidayNightShiftDifferentialPay = rs.getFloat("RDW");
+					float wTax = rs.getFloat("RDW");
+					float netPay = rs.getFloat("RDW");				
 					
-					
+
+
 					float grossPay = rs.getFloat("RDW");
 					/*new Payslip(assignment,  name, periodStartDate,
 					position, regularDaysWork, dailyRate,
