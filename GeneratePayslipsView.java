@@ -208,7 +208,9 @@ public class GeneratePayslipsView extends JFrame {
 	}
 	
 	public String getClient(){return (String)clientCBox.getSelectedItem();}
-	public void showSuccess(){}
+	public void showSuccess(){
+		JOptionPane.showMessageDialog(null, "Generate payslips success!", "Generate payslips success!", JOptionPane.PLAIN_MESSAGE); 
+	}
 	
 	public void setFileDirectory(File f){
 		file = f;

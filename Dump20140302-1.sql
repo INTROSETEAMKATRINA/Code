@@ -84,9 +84,10 @@ CREATE TABLE `dtr` (
   `LH` decimal(10,2) DEFAULT NULL,
   `LHOT` decimal(10,2) DEFAULT NULL,
   `LHNSD` decimal(10,2) DEFAULT NULL,
+  `late` decimal(10,2) DEFAULT NULL,
   `PeriodStartDate` date NOT NULL,
   `TIN` varchar(20) NOT NULL,
-  PRIMARY KEY (`TIN`,`PeriodStartDate`)
+  PRIMARY KEY (`PeriodStartDate`,`TIN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -252,4 +253,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-02 14:27:39
+-- Dump completed on 2014-03-02 16:00:12

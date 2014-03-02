@@ -261,6 +261,7 @@ public class PayrollSystemModel {
                             stmt=con.prepareStatement(sql);
                             stmt.execute(sql);
                     } catch (SQLException ex1) {
+						System.out.println(ex);
                     }
                 } else {
                     System.out.println(ex);
@@ -282,7 +283,7 @@ public class PayrollSystemModel {
 			String name,tin;
 			float regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 				  specialHoliday, specialHolidayOvertime, specialHolidayNightShiftDifferential,
-				  legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential;
+				  legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential, late;
 			Date psd;
 			int row,column;
 
@@ -382,11 +383,18 @@ public class PayrollSystemModel {
 					}catch(Exception e){
 					  	legalHolidayNightShiftDifferential = 0;
 					}
-
+					
+					column++;
+				  	try{
+						late = Float.parseFloat(sheet.getCell(column,row).getContents());
+					}catch(Exception e){
+					  	late = 0;
+					}
+					
 				    dtrs.add(new DTR(name, tin, regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 			   								 specialHoliday, specialHolidayOvertime,specialHolidayNightShiftDifferential,
 			   								 legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential,
-			   								 periodStartDate));
+			   								 late, periodStartDate));
 				}
 				row++;
 			}
@@ -410,6 +418,7 @@ public class PayrollSystemModel {
                     "`LHOT`,\n" +
                     "`LHNSD`,\n" +
                     "`PeriodStartDate`,\n" +
+					"`late`,\n" +
                     "`TIN`)\n" +
                     "VALUES\n" +
                     "('"+ dtr.getRegularDaysWorks() +"',\n" +
@@ -422,6 +431,7 @@ public class PayrollSystemModel {
                     "'"+ dtr.getLegalHolidayOvertime() +"',\n" +
                     "'"+ dtr.getLegalHolidayNightShiftDifferential() +"',\n" +
                     "'"+ sdf.format(dtr.getPeriodStartDate()) +"',\n" +
+					"'"+ dtr.getLate() +"',\n" +
                     "'"+ dtr.getTIN() +"');";
                     stmt=con.prepareStatement(sql);
                     stmt.execute(sql);
@@ -439,13 +449,15 @@ public class PayrollSystemModel {
                                 "`SHNSD` = "+dtr.getSpecialHolidayNightShiftDifferential()+",\n" +
                                 "`LH` = "+dtr.getLegalHoliday()+",\n" +
                                 "`LHOT` = "+dtr.getLegalHolidayOvertime()+",\n" +
-                                "`LHNSD` = "+dtr.getLegalHolidayNightShiftDifferential()+"\n" +
+                                "`LHNSD` = "+dtr.getLegalHolidayNightShiftDifferential()+",\n" +
+								"`late` = "+dtr.getLate()+"\n" +
                                 "WHERE `PeriodStartDate` = \"" + sdf.format(dtr.getPeriodStartDate()) + "\" AND"
                                         + " `TIN` = \""+dtr.getTIN()+"\";";
                                 stmt=con.prepareStatement(sql);
                                 stmt.execute(sql);
                         
                         } catch(SQLException ex1){
+							System.out.println(ex);
                         }
                     } else{
                         System.out.println(ex);
@@ -510,13 +522,43 @@ public class PayrollSystemModel {
 
 	public void generatePayslips(File directory, String client, String psd){
 		Statement stmt = null;
+		ArrayList<Payslip> payslips = new ArrayList<>();
             try{
 				String sql = "Select * FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
 							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"'";
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				while(rs.next()){
+					String assignment = rs.getString("assignment");
+					String name = rs.getString("personnel.name");
+					Date periodStartDate = rs.getDate("PeriodStartDate");
+					String position = rs.getString("Position");
+					float regularDaysWork = rs.getFloat("RDW");
+					float dailyRate = rs.getFloat("DailyRate");
 					
+					//float regularDaysWork = rs.getFloat("RDW");
+					//float regularDaysWork = rs.getFloat("RDW");
+					
+					
+					float grossPay = rs.getFloat("RDW");
+					/*new Payslip(assignment,  name, periodStartDate,
+					position, regularDaysWork, dailyRate,
+					grossPay, late, regularPay,
+					regularOvertime, regularOvertimePay,
+					regularNightShiftDifferential,
+					regularNightShiftDifferentialPay,
+					legalHoliday, legalHolidayPay,
+					legalHolidayOvertime, legalHolidayOvertimePay,
+					legalHolidayNightShiftDifferential,
+					legalHolidayNightShiftDifferentialPay,
+					specialHoliday, specialHolidayPay,
+					specialHolidayOvertime, specialHolidayOvertimePay,
+					specialHolidayNightShiftDifferential,
+					specialHolidayNightShiftDifferentialPay,
+					transpoAllow, adjustments, wTax,
+					sss, phic, hdmf, sssLoan,
+					hdmfLoan, payrollAdvance, houseRental,
+					uniformAndOthers, netPay);*/
 				}
             } catch (Exception ex) {
 				System.out.println(ex);
