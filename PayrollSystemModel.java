@@ -259,7 +259,7 @@ public class PayrollSystemModel {
                         "`ColaRate` = '"+personnel.getColaRate()+"',\n" +
                         "`MonthlyRate` = '"+personnel.getMonthlyRate()+"',\n" +
                         "`TaxStatus` = '"+personnel.getTaxStatus()+"'\n" +
-                        "WHERE `TIN` = \""+personnel.getTIN()+"\";";
+                        "WHERE `TIN` = \""+pTIN+"\";";
                         stmt=con.prepareStatement(sql);
                         stmt.execute(sql);
 						
@@ -534,7 +534,22 @@ public class PayrollSystemModel {
 			stmt=con.prepareStatement(sql);
 			stmt.execute(sql);
         } catch (SQLException ex) {
-			System.out.println(ex);
+			if(ex.getErrorCode() == 1062){		
+				try{
+					String sql ="UPDATE `Payroll System`.`AdjustmentsAndDeductions`\n" +
+					"SET\n" +
+					"`amount` = '"+ adjustment +"'\n" +
+					"WHERE `TIN` = \""+tin+"\"" + 
+					"and `TYPE` = \""+reason+"\"" +
+					"and `PeriodStartDate` = \""+sdf.format(periodStartDate)+"\";";
+					stmt=con.prepareStatement(sql);
+					stmt.execute(sql);
+				}catch(SQLException ex1){
+					System.out.println(ex1);
+				}
+			}else{
+				System.out.println(ex);
+			}
 		}
 	}
 

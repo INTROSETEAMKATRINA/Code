@@ -29,7 +29,7 @@ CREATE TABLE `adjustmentsanddeductions` (
   `type` varchar(30) NOT NULL,
   `PeriodStartDate` date NOT NULL,
   `TIN` varchar(20) NOT NULL,
-  PRIMARY KEY (`PeriodStartDate`,`TIN`,`type`,`amount`),
+  PRIMARY KEY (`PeriodStartDate`,`TIN`,`type`),
   KEY `PersonnelAdjustmentsAndDeductions_idx` (`TIN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
