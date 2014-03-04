@@ -1025,7 +1025,7 @@ public class PayrollSystemModel {
 		return false;
 		
 	}
-	public Date getPeriodStartDate(String client){  ///// This is going to be updated
+	public Date getPeriodDateList(String client){  ///// This is going to be updated
 		Statement stmt = null;
 		Date period = new Date();
             try{
