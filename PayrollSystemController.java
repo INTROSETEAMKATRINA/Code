@@ -76,6 +76,8 @@ public class PayrollSystemController{
 		generatePayslips.setClientListener(new clientListGeneratePayslipsListener());
 		generatePayslips.setGenerateListener(new generatePayslipsButtonListener());
 		generatePayslips.setCancelListener(new cancelGeneratePayslipsButtonListener());
+		viewSummaryReport.setPeriodStartDateListener(new addPeriodStartDateListener()); //// This is going to be updated
+		viewSummaryReport.setViewListener(new viewReportListener());
 	}
 
 	//Main Menu Buttons Listeners
@@ -134,6 +136,8 @@ public class PayrollSystemController{
 	//View summary report button in main menu
 	class viewSummaryReportListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
+			viewSummaryReport.updateClientList();
+			viewSummaryReport.updateViewList();
 			viewSummaryReport.setVisible(true);
 		}
 	}
@@ -218,17 +222,26 @@ public class PayrollSystemController{
 		}
 	}
 
-	//listeners in view summary report view
-	//view button listener in view summary report view
-	class viewSummaryReportButtonListener implements ActionListener{
+	class addPeriodStartDateListener implements ActionListener{ //This is going to be updated
 		public void actionPerformed(ActionEvent e){
-			viewSummaryReport.updateTable(model.getSummaryReport(
-										  viewSummaryReport.getClient(),
-										  viewSummaryReport.getReport(),
-										  periodStartDate));
+			viewSummaryReport.updateDateList();
 		}
 	}
-
+	class viewReportListener implements ActionListener{ //This is going to be updated
+		public void actionPerformed(ActionEvent e){
+			if(viewSummaryReport.getClient() == null || viewSummaryReport.getPeriodStartDate() == null)
+			{
+				JOptionPane.showMessageDialog(null, "Your one of item is empty. Please check your database", "Your one of item is empty.", JOptionPane.ERROR_MESSAGE);
+				
+			}
+			else
+			{
+				viewSummaryReport.updateTable();
+			}
+		}
+	}
+	
+	
 	//listeners in change password view
 	//change password button in change password view
 	class changePasswordButtonListener implements ActionListener{
