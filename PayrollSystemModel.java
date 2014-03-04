@@ -1025,5 +1025,138 @@ public class PayrollSystemModel {
 		return false;
 		
 	}
-	
+	public Date getPeriodStartDate(String client){  ///// This is going to be updated
+		Statement stmt = null;
+		Date period = new Date();
+            try{
+				String sql="Select MIN(PeriodStartDate) FROM payslip where assignment = '"+client+"' order by name";
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(sql);
+				rs.next();
+				period = rs.getDate("PeriodStartDate");
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
+		return period;
+	}
+	public ArrayList<Object[]> getTableRow(String client, String date, String report){ // This is going to be updated
+		ArrayList<Object[]> row = new ArrayList<>();
+		Statement stmt = null;
+			try{
+				String sql = "select distinct name from `payslip` where PeriodStartDate = '"+date+"'";
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(sql);
+				ResultSet rs2;
+				if(rs.first())
+				{
+					String name,position;
+						int j = 0;
+						int TRHW = 0,TRegularPay = 0,TROT = 0,TROTPay = 0,TRNSD = 0,TRNSDPay = 0,TLH = 0,TLHPay = 0,TLHOT = 0
+		    	 													,TLHOTPay = 0,TLHNSD = 0,TLHNSDPay = 0,TSH = 0,TSHPay = 0,TSHOT = 0,TSHOTPay = 0,
+																	TSHNSD = 0,TSHNSDPay = 0,TAdjustments = 0,TGrossPay = 0,TSSS = 0,TPHIC = 0,THDMF = 0,TSSSLoan = 0,
+																	TPayrollAdvance = 0,THouseRental = 0,TUniformAndOthers = 0,TSavings = 0,TNetPay = 0;
+						name = rs.getString("name");
+						System.out.println(name);
+						do
+						{
+						sql = "select position,RHW,DailyRate,TranspoAllow,RegularPay,ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay,LHNSD,LHNSDPay,SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay,Adjustments,GrossPay,SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental,UniformAndOthers,Savings,NetPay from `payslip`where name = '"+name+"'";
+						st = con.createStatement();
+						rs2 = st.executeQuery(sql);
+						rs2.next();
+						position = rs2.getString("position");
+						int RHW = 0,DailyRate = 0,TranspoAllow = 0,RegularPay = 0,ROT = 0,ROTPay = 0,RNSD = 0,RNSDPay = 0,LH = 0,LHPay = 0,LHOT = 0
+		    	 													,LHOTPay = 0,LHNSD = 0,LHNSDPay = 0,SH = 0,SHPay = 0,SHOT = 0,SHOTPay = 0,
+																	SHNSD = 0,SHNSDPay = 0,Adjustments = 0,GrossPay = 0,SSS = 0,PHIC = 0,HDMF = 0,SSSLoan = 0,
+																	PayrollAdvance = 0,HouseRental = 0,UniformAndOthers = 0,Savings = 0,NetPay = 0;
+						do
+		    	 					{ 
+		    	 						RHW += rs2.getInt(2); DailyRate += rs2.getInt(3); TranspoAllow += rs2.getInt(4);
+										RegularPay += rs2.getInt(5); ROT += rs2.getInt(6); ROTPay += rs2.getInt(7); RNSD += rs2.getInt(8);
+										RNSDPay += rs2.getInt(9); LH += rs2.getInt(10); LHPay += rs2.getInt(11); LHOT += rs2.getInt(12);
+										LHNSD += rs2.getInt(13);
+										LHNSDPay += rs2.getInt(14); SH += rs2.getInt(15); SHPay += rs2.getInt(16);
+										SHOT += rs2.getInt(17); SHOTPay += rs2.getInt(18); SHNSD += rs2.getInt(19); SHNSDPay += rs2.getInt(20);
+										Adjustments += rs2.getInt(21); GrossPay += rs2.getInt(22); SSS += rs2.getInt(23); PHIC += rs2.getInt(24);
+										HDMF += rs2.getInt(25); SSSLoan += rs2.getInt(26); PayrollAdvance += rs2.getInt(27); HouseRental += rs2.getInt(28);
+										UniformAndOthers += rs2.getInt(29); Savings += rs2.getInt(30); NetPay += rs2.getInt(31);
+										
+										TRHW += rs2.getInt(2); 
+										TRegularPay += rs2.getInt(5); TROT += rs2.getInt(6); TROTPay += rs2.getInt(7); TRNSD += rs2.getInt(8);
+										TRNSDPay += rs2.getInt(9); TLH += rs2.getInt(10); TLHPay += rs2.getInt(11); TLHOT += rs2.getInt(12);
+										TLHNSD += rs2.getInt(13);
+										TLHNSDPay += rs2.getInt(14); TSH += rs2.getInt(15); TSHPay += rs2.getInt(16);
+										TSHOT += rs2.getInt(17); TSHOTPay += rs2.getInt(18); TSHNSD += rs2.getInt(19); TSHNSDPay += rs2.getInt(20);
+										TAdjustments += rs2.getInt(21); TGrossPay += rs2.getInt(22); TSSS += rs2.getInt(23); TPHIC += rs2.getInt(24);
+										THDMF += rs2.getInt(25); TSSSLoan += rs2.getInt(26); TPayrollAdvance += rs2.getInt(27); THouseRental += rs2.getInt(28);
+										TUniformAndOthers += rs2.getInt(29); TSavings += rs2.getInt(30); TNetPay += rs2.getInt(31);	
+		    	 					}while(rs2.next());
+		    	 					if(report.equals("Daily time record summary"))
+									{
+										Object[] data1 = {j,name,position,RHW,ROT,RNSD,LH,LHOT,LHNSD,SH,SHOT,SHNSD};
+										row.add(data1);
+									}
+									else if(report.equals("Billing summary"))
+									{
+										Object[] data1 = {j,name,
+			    	 					position,RHW,DailyRate,TranspoAllow,RegularPay,
+			    	 					ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay = 0,LHNSD,LHNSDPay,
+			    	 					SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay,RegularPay,Adjustments,GrossPay,
+			    	 					SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental,UniformAndOthers,Savings,NetPay};
+			    	 					row.add(data1);
+									}
+									else if(report.equals("atm/cash payroll summary"))
+									{
+										Object[] data1 = {name,GrossPay,SSS,PHIC,HDMF,SSSLoan,HouseRental,Savings,0,NetPay,0,0,0,0};
+										row.add(data1);
+									}
+									else if(report.equals("payroll with total deduction"))
+									{
+										Object[] data1 = {j,name,
+			    	 					position,RHW,DailyRate,TranspoAllow,RegularPay,
+			    	 					ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay,LHNSD,LHNSDPay,
+			    	 					SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay,RegularPay,Adjustments,GrossPay,
+			    	 					SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental,UniformAndOthers,Savings,NetPay};
+			    	 					row.add(data1);
+									}
+									j++;
+						}while(rs.next());
+						if(report.equals("Daily time record summary"))
+									{
+										Object[] data1 = {j+1,"Total"," ",TRHW,TROT,TRNSD,TLH,TLHOT,TLHNSD,TSH,TSHOT,TSHNSD};
+	    	 							row.add(data1);
+									}
+									else if(report.equals("Billing summary"))
+									{
+										Object[] data1 = {j+1,"TOTAL",
+			    	 					"",TRHW,0,0,TRegularPay,
+			    	 					TROT,TROTPay,TRNSD,TRNSDPay,TLH,TLHPay,TLHOT,TLHOTPay,TLHNSD,TLHNSDPay,
+			    	 					TSH,TSHPay,TSHOT,TSHOTPay,TSHNSD,TSHNSDPay,TRegularPay,TAdjustments,TGrossPay,
+			    	 					TSSS,TPHIC,THDMF,TSSSLoan,TPayrollAdvance,THouseRental,TUniformAndOthers,TSavings,TNetPay};
+			    	 					row.add(data1);
+									}
+									else if(report.equals("atm/cash payroll summary"))
+									{
+										Object[] data1 = {"Total",TGrossPay,TSSS,TPHIC,THDMF,TSSSLoan,THouseRental,TSavings,0,TNetPay,0,0,0,0};
+										row.add(data1);
+									}
+									else if(report.equals("payroll with total deduction"))
+									{
+										Object[] data1 = {j+1,"TOTAL",
+			    	 					"",TRHW,0,0,TRegularPay,
+			    	 					TROT,TROTPay,TRNSD,TRNSDPay,TLH,TLHPay,TLHOT,TLHOTPay,TLHNSD,TLHNSDPay,
+			    	 					TSH,TSHPay,TSHOT,TSHOTPay,TSHNSD,TSHNSDPay,TRegularPay,TAdjustments,TGrossPay,
+			    	 					TSSS,TPHIC,THDMF,TSSSLoan,TPayrollAdvance,THouseRental,TUniformAndOthers,TSavings,TNetPay};
+			    	 					row.add(data1);
+									}
+				}
+				else
+				{
+						
+				}
+			}catch(Exception ex){
+				System.out.println(ex);
+			}
+			
+		return row;
+	}
 }
