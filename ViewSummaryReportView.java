@@ -206,13 +206,6 @@ public class ViewSummaryReportView extends JFrame {
 		for(Object[] t : row)
 			tableModel.addRow(t);
 	}
-	
-	public void updatePeriodStartDate(){
-		dateCBox.removeAllItems();
-		Date date = model.getPeriodStartDate((String)clientCBox.getSelectedItem());
-			dateCBox.addItem(date);
-		
-	}
 	public void updateClientList(){
 		clientCBox.removeAllItems();
 		ArrayList<String> clients = model.getClientList();
