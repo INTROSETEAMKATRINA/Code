@@ -4,17 +4,20 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-
-import java.util.ArrayList;
+import javax.swing.*;
+import javax.swing.event.*;
 
 public class ViewSummaryReportView extends JFrame {
 
@@ -28,10 +31,13 @@ public class ViewSummaryReportView extends JFrame {
 	private JLabel selectSummLbl;
 	private JLabel selectClientLbl;
 	private JLabel statusLbl;
+	private JLabel selectDateLbl;
 	private JComboBox viewCBox;
 	private JComboBox clientCBox;
+	private JComboBox dateCBox;
 	private JTable summaryTable;
 	private JScrollPane summaryPane;
+	private DefaultTableModel tableModel;
 	
 	public ViewSummaryReportView(PayrollSystemModel model)
 	{
@@ -45,40 +51,39 @@ public class ViewSummaryReportView extends JFrame {
 		
 		selectSummLbl = new JLabel("Select Summary Report: ");
 		selectClientLbl = new JLabel("Select Client: ");
+		selectDateLbl = new JLabel("Select Period: ");
 
 		clientCBox = new JComboBox();
 		viewCBox = new JComboBox();
+		dateCBox = new JComboBox();
 		
 		/*Testing*/
-		DefaultTableModel tableModel = new DefaultTableModel() {
+		tableModel = new DefaultTableModel() {
 		    public boolean isCellEditable(int rowIndex, int columnIndex) {
 	            return false;
 	        }
 		};
-		
-		Object[][] sample = {{8,10,0,0,1,8},
-						     {8,10,3,0,2,2},
-						     {3,0,4,0,4,2},
-						     {5,10,8,0,5,2},
-						     {8,0,6,0,1,7},
-						     {8,10,2,0,1,2}};
-		
-		String[] columnName = {"RHW","ROT","RNSD","SH","SH/OT","SH/NSD"};
+        String [] columnName = {" "," "," "," "," "," "," "," "," "," "," "," "," "," "
+		    	 													," "," "," "," "," "," "," ",
+																	" "," "," "," "," "," "," "," "," ",
+																	" "," "," "," "," "};
 		for(String x: columnName)
 			tableModel.addColumn(x);
-		
-		for(Object[] x: sample)
-			tableModel.addRow(x);
 		
 		//////////
 		
 		summaryTable = new JTable(tableModel);
 		summaryPane = new JScrollPane(summaryTable);
+		summaryTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+    	this.add(summaryPane, BorderLayout.CENTER);
+		
 		
 		modifyUI();
 	}
 	
-	private void modifyUI(){
+	private void modifyUI()
+	{
 		setSize(1064, 720);
 		setLocationRelativeTo(null);
 		setLayout(new GridBagLayout());	
@@ -96,6 +101,8 @@ public class ViewSummaryReportView extends JFrame {
 		viewCBox.setBorder(new LineBorder(Color.GRAY));
 		clientCBox.setPreferredSize(new Dimension(500,30));
 		clientCBox.setBorder(new LineBorder(Color.GRAY));
+		dateCBox.setPreferredSize(new Dimension(500,30));
+		dateCBox.setBorder(new LineBorder(Color.GRAY));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -115,10 +122,17 @@ public class ViewSummaryReportView extends JFrame {
 		add(selectClientLbl,gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(30,0,5,0);
+		gbc.insets = new Insets(0,0,5,0);
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
+		add(selectDateLbl,gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(30,0,5,0);
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
 		add(selectSummLbl,gbc);
 		
 		gbc.fill = GridBagConstraints.NONE;
@@ -133,15 +147,23 @@ public class ViewSummaryReportView extends JFrame {
 		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.insets = new Insets(0,0,5,0);
 		gbc.gridwidth = 2;
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		add(dateCBox,gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.insets = new Insets(0,0,5,0);
+		gbc.gridwidth = 2;
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		add(viewCBox,gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(10,0,5,0);
 		gbc.gridwidth = 3;
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		add(summaryPane,gbc);
 		
 		gbc.fill = GridBagConstraints.NONE;
@@ -149,7 +171,7 @@ public class ViewSummaryReportView extends JFrame {
 		gbc.insets = new Insets(0,0,5,0);
 		gbc.gridwidth = 1;
 		gbc.gridx = 2;
-		gbc.gridy = 5;
+		gbc.gridy = 6;
 		add(statusLbl,gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -157,7 +179,7 @@ public class ViewSummaryReportView extends JFrame {
 		gbc.insets = new Insets(0,0,5,0);
 		gbc.gridwidth = 1;
 		gbc.gridx = 2;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		add(viewBtn,gbc);
 		
 		gbc.fill = GridBagConstraints.NONE;
@@ -165,11 +187,53 @@ public class ViewSummaryReportView extends JFrame {
 		gbc.insets = new Insets(30,0,5,0);
 		gbc.gridwidth = 1;
 		gbc.gridx = 2;
-		gbc.gridy = 6;
+		gbc.gridy = 7;
 		add(backBtn,gbc);
 	}
+	public String getClient(){ return (String)clientCBox.getSelectedItem();}
 	
-	public String getClient(){ return new String();}
-	public String getReport(){ return new String();}
-	public void updateTable(ArrayList<String> table){}
+	public String getPeriodStartDate(){ return (String)dateCBox.getSelectedItem(); }
+	
+	public String getReport(){ return (String)viewCBox.getSelectedItem(); }
+	
+	public void setPeriodStartDateListener(ActionListener list){clientCBox.addActionListener(list);}
+	
+	public void setViewListener(ActionListener list){viewBtn.addActionListener(list);}
+	
+	public void updateTable(){
+		tableModel.setRowCount(0);
+		ArrayList<Object[]> row = model.getTableRow(getClient(),getPeriodStartDate(),getReport());
+		for(Object[] t : row)
+			tableModel.addRow(t);
+	}
+	
+	public void updatePeriodStartDate(){
+		dateCBox.removeAllItems();
+		Date date = model.getPeriodStartDate((String)clientCBox.getSelectedItem());
+			dateCBox.addItem(date);
+		
+	}
+	public void updateClientList(){
+		clientCBox.removeAllItems();
+		ArrayList<String> clients = model.getClientList();
+		for(String t : clients)
+			clientCBox.addItem(t);
+	}
+	
+	public void updateDateList(){
+		dateCBox.removeAllItems();
+		ArrayList<String> dates = model.getPeriodDateList(getClient());
+		for(String t : dates)
+			dateCBox.addItem(t);		
+	}
+	public void updateViewList(){
+		viewCBox.removeAllItems();
+		ArrayList<String> view = new ArrayList();
+		view.add("Daily time record summary");
+		view.add("Billing summary");
+		view.add("atm/cash payroll summary");
+		view.add("payroll with total deduction");
+		for(String t : view)
+			viewCBox.addItem(t);
+	}
 }
