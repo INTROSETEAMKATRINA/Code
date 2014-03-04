@@ -1025,19 +1025,20 @@ public class PayrollSystemModel {
 		return false;
 		
 	}
-	public Date getPeriodDateList(String client){  ///// This is going to be updated
+	public ArrayList<String> getPeriodDateList(String client){ ///This should be updated
 		Statement stmt = null;
-		Date period = new Date();
+		ArrayList<String> dates = new ArrayList<>();
             try{
-				String sql="Select MIN(PeriodStartDate) FROM payslip where assignment = '"+client+"' order by name";
+				String sql = "Select distinct periodstartdate FROM `payslip` where assignment = '"+client+"' order by periodstartdate";
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
-				rs.next();
-				period = rs.getDate("PeriodStartDate");
+				while(rs.next()){
+					dates.add(rs.getString("periodstartdate"));
+				}
             } catch (Exception ex) {
 				System.out.println(ex);
             }
-		return period;
+		return dates;
 	}
 	public ArrayList<Object[]> getTableRow(String client, String date, String report){ // This is going to be updated
 		ArrayList<Object[]> row = new ArrayList<>();
