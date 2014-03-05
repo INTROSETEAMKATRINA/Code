@@ -211,6 +211,8 @@ public class ViewSummaryReportView extends JFrame {
 	
 	public void setViewListener(ActionListener list){viewBtn.addActionListener(list);}
 	
+	public void backListener(ActionListener list){backBtn.addActionListener(list);}
+	
 	public void updateTable(){
 		tableModel.setRowCount(0);
 		ArrayList<Object[]> row = model.getTableRow(getClient(),getPeriodStartDate(),getReport());
