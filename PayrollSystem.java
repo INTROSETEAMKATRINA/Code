@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -18,8 +19,13 @@ public class PayrollSystem{
 			con = DriverManager.getConnection (url, uname, pass);
 			System.out.println("Connected!");
 			String inputPass = null;
-			inputPass = JOptionPane.showInputDialog("Please Input Password!");
-			if(inputPass!=null){ 
+			JPasswordField pwd = new JPasswordField(10);
+			pwd.addAncestorListener(new RequestFocusListener());
+			//RequestFocusListener is an External Class
+			int action = JOptionPane.showConfirmDialog(null, pwd ,"Enter Password",JOptionPane.OK_CANCEL_OPTION);  
+			
+			inputPass = new String(pwd.getPassword());
+			if(action >= 0){ 
 				Statement st = con.createStatement();	
 				ResultSet rs = st.executeQuery("select password from password where password = '"+inputPass+"'");
 				int rowCount = 0;  

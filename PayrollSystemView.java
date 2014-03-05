@@ -95,6 +95,13 @@ public class PayrollSystemView extends JFrame {
 		setContentPane(mainPanel);
 		setResizable(true);
 		setMinimumSize(new Dimension(1064, 720));
+		
+		backupBtn.setEnabled(false);
+		modifyClientBtn.setEnabled(false);
+		modifyTaxTableBtn.setEnabled(false);
+		removePersonnelBtn.setEnabled(false);
+		viewPersonnelBtn.setEnabled(false);
+		generateSummaryReportBtn.setEnabled(false);
 	}
 	
 	private void modifyUI(){ //Analyst Part
