@@ -78,6 +78,7 @@ public class PayrollSystemController{
 		generatePayslips.setCancelListener(new cancelGeneratePayslipsButtonListener());
 		viewSummaryReport.setPeriodStartDateListener(new addPeriodStartDateListener()); //// This is going to be updated
 		viewSummaryReport.setViewListener(new viewReportListener());
+		viewSummaryReport.backListener(new cancelViewSummaryReportListener());
 	}
 
 	//Main Menu Buttons Listeners
@@ -207,7 +208,12 @@ public class PayrollSystemController{
 			removeAdjustments.setVisible(false);
 		}
 	}
-
+	
+	class cancelViewSummaryReportListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			viewSummaryReport.setVisible(false);
+		}
+	}
 	//client list combo box in remove adjustments view
 	class clientListRemoveAdjustmentListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
