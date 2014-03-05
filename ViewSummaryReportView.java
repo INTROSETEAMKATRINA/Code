@@ -40,8 +40,7 @@ public class ViewSummaryReportView extends JFrame {
 	private DefaultTableModel tableModel;
 	private ArrayList<String> columnName;
 	
-	public ViewSummaryReportView(PayrollSystemModel model)
-	{
+	public ViewSummaryReportView(PayrollSystemModel model){
 		this.model = model;
 		columnName = new ArrayList<>();
 		
@@ -190,14 +189,15 @@ public class ViewSummaryReportView extends JFrame {
 		gbc.gridy = 7;
 		add(backBtn,gbc);
 	}
+	
 	public void updateTableColumn(){
 		ArrayList<String> column = model.getColumnName(getReport());
 		tableModel.setColumnCount(column.size());
-		System.out.println(column.size());
 		for(int i = 0; i < column.size();i++){
 			summaryTable.getColumnModel().getColumn(i).setHeaderValue(column.get(i));
 		}
 	}
+	
 	public int getColumnNumber(){ return columnName.size();}
 	
 	public String getClient(){ return (String)clientCBox.getSelectedItem();}
