@@ -43,8 +43,9 @@ class Payslip{
 	private float houseRental;
 	private float uniformAndOthers;
 	private float netPay;
+	private String tin;
 	
-	public Payslip(String assignment, String name, Date periodStartDate,
+	public Payslip(String tin, String assignment, String name, Date periodStartDate,
 	String position, float regularDaysWork, float dailyRate,
 	float grossPay, float late, float regularPay,
 	float regularOvertime, float regularOvertimePay,
@@ -64,6 +65,7 @@ class Payslip{
 	float sss, float phic, float hdmf, float sssLoan,
 	float hdmfLoan, float payrollAdvance, float houseRental,
 	float uniformAndOthers, float netPay){
+		this.tin = tin;
 		this.assignment = assignment;
 		this.name = name;
 		this.periodStartDate = periodStartDate;
@@ -105,6 +107,10 @@ class Payslip{
 		this.houseRental = houseRental;
 		this.uniformAndOthers = uniformAndOthers;
 		this.netPay = netPay;
+	}
+	
+	public String getTIN(){
+		return tin;
 	}
 	
 	public String getAssignment(){

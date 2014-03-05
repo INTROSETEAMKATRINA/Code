@@ -611,7 +611,6 @@ public class PayrollSystemModel {
 					st = con.createStatement();
 					ResultSet rs2 = st.executeQuery(sql);
 					
-					
 					String assignment = rs.getString("assignment");
 					String name = rs.getString("personnel.name");
 					Date periodStartDate = rs.getDate("PeriodStartDate");
@@ -707,7 +706,7 @@ public class PayrollSystemModel {
 									adjustments + legalHolidayOnRestDayPay + specialHolidayOnRestDayPay;
 					float netPay = grossPay - totalDeductions;
 					
-					payslips.add(new Payslip(assignment,  name, periodStartDate,
+					payslips.add(new Payslip(tin, assignment,  name, periodStartDate,
 					position, regularDaysWork, dailyRate,
 					grossPay, late, regularPay,
 					regularOvertime, regularOvertimePay,
@@ -742,6 +741,83 @@ public class PayrollSystemModel {
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
 		for(Payslip p : payslips){
+		
+			//Put to database.
+			try{
+				String sql="INSERT INTO `Payroll System`.`Payslip`" +
+				"(`Assignment`, `Name`, `PeriodStartDate`, `TIN`, `Position`, `RDW`," +
+				"`DailyRate`, `GrossPay`, `Late`, `RegularPay`, `ROT`, `ROTPay`," +
+				"`RNSD`, `RNSDPay`, `LH`, `LHPay`, `LHOT`, `LHOTPay`, `LHNSD`," +
+				"`LHNSDPay`, `LHRD`, `LHRDPay`, `SH`, `SHPay`, `SHOT`, `SHOTPay`," +
+				"`SHNSD`, `SHNSDPay`, `SHRD`, `SHRDPay`, `TranspoAllow`, `Adjustments`," +
+				"`WTax`, `SSS`, `PHIC`, `HDMF`, `SSSLoan`, `Savings`, `PayrollAdvance`," +
+				"`HouseRental`, `UniformAndOthers`, `NetPay`) VALUES " +
+				"('"+ p.getAssignment() + "'," + "'" + p.getName() + "'," + 
+				"'"+ sdf.format(p.getPeriodStartDate()) + "'," + "'" + p.getTIN() + "'," + 
+				"'"+ p.getPosition() + "', " + p.getRegularDaysWork() + ", " + 
+				p.getDailyRate() + ", " + p.getGrossPay() + ", " + 
+				p.getLate() + ", " + p.getRegularPay() + ", " + 
+				p.getRegularOvertime() + ", " + p.getRegularOvertimePay() + ", " + 
+				p.getRegularNightShiftDifferential() + ", " + p.getRegularNightShiftDifferentialPay() + ", " + 
+				p.getLegalHoliday() + ", " + p.getLegalHolidayPay() + ", " + 
+				p.getLegalHolidayOvertime() + ", " + p.getLegalHolidayOvertimePay() + ", " + 
+				p.getLegalHolidayNightShiftDifferential() + "," + 
+				p.getLegalHolidayNightShiftDifferentialPay() + ", " + 
+				p.getLegalHolidayOnRestDay() +", " + p.getLegalHolidayOnRestDayPay() + ", " + 
+				p.getSpecialHoliday() + ", " + p.getSpecialHolidayPay() + ", " + 
+				p.getSpecialHolidayOvertime() + ", " + p.getSpecialHolidayOvertimePay() + ", " + 
+				p.getSpecialHolidayNightShiftDifferential() + ", " + 
+				p.getSpecialHolidayNightShiftDifferentialPay() + ", " + 
+				p.getSpecialHolidayOnRestDay() + ", " + p.getSpecialHolidayOnRestDayPay() +", " + 
+				0 +", " + p.getAdjustments() + ", " + 
+				p.getWTax() +", " + p.getSSS() +", " + p.getPHIC() + ", " + p.getHDMF() +", " + 
+				p.getSSSLoan() +", " + 0 + ", " + 
+				p.getPayrollAdvance() +", " + p.getHouseRental() + ", " + 
+				p.getUniformAndOthers() +", " + p.getNetPay() + ");";
+				//Transpo Allow and Savings are set to 0 since I still don't know where it comes from.
+				stmt=con.prepareStatement(sql);
+				stmt.execute(sql);
+			}catch(SQLException ex){
+				if(ex.getErrorCode() == 1062){
+					try{
+						String sql ="UPDATE `Payroll System`.`Payslip` " +
+						"SET " +
+						"`Assignment` = \""+p.getAssignment()+"\", `Name` = \""+p.getName()+"\", " +
+						"`Position` = \""+p.getPosition()+"\", `RDW` = \""+p.getRegularDaysWork()+"\", " +
+						"`DailyRate` = "+p.getDailyRate()+", `GrossPay` = "+p.getGrossPay()+", " +
+						"`Late` = "+p.getLate()+", " + "`RegularPay` = "+p.getRegularPay()+", " + 
+						"`ROT` = "+p.getRegularOvertime()+", `ROTPay` = "+p.getRegularOvertimePay()+", " +
+						"`RNSD` = "+p.getRegularNightShiftDifferential()+", " + 
+						"`RNSDPay` = "+p.getRegularNightShiftDifferentialPay()+", " + 
+						"`LH` = "+p.getLegalHoliday()+", `LHPay` = "+p.getLegalHolidayPay()+", "+
+						"`LHOT` = "+p.getLegalHolidayOvertime()+", `LHOTPay` = "+p.getLegalHolidayOvertimePay()+", " + 
+						"`LHNSD` = "+p.getLegalHolidayNightShiftDifferential()+", " +
+						"`LHNSDPay` = "+p.getLegalHolidayNightShiftDifferentialPay()+", " + 
+						"`LHRD` = "+p.getLegalHolidayOnRestDay()+", `LHRDPay` = "+p.getLegalHolidayOnRestDayPay()+", " +
+						"`SH` = "+p.getSpecialHoliday()+", `SHPay` = "+p.getSpecialHolidayPay()+", " + 
+						"`SHOT` = "+p.getSpecialHolidayOvertime()+", `SHOTPay` = "+p.getSpecialHolidayOvertimePay()+", " +
+						"`SHNSD` = "+p.getSpecialHolidayNightShiftDifferential()+", " + 
+						"`SHNSDPay` = "+p.getSpecialHolidayNightShiftDifferentialPay()+", " + 
+						"`SHRD` = "+p.getSpecialHolidayOnRestDay()+", `SHRDPay` = "+p.getSpecialHolidayOnRestDayPay()+", " + 
+						"`TranspoAllow` = 0, `Adjustments` = "+p.getAdjustments()+", " +
+						"`WTax` = "+p.getWTax()+", `SSS` = "+p.getSSS()+", " + 
+						"`PHIC` = "+p.getPHIC()+", `HDMF` = "+p.getHDMF()+", " + 
+						"`SSSLoan` = "+p.getSSSLoan()+", `Savings` = 0, " + 
+						"`PayrollAdvance` = "+p.getPayrollAdvance()+", " +
+						"`HouseRental` = "+p.getHouseRental()+", " + 
+						"`UniformAndOthers` = "+p.getUniformAndOthers()+", " + 
+						"`NetPay` = "+p.getNetPay()+
+						"WHERE `TIN` = \""+p.getTIN()+"\" and `PeriodStartDate` = \""+sdf.format(p.getPeriodStartDate())+"\";";
+						stmt=con.prepareStatement(sql);
+						stmt.execute(sql);
+					}catch(SQLException ex1){
+						System.out.println(ex1);
+					}
+				}else{
+					System.out.println(ex);
+				}
+			}
+			
 			writer.print("\"888 GALLANT MANPOWER AND MANAGEMENT SERVICES INCORPORATED\",,,,,,,,,\""+p.getAssignment()+"\"");
 			writer.println(",,\"888 GALLANT MANPOWER AND MANAGEMENT SERVICES INCORPORATED\",,,,,,,,,\""+p.getAssignment()+"\",");
 			writer.print("\"558 Quirino Avenue Brgy. Tambo Paranaque City\",,,,,,,,,,,");

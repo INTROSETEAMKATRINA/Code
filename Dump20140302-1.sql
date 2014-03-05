@@ -136,7 +136,7 @@ CREATE TABLE `payslip` (
   `PeriodStartDate` date NOT NULL,
   `TIN` varchar(20) NOT NULL,
   `Position` varchar(30) DEFAULT NULL,
-  `RHW` decimal(10,2) unsigned DEFAULT NULL,
+  `RDW` decimal(10,2) unsigned DEFAULT NULL,
   `DailyRate` decimal(10,2) DEFAULT NULL,
   `GrossPay` decimal(10,2) DEFAULT NULL,
   `Late` int(11) DEFAULT NULL,
