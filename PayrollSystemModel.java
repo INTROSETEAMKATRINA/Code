@@ -1099,7 +1099,22 @@ public class PayrollSystemModel {
 				System.out.println(ex);
             }
 		return false;
-		
+	}
+
+	public boolean checkPeriodForPayslips(String client, String psd){
+		Statement stmt = null;
+            try{
+				String sql = "Select * FROM `client`,`payslip`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
+							" and payslip.tin = personnel.tin and payslip.periodstartdate = '"+psd+"'";
+				Statement st = con.createStatement();
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					return true;
+				}
+            } catch (Exception ex) {
+				System.out.println(ex);
+            }
+		return false;
 	}
 	
 	public ArrayList<String> getDateListPayslips(String client){ ///This should be updated
@@ -1124,7 +1139,7 @@ public class PayrollSystemModel {
 			column.add("Seq no.");
 			column.add("Name");
 			column.add("Position");
-			column.add("RHW");
+			column.add("RDW");
 			column.add("ROT");
 			column.add("RNSD");
 			column.add("LH");
@@ -1140,7 +1155,7 @@ public class PayrollSystemModel {
 			column.add("Seq No.");
 			column.add("Name");
 			column.add("Position");
-			column.add("RHW");
+			column.add("RDW");
 			column.add("DailyRate");
 			column.add("Allowance");
 			column.add("RegularPay");
@@ -1196,7 +1211,7 @@ public class PayrollSystemModel {
 			column.add("Seq No.");
 			column.add("Name");
 			column.add("Position");
-			column.add("RHW");
+			column.add("RDW");
 			column.add("DailyRate");
 			column.add("Allowance");
 			column.add("RegularPay");
@@ -1238,31 +1253,34 @@ public class PayrollSystemModel {
 		ArrayList<Object[]> row = new ArrayList<>();
 		Statement stmt = null;
 			try{
-				String sql = "select distinct name from `payslip` where PeriodStartDate = '"+date+"'";
+				String sql = "select distinct name, tin from `payslip` where PeriodStartDate = '"+date+"'";
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				ResultSet rs2;
 				if(rs.first()){
 					String name,position;
+					String tin;
 					int j = 0;
-					int TRHW = 0,TRegularPay = 0,TROT = 0,TROTPay = 0,TRNSD = 0,TRNSDPay = 0,TLH = 0,TLHPay = 0,TLHOT = 0,
+					int TRDW = 0,TRegularPay = 0,TROT = 0,TROTPay = 0,TRNSD = 0,TRNSDPay = 0,TLH = 0,TLHPay = 0,TLHOT = 0,
 						TLHOTPay = 0,TLHNSD = 0,TLHNSDPay = 0,TSH = 0,TSHPay = 0,TSHOT = 0,TSHOTPay = 0,
 						TSHNSD = 0,TSHNSDPay = 0,TAdjustments = 0,TGrossPay = 0,TSSS = 0,TPHIC = 0,THDMF = 0,TSSSLoan = 0,
 						TPayrollAdvance = 0,THouseRental = 0,TUniformAndOthers = 0,TSavings = 0,TNetPay = 0;
-					name = rs.getString("name");
-					System.out.println(name);
-					do{
-						sql = "select position,RHW,DailyRate,TranspoAllow,RegularPay,ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay,LHNSD,LHNSDPay,SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay,Adjustments,GrossPay,SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental,UniformAndOthers,Savings,NetPay from `payslip`where name = '"+name+"'";
+					do{	tin = rs.getString("tin");
+						name = rs.getString("name");
+						sql = "select position,RDW,DailyRate,TranspoAllow,RegularPay,ROT,ROTPay,RNSD,RNSDPay,LH,LHPay," +
+							  "LHOT,LHOTPay,LHNSD,LHNSDPay,SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay," +
+							  "Adjustments,GrossPay,SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental," +
+							  "UniformAndOthers,Savings,NetPay from `payslip`where tin = '"+tin+"'";
 						st = con.createStatement();
 						rs2 = st.executeQuery(sql);
 						rs2.next();
 						position = rs2.getString("position");
-						int RHW = 0,DailyRate = 0,TranspoAllow = 0,RegularPay = 0,ROT = 0,ROTPay = 0,RNSD = 0,RNSDPay = 0,LH = 0,LHPay = 0,LHOT = 0
+						int RDW = 0,DailyRate = 0,TranspoAllow = 0,RegularPay = 0,ROT = 0,ROTPay = 0,RNSD = 0,RNSDPay = 0,LH = 0,LHPay = 0,LHOT = 0
 		    	 													,LHOTPay = 0,LHNSD = 0,LHNSDPay = 0,SH = 0,SHPay = 0,SHOT = 0,SHOTPay = 0,
 																	SHNSD = 0,SHNSDPay = 0,Adjustments = 0,GrossPay = 0,SSS = 0,PHIC = 0,HDMF = 0,SSSLoan = 0,
 																	PayrollAdvance = 0,HouseRental = 0,UniformAndOthers = 0,Savings = 0,NetPay = 0;
 						do{ 
-		    	 			RHW += rs2.getInt(2); DailyRate += rs2.getInt(3); TranspoAllow += rs2.getInt(4);
+		    	 			RDW += rs2.getInt(2); DailyRate += rs2.getInt(3); TranspoAllow += rs2.getInt(4);
 							RegularPay += rs2.getInt(5); ROT += rs2.getInt(6); ROTPay += rs2.getInt(7); RNSD += rs2.getInt(8);
 							RNSDPay += rs2.getInt(9); LH += rs2.getInt(10); LHPay += rs2.getInt(11); LHOT += rs2.getInt(12);
 							LHOTPay += rs2.getInt(13); LHNSD += rs2.getInt(14);
@@ -1271,7 +1289,7 @@ public class PayrollSystemModel {
 							Adjustments += rs2.getInt(22); GrossPay += rs2.getInt(23); SSS += rs2.getInt(24); PHIC += rs2.getInt(25);
 							HDMF += rs2.getInt(26); SSSLoan += rs2.getInt(27); PayrollAdvance += rs2.getInt(28); HouseRental += rs2.getInt(29);
 							UniformAndOthers += rs2.getInt(30); Savings += rs2.getInt(31); NetPay += rs2.getInt(32);
-							TRHW += rs2.getInt(2); DailyRate += rs2.getInt(3); TranspoAllow += rs2.getInt(4);
+							TRDW += rs2.getInt(2); DailyRate += rs2.getInt(3); TranspoAllow += rs2.getInt(4);
 							TRegularPay += rs2.getInt(5); TROT += rs2.getInt(6); TROTPay += rs2.getInt(7); TRNSD += rs2.getInt(8);
 							TRNSDPay += rs2.getInt(9); TLH += rs2.getInt(10); TLHPay += rs2.getInt(11); TLHOT += rs2.getInt(12);
 							TLHOTPay += rs2.getInt(13); TLHNSD += rs2.getInt(14);
@@ -1283,11 +1301,11 @@ public class PayrollSystemModel {
 		    	 		}while(rs2.next());
 						
 		    	 		if(report.equals("Daily time record summary")){
-							Object[] data1 = {j,name,position,RHW,ROT,RNSD,LH,LHOT,LHNSD,SH,SHOT,SHNSD};
+							Object[] data1 = {j,name,position,RDW,ROT,RNSD,LH,LHOT,LHNSD,SH,SHOT,SHNSD};
 							row.add(data1);
 						}else if(report.equals("Billing summary")){
 							Object[] data1 = {j,name,
-			    	 		position,RHW,DailyRate,TranspoAllow,RegularPay,
+			    	 		position,RDW,DailyRate,TranspoAllow,RegularPay,
 			    	 		ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay,LHNSD,LHNSDPay,
 			    	 		SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay,Adjustments,GrossPay,
 			    	 		SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental,UniformAndOthers,Savings,NetPay};
@@ -1297,7 +1315,7 @@ public class PayrollSystemModel {
 							row.add(data1);
 						}else if(report.equals("payroll with total deduction")){
 							Object[] data1 = {j,name,
-			    	 		position,RHW,DailyRate,TranspoAllow,RegularPay,
+			    	 		position,RDW,DailyRate,TranspoAllow,RegularPay,
 			    	 		ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay,LHNSD,LHNSDPay,
 			    	 		SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay,Adjustments,GrossPay,
 			    	 		SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental,UniformAndOthers,Savings,NetPay};
@@ -1307,11 +1325,11 @@ public class PayrollSystemModel {
 					}while(rs.next());
 					
 					if(report.equals("Daily time record summary")){
-						Object[] data1 = {j,"Total"," ",TRHW,TROT,TRNSD,TLH,TLHOT,TLHNSD,TSH,TSHOT,TSHNSD};
+						Object[] data1 = {j,"Total"," ",TRDW,TROT,TRNSD,TLH,TLHOT,TLHNSD,TSH,TSHOT,TSHNSD};
 	    	 			row.add(data1);
 					}else if(report.equals("Billing summary")){
 						Object[] data1 = {j,"TOTAL",
-			    	 	"",TRHW,0,0,TRegularPay,
+			    	 	"",TRDW,0,0,TRegularPay,
 			    	 	TROT,TROTPay,TRNSD,TRNSDPay,TLH,TLHPay,TLHOT,TLHOTPay,TLHNSD,TLHNSDPay,
 			    	 	TSH,TSHPay,TSHOT,TSHOTPay,TSHNSD,TSHNSDPay,TAdjustments,TGrossPay,
 			    		TSSS,TPHIC,THDMF,TSSSLoan,TPayrollAdvance,THouseRental,TUniformAndOthers,TSavings,TNetPay};
@@ -1321,7 +1339,7 @@ public class PayrollSystemModel {
 						row.add(data1);
 					}else if(report.equals("payroll with total deduction")){
 						Object[] data1 = {j,"TOTAL",
-			    	 	"",TRHW,0,0,TRegularPay,
+			    	 	"",TRDW,0,0,TRegularPay,
 			    	 	TROT,TROTPay,TRNSD,TRNSDPay,TLH,TLHPay,TLHOT,TLHOTPay,TLHNSD,TLHNSDPay,
 			    	 	TSH,TSHPay,TSHOT,TSHOTPay,TSHNSD,TSHNSDPay,TAdjustments,TGrossPay,
 			    	 	TSSS,TPHIC,THDMF,TSSSLoan,TPayrollAdvance,THouseRental,TUniformAndOthers,TSavings,TNetPay};

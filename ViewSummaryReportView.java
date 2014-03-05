@@ -242,7 +242,14 @@ public class ViewSummaryReportView extends JFrame {
 			viewCBox.addItem(t);
 	}
 	
-	public void showError(){
-		JOptionPane.showMessageDialog(null, "Lacking Input. Please check your database `Payslip`", "Lacking Input.", JOptionPane.ERROR_MESSAGE);
+	public void showError(int i){
+		String error = "";
+		if(i == 0){
+			error = "Lacking Input.";
+		}else if(i==1){
+			error = "No payslips for client in current period!";
+		}
+		
+		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE);
 	}
 }

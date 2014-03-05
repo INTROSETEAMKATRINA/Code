@@ -236,10 +236,16 @@ public class PayrollSystemController{
 	class viewReportListener implements ActionListener{ //This is going to be updated
 		public void actionPerformed(ActionEvent e){
 			if(viewSummaryReport.getClient() == null || viewSummaryReport.getPeriodStartDate() == null){
-				viewSummaryReport.showError();
+				viewSummaryReport.showError(0);
 			}else{
-				viewSummaryReport.updateTableColumn();
-				viewSummaryReport.updateTable();
+				String client = viewSummaryReport.getClient();
+				String psd = viewSummaryReport.getPeriodStartDate();
+				if(model.checkPeriodForPayslips(client, psd)){
+					viewSummaryReport.updateTableColumn();
+					viewSummaryReport.updateTable();
+				}else{
+					viewSummaryReport.showError(1);
+				}
 			}
 		}
 	}
