@@ -38,10 +38,12 @@ public class ViewSummaryReportView extends JFrame {
 	private JTable summaryTable;
 	private JScrollPane summaryPane;
 	private DefaultTableModel tableModel;
+	private ArrayList<String> columnName;
 	
 	public ViewSummaryReportView(PayrollSystemModel model)
 	{
 		this.model = model;
+		columnName = new ArrayList<>();
 		
 		titleLbl = new JLabel("View Summary Reports");
 		statusLbl = new JLabel("Status: You are now viewing DTR.");
@@ -63,10 +65,10 @@ public class ViewSummaryReportView extends JFrame {
 	            return false;
 	        }
 		};
-        String [] columnName = {" "," "," "," "," "," "," "," "," "," "," "," "," "," "
-		    	 													," "," "," "," "," "," "," ",
-																	" "," "," "," "," "," "," "," "," ",
-																	" "," "," "," "," "};
+        for(int i = 0; i < 35; i++)
+        {
+        	columnName.add(" ");
+        }
 		for(String x: columnName)
 			tableModel.addColumn(x);
 		
@@ -190,6 +192,15 @@ public class ViewSummaryReportView extends JFrame {
 		gbc.gridy = 7;
 		add(backBtn,gbc);
 	}
+	public void updateTableColumn(){
+		ArrayList<String> column = model.getColumnName(getReport(),getColumnNumber());
+		for(int i = 0; i < column.size();i++)
+		{
+			summaryTable.getColumnModel().getColumn(i).setHeaderValue(column.get(i));
+		}
+	}
+	public int getColumnNumber(){ return columnName.size();}
+	
 	public String getClient(){ return (String)clientCBox.getSelectedItem();}
 	
 	public String getPeriodStartDate(){ return (String)dateCBox.getSelectedItem(); }
