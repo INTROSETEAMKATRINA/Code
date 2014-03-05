@@ -194,8 +194,7 @@ public class ViewSummaryReportView extends JFrame {
 	}
 	public void updateTableColumn(){
 		ArrayList<String> column = model.getColumnName(getReport(),getColumnNumber());
-		for(int i = 0; i < column.size();i++)
-		{
+		for(int i = 0; i < column.size();i++){
 			summaryTable.getColumnModel().getColumn(i).setHeaderValue(column.get(i));
 		}
 	}
@@ -241,5 +240,9 @@ public class ViewSummaryReportView extends JFrame {
 		view.add("payroll with total deduction");
 		for(String t : view)
 			viewCBox.addItem(t);
+	}
+	
+	public void showError(){
+		JOptionPane.showMessageDialog(null, "Lacking Input. Please check your database `Payslip`", "Lacking Input.", JOptionPane.ERROR_MESSAGE);
 	}
 }

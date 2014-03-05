@@ -235,13 +235,9 @@ public class PayrollSystemController{
 	}
 	class viewReportListener implements ActionListener{ //This is going to be updated
 		public void actionPerformed(ActionEvent e){
-			if(viewSummaryReport.getClient() == null || viewSummaryReport.getPeriodStartDate() == null)
-			{
-				JOptionPane.showMessageDialog(null, "Your one of item is empty. Please check your database `Payslip`", "Your one of item is empty.", JOptionPane.ERROR_MESSAGE);
-				
-			}
-			else
-			{
+			if(viewSummaryReport.getClient() == null || viewSummaryReport.getPeriodStartDate() == null){
+				viewSummaryReport.showError();
+			}else{
 				viewSummaryReport.updateTableColumn();
 				viewSummaryReport.updateTable();
 			}
