@@ -32,9 +32,9 @@ public class ViewSummaryReportView extends JFrame {
 	private JLabel selectClientLbl;
 	private JLabel statusLbl;
 	private JLabel selectDateLbl;
-	private JComboBox viewCBox;
-	private JComboBox clientCBox;
-	private JComboBox dateCBox;
+	private JComboBox<String> viewCBox;
+	private JComboBox<String> clientCBox;
+	private JComboBox<String> dateCBox;
 	private JTable summaryTable;
 	private JScrollPane summaryPane;
 	private DefaultTableModel tableModel;
@@ -55,9 +55,9 @@ public class ViewSummaryReportView extends JFrame {
 		selectClientLbl = new JLabel("Select Client: ");
 		selectDateLbl = new JLabel("Select Period: ");
 
-		clientCBox = new JComboBox();
-		viewCBox = new JComboBox();
-		dateCBox = new JComboBox();
+		clientCBox = new JComboBox<String>();
+		viewCBox = new JComboBox<String>();
+		dateCBox = new JComboBox<String>();
 		
 		/*Testing*/
 		tableModel = new DefaultTableModel() {
