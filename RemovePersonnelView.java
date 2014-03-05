@@ -32,7 +32,7 @@ public class RemovePersonnelView extends JFrame {
 	private JButton removeBtn;
 	private JButton applyBtn;
 
-	private JComboBox clientCBox;
+	private JComboBox<String> clientCBox;
 	
 	public RemovePersonnelView(PayrollSystemModel model)
 	{
@@ -72,7 +72,7 @@ public class RemovePersonnelView extends JFrame {
 		selectClientLbl = new JLabel("Select Client: ");
 		personnelLbl = new JLabel("<Client>'s Personnel List ");
 		
-		clientCBox = new JComboBox();
+		clientCBox = new JComboBox<String>();
 		
 		modifyUI();
 	}

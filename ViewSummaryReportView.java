@@ -233,7 +233,7 @@ public class ViewSummaryReportView extends JFrame {
 	}
 	public void updateViewList(){
 		viewCBox.removeAllItems();
-		ArrayList<String> view = new ArrayList();
+		ArrayList<String> view = new ArrayList<String>();
 		view.add("Daily time record summary");
 		view.add("Billing summary");
 		view.add("atm/cash payroll summary");
