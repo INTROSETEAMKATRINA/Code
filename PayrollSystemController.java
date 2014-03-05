@@ -231,11 +231,12 @@ public class PayrollSystemController{
 		public void actionPerformed(ActionEvent e){
 			if(viewSummaryReport.getClient() == null || viewSummaryReport.getPeriodStartDate() == null)
 			{
-				JOptionPane.showMessageDialog(null, "Your one of item is empty. Please check your database", "Your one of item is empty.", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Your one of item is empty. Please check your database `Payslip`", "Your one of item is empty.", JOptionPane.ERROR_MESSAGE);
 				
 			}
 			else
 			{
+				viewSummaryReport.updateTableColumn();
 				viewSummaryReport.updateTable();
 			}
 		}
