@@ -227,7 +227,7 @@ public class ViewSummaryReportView extends JFrame {
 	
 	public void updateDateList(){
 		dateCBox.removeAllItems();
-		ArrayList<String> dates = model.getPeriodDateList(getClient());
+		ArrayList<String> dates = model.getDateListPayslips(getClient());
 		for(String t : dates)
 			dateCBox.addItem(t);		
 	}

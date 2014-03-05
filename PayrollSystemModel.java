@@ -992,7 +992,7 @@ public class PayrollSystemModel {
 		return "";
 	}
 	
-	public ArrayList<String> getDateList(String client){
+	public ArrayList<String> getDateListDTR(String client){
 		Statement stmt = null;
 		ArrayList<String> dates = new ArrayList<>();
             try{
@@ -1025,7 +1025,8 @@ public class PayrollSystemModel {
 		return false;
 		
 	}
-	public ArrayList<String> getPeriodDateList(String client){ ///This should be updated
+	
+	public ArrayList<String> getDateListPayslips(String client){ ///This should be updated
 		Statement stmt = null;
 		ArrayList<String> dates = new ArrayList<>();
             try{
@@ -1040,6 +1041,7 @@ public class PayrollSystemModel {
             }
 		return dates;
 	}
+	
 	public ArrayList<String> getColumnName(String report,int sizee){
 		ArrayList<String> column = new ArrayList<>();
 		if(report.equals("Daily time record summary")){
