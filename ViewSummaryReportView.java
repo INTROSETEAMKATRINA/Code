@@ -72,7 +72,6 @@ public class ViewSummaryReportView extends JFrame {
 		for(String x: columnName)
 			tableModel.addColumn(x);
 		
-		//////////
 		
 		summaryTable = new JTable(tableModel);
 		summaryPane = new JScrollPane(summaryTable);
@@ -84,8 +83,7 @@ public class ViewSummaryReportView extends JFrame {
 		modifyUI();
 	}
 	
-	private void modifyUI()
-	{
+	private void modifyUI(){
 		setSize(1064, 720);
 		setLocationRelativeTo(null);
 		setLayout(new GridBagLayout());	
@@ -193,7 +191,9 @@ public class ViewSummaryReportView extends JFrame {
 		add(backBtn,gbc);
 	}
 	public void updateTableColumn(){
-		ArrayList<String> column = model.getColumnName(getReport(),getColumnNumber());
+		ArrayList<String> column = model.getColumnName(getReport());
+		tableModel.setColumnCount(column.size());
+		System.out.println(column.size());
 		for(int i = 0; i < column.size();i++){
 			summaryTable.getColumnModel().getColumn(i).setHeaderValue(column.get(i));
 		}
@@ -218,6 +218,7 @@ public class ViewSummaryReportView extends JFrame {
 		for(Object[] t : row)
 			tableModel.addRow(t);
 	}
+	
 	public void updateClientList(){
 		clientCBox.removeAllItems();
 		ArrayList<String> clients = model.getClientList();
@@ -231,13 +232,14 @@ public class ViewSummaryReportView extends JFrame {
 		for(String t : dates)
 			dateCBox.addItem(t);		
 	}
+	
 	public void updateViewList(){
 		viewCBox.removeAllItems();
 		ArrayList<String> view = new ArrayList<String>();
 		view.add("Daily time record summary");
 		view.add("Billing summary");
-		view.add("atm/cash payroll summary");
-		view.add("payroll with total deduction");
+		view.add("Atm/cash payroll summary");
+		view.add("Payroll with total deduction");
 		for(String t : view)
 			viewCBox.addItem(t);
 	}
@@ -245,11 +247,11 @@ public class ViewSummaryReportView extends JFrame {
 	public void showError(int i){
 		String error = "";
 		if(i == 0){
-			error = "Lacking Input.";
+			error = "Lacking Input!";
 		}else if(i==1){
 			error = "No payslips for client in current period!";
 		}
-		
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE);
 	}
+	
 }
