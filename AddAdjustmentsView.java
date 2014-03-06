@@ -155,13 +155,13 @@ public class AddAdjustmentsView extends JFrame {
 		gbc.gridy = 4;
 		add(reasonTextFld,gbc);
 
-		gbc.insets = new Insets(30,0,0,0);
+		/*gbc.insets = new Insets(30,0,0,0);
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.gridwidth = 4;
 		gbc.gridx = 0;
 		gbc.gridy = 5;
-		add(statusLbl,gbc);
+		add(statusLbl,gbc);*/
 		
 		gbc.insets = new Insets(30,10,0,0);
 		gbc.fill = GridBagConstraints.NONE;

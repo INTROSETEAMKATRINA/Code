@@ -170,13 +170,13 @@ public class RemoveAdjustmentsView extends JFrame {
 		gbc.gridy = 4;
 		add(removeBtn,gbc);
 		
-		gbc.insets = new Insets(30,0,0,0);
+		/*gbc.insets = new Insets(30,0,0,0);
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.gridwidth = 2;
 		gbc.gridx = 0;
 		gbc.gridy = 5;
-		add(statusLbl,gbc);
+		add(statusLbl,gbc);*/
 		
 		/*gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.EAST;

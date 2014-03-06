@@ -44,7 +44,7 @@ public class ViewSummaryReportView extends JFrame {
 		this.model = model;
 		
 		titleLbl = new JLabel("View Summary Reports");
-		statusLbl = new JLabel("Status: You are now viewing DTR.");
+		statusLbl = new JLabel("Status: ");
 		
 		viewBtn = new JButton("View Report");
 		backBtn = new JButton("Back");
@@ -204,6 +204,7 @@ public class ViewSummaryReportView extends JFrame {
 	
 	public void updateTable(){
 		tableModel.setRowCount(0);
+		statusLbl.setText("Status: You are now viewing " + getReport().toLowerCase() + ".");
 		ArrayList<Object[]> row = model.getTableRow(getClient(),getPeriodStartDate(),getReport());
 		for(Object[] t : row)
 			tableModel.addRow(t);
