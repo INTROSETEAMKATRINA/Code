@@ -45,12 +45,14 @@ public class PayrollSystemController{
 		this.view = view;
 		this.con = con;
 		try{
-			Scanner in = new Scanner(this.getClass().getResourceAsStream("/periodStartDate.txt"));
+			Scanner in = new Scanner(this.getClass().getResourceAsStream("periodStartDate.txt"));
 			String s = in.next();
 			periodStartDate = sdf.parse(s);
 			System.out.println(sdf.format(periodStartDate));
 		}catch(Exception ex){
 			System.out.println("ERROR!");
+			view.showPeriodStartDateNotFound();
+			System.exit(1);
 		}
 		model.setPeriodStartDate(periodStartDate);
 		removeAdjustments = new RemoveAdjustmentsView(model);

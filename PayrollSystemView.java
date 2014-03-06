@@ -250,6 +250,11 @@ public class PayrollSystemView extends JFrame {
 		JOptionPane.showMessageDialog(null, "Excel successfully added!", "Excel successfully added!", JOptionPane.PLAIN_MESSAGE); 
 	}
 	
+	public void showPeriodStartDateNotFound(){
+		String error = "Period Start Date not found. Program will now quit.";
+		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
+	}
+	
 	public void showErrorDTR(int i){
 		String error = "";
 		if(i == 1){
