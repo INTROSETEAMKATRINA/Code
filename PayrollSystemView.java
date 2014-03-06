@@ -250,7 +250,31 @@ public class PayrollSystemView extends JFrame {
 		JOptionPane.showMessageDialog(null, "Excel successfully added!", "Excel successfully added!", JOptionPane.PLAIN_MESSAGE); 
 	}
 	
-	public void showProblemWithFile(){
-		JOptionPane.showMessageDialog(null, "ERROR INPUT FILE!", "ERROR INPUT FILE!", JOptionPane.ERROR_MESSAGE); 
+	public void showErrorDTR(int i){
+		String error = "";
+		if(i == 1){
+			error = "B2 is not formtted to Date!";
+		}else if(i == 2){
+			error = "Date not equal to system date!";
+		}else if(i == 3){
+			error = "Lacking tin!";
+		}else if(i == 4){
+			error = "Unknown error.";
+		}
+		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
+	}
+	
+	public void showErrorPersonnel(int i){
+		String error = "";
+		if(i == 1){
+			error = "B2 is not formtted to Date!";
+		}else if(i == 2){
+			error = "Date not equal to system date!";
+		}else if(i == 3){
+			error = "Lacking tin!";
+		}else if(i == 4){
+			error = "Unknown error.";
+		}
+		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}
 }

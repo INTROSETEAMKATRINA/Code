@@ -33,7 +33,7 @@ public class PayrollSystemModel {
 		periodStartDate = psd;
 	}
 
-	public boolean addPersonnel(File fileDirectory, Date periodStartDate) {
+	public int addPersonnel(File fileDirectory, Date periodStartDate) {
     	ArrayList<Personnel> personnels = new ArrayList<Personnel>();
 		String assignment = "";
         try{
@@ -61,14 +61,14 @@ public class PayrollSystemModel {
 					DateCell date = (DateCell)cell;
 					psd = sdf.parse(sdf.format(date.getDate()));
 				}else{
-					return false;
+					return 1;
 				}
 			}catch(Exception e){
 				System.out.println(e);
 			}
 
 			if(!sdf.format(psd).equals(sdf.format(periodStartDate))){
-				return false;
+				return 2;
 			}
 
 			row += 2;
@@ -109,7 +109,7 @@ public class PayrollSystemModel {
 					column++;
 					tin = sheet.getCell(column,row).getContents();
 					if(tin.length() == 0){
-						return false;
+						return 3;
 					}
 					column++;
 					taxStatus = sheet.getCell(column,row).getContents();
@@ -178,7 +178,7 @@ public class PayrollSystemModel {
 			}
 		}catch(Exception e){
 			System.out.println(e);
-			return false;
+			return 4;
 		}
 
         //ADD TO DATABASE
@@ -300,10 +300,10 @@ public class PayrollSystemModel {
                                 
             }
         }
-		return true;
+		return 0;
 	}
 
-	public boolean addDTR(File fileDirectory, Date periodStartDate) {
+	public int addDTR(File fileDirectory, Date periodStartDate) {
     	ArrayList<DTR> dtrs = new ArrayList<DTR>();
 
         try{
@@ -328,14 +328,14 @@ public class PayrollSystemModel {
 					DateCell date = (DateCell)cell;
 					psd = sdf.parse(sdf.format(date.getDate()));
 				}else{
-					return false;
+					return 1;
 				}
 			}catch(Exception e){
 				System.out.println(e);
 			}
 
 			if(!sdf.format(psd).equals(sdf.format(periodStartDate))){
-				return false;
+				return 2;
 			}
 
 			row += 2;
@@ -350,7 +350,7 @@ public class PayrollSystemModel {
 					column++;
 					tin = sheet.getCell(column,row).getContents();
 					if(tin.length() == 0){
-						return false;
+						return 3;
 					}
 
 					column++;
@@ -446,7 +446,10 @@ public class PayrollSystemModel {
 			}
 
 		}catch(Exception e){
+			System.out.println(e);
+			return 4;
 		}
+		
         //ADD TO DATABASE
 		Statement stmt = null;
 		String sql;
@@ -515,7 +518,7 @@ public class PayrollSystemModel {
                     }
                 }
             }
-            return true;
+            return 0;
 	}
 
 	public void removePersonnel(String client){

@@ -91,10 +91,12 @@ public class PayrollSystemController{
 		public void actionPerformed(ActionEvent e) {
 			File f = view.fileChooser();
 			if(f!=null){
-				if(model.addPersonnel(f, periodStartDate))
+				int add = model.addPersonnel(f, periodStartDate);
+				if(add == 0){
 					view.showSuccess();
-				else
-					view.showProblemWithFile();
+				}else{
+					view.showErrorPersonnel(add);
+				}
 			}else
 				System.out.println("No file chosen");
 		}
@@ -104,12 +106,14 @@ public class PayrollSystemController{
 	class addDTRListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			File f = view.fileChooser();
-			if(f!=null)
-				if(model.addDTR(f, periodStartDate))
+			if(f!=null){
+				int i = model.addDTR(f, periodStartDate);
+				if(i == 0){
 					view.showSuccess();
-				else
-					view.showProblemWithFile();
-			else
+				}else{
+					view.showErrorDTR(i);
+				}
+			}else
 				System.out.println("No file chosen");
 		}
 	}

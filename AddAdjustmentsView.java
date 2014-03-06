@@ -42,7 +42,7 @@ public class AddAdjustmentsView extends JFrame {
 	public AddAdjustmentsView(PayrollSystemModel model){
 		this.model = model;
 		
-		cancelBtn = new JButton("Cancel");
+		cancelBtn = new JButton("Back");
 		applyBtn = new JButton("Apply");
 		addBtn = new JButton("Add");
 		
@@ -171,11 +171,11 @@ public class AddAdjustmentsView extends JFrame {
 		gbc.gridy = 6;
 		add(addBtn,gbc);
 		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		/*gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.gridx = 2;
 		gbc.gridy = 6;
-		add(applyBtn,gbc);
+		add(applyBtn,gbc);*/
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.EAST;

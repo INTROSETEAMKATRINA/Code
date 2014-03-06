@@ -68,7 +68,7 @@ public class RemoveAdjustmentsView extends JFrame {
 		
 		//////////
 		
-		cancelBtn = new JButton("Cancel");
+		cancelBtn = new JButton("Back");
 		applyBtn = new JButton("Apply");
 		removeBtn = new JButton("Remove Selected");
 		
@@ -178,13 +178,13 @@ public class RemoveAdjustmentsView extends JFrame {
 		gbc.gridy = 5;
 		add(statusLbl,gbc);
 		
-		gbc.fill = GridBagConstraints.NONE;
+		/*gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.insets = new Insets(30,70,0,0);
 		gbc.gridwidth = 1;
 		gbc.gridx = 2;
 		gbc.gridy = 5;
-		add(applyBtn,gbc);
+		add(applyBtn,gbc);*/
 		
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.EAST;
