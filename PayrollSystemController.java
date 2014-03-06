@@ -20,6 +20,8 @@ import java.sql.ResultSet;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 import java.io.File;
 
@@ -65,6 +67,7 @@ public class PayrollSystemController{
 		view.setChangePasswordListener(new changePasswordListener());
 		changePassword.setChangeListener(new changePasswordButtonListener());
 		changePassword.setCancelListener(new cancelChangePasswordButtonListener());
+		changePassword.setShowListener(new showPasswordListener());
 		addAdjustments.setClientListener(new clientListAddAdjustmentListener());
 		addAdjustments.setAddListener(new addAdjustmentButtonListener());
 		addAdjustments.setCancelListener(new cancelAddAdjustmentButtonListener());
@@ -270,13 +273,13 @@ public class PayrollSystemController{
 								changePassword.clear();
 								changePassword.setVisible(false);
 							}else{
-								changePassword.showFailed();
+								changePassword.showError(0);
 							}
 						}else{
-							changePassword.showPasswordNotTheSame();
+							changePassword.showError(1);
 						}
 					}else{
-						changePassword.showWrongOldPassword();
+						changePassword.showError(2);
 					}
 				}
 			}catch(Exception ex){
@@ -290,6 +293,17 @@ public class PayrollSystemController{
 		public void actionPerformed(ActionEvent e){
 			changePassword.clear();
 			changePassword.setVisible(false);
+		}
+	}
+	
+	//show password checkbox in change password view
+	class showPasswordListener implements ItemListener{
+		public void itemStateChanged(ItemEvent e) {
+			if (e.getStateChange() != ItemEvent.SELECTED) {
+				changePassword.showPassword(true);
+			}else{
+				 changePassword.showPassword(false);
+			}
 		}
 	}
 

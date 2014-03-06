@@ -20,7 +20,11 @@ public class PayrollSystemModel {
 	private SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 	private Connection con;
 	private Date periodStartDate;
-
+	private String[] summaryReports = {"Daily time record summary",
+									   "Billing summary",
+									   "Atm/cash payroll summary",
+									   "Payroll with total deduction"};
+									   
 	public PayrollSystemModel(Connection con){
 		this.con = con;
 	}
@@ -1288,20 +1292,20 @@ public class PayrollSystemModel {
 							TUniformAndOthers += rs2.getInt(30); TSavings += rs2.getInt(31); TNetPay += rs2.getInt(32);
 		    	 		}while(rs2.next());
 						
-		    	 		if(report.equals("Daily time record summary")){
+		    	 		if(report.equals(getSummaryReport(0))){
 							Object[] data1 = {j,name,position,RDW,ROT,RNSD,LH,LHOT,LHNSD,SH,SHOT,SHNSD};
 							row.add(data1);
-						}else if(report.equals("Billing summary")){
+						}else if(report.equals(getSummaryReport(1))){
 							Object[] data1 = {j,name,
 			    	 		position,RDW,DailyRate,TranspoAllow,RegularPay,
 			    	 		ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay,LHNSD,LHNSDPay,
 			    	 		SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay,Adjustments,GrossPay,
 			    	 		SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental,UniformAndOthers,Savings,NetPay};
 			    	 		row.add(data1);
-						}else if(report.equals("Atm/cash payroll summary")){
+						}else if(report.equals(getSummaryReport(2))){
 							Object[] data1 = {name,GrossPay,SSS,PHIC,HDMF,SSSLoan,HouseRental,Savings,0,NetPay,0,0,0,0};
 							row.add(data1);
-						}else if(report.equals("Payroll with total deduction")){
+						}else if(report.equals(getSummaryReport(3))){
 							Object[] data1 = {j,name,
 			    	 		position,RDW,DailyRate,TranspoAllow,RegularPay,
 			    	 		ROT,ROTPay,RNSD,RNSDPay,LH,LHPay,LHOT,LHOTPay,LHNSD,LHNSDPay,
@@ -1312,20 +1316,20 @@ public class PayrollSystemModel {
 							j++;
 					}while(rs.next());
 					
-					if(report.equals("Daily time record summary")){
+					if(report.equals(getSummaryReport(0))){
 						Object[] data1 = {j,"Total"," ",TRDW,TROT,TRNSD,TLH,TLHOT,TLHNSD,TSH,TSHOT,TSHNSD};
 	    	 			row.add(data1);
-					}else if(report.equals("Billing summary")){
+					}else if(report.equals(getSummaryReport(1))){
 						Object[] data1 = {j,"TOTAL",
 			    	 	"",TRDW,0,0,TRegularPay,
 			    	 	TROT,TROTPay,TRNSD,TRNSDPay,TLH,TLHPay,TLHOT,TLHOTPay,TLHNSD,TLHNSDPay,
 			    	 	TSH,TSHPay,TSHOT,TSHOTPay,TSHNSD,TSHNSDPay,TAdjustments,TGrossPay,
 			    		TSSS,TPHIC,THDMF,TSSSLoan,TPayrollAdvance,THouseRental,TUniformAndOthers,TSavings,TNetPay};
 			    	 	row.add(data1);
-					}else if(report.equals("Atm/cash payroll summary")){
+					}else if(report.equals(getSummaryReport(2))){
 						Object[] data1 = {"Total",TGrossPay,TSSS,TPHIC,THDMF,TSSSLoan,THouseRental,TSavings,0,TNetPay,0,0,0,0};
 						row.add(data1);
-					}else if(report.equals("Payroll with total deduction")){
+					}else if(report.equals(getSummaryReport(3))){
 						Object[] data1 = {j,"TOTAL",
 			    	 	"",TRDW,0,0,TRegularPay,
 			    	 	TROT,TROTPay,TRNSD,TRNSDPay,TLH,TLHPay,TLHOT,TLHOTPay,TLHNSD,TLHNSDPay,
@@ -1339,5 +1343,13 @@ public class PayrollSystemModel {
 			}
 			
 		return row;
+	}
+	
+	public String getSummaryReport(int i){
+		return summaryReports[i];
+	}
+	
+	public String[] getSummaryReports(){
+		return summaryReports;
 	}
 }

@@ -45,7 +45,7 @@ public class PayrollSystem{
 			}
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(null, "Database not found! Program will now exit.", "Database not found! Program will now exit.", JOptionPane.ERROR_MESSAGE); 
-			System.out.println("Error: " + e.getMessage());
+			System.out.println("Error: " + e);
 		}	
 	}	
 }

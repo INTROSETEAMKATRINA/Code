@@ -4,11 +4,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.JOptionPane;
 
 public class ChangePasswordView extends JFrame {
@@ -23,10 +24,11 @@ public class ChangePasswordView extends JFrame {
 	
 	private JCheckBox showPassBox;
 	
-	private JTextField confirmTxtFld;
-	private JTextField newPassTxtFld;
-	private JTextField oldPassTxtFld;
+	private JPasswordField confirmPwdFld;
+	private JPasswordField newPassPwdFld;
+	private JPasswordField oldPassPwdFld;
 	
+	char defaultEchoChar;
 	public ChangePasswordView()
 	{
 		changeBtn = new JButton("Apply Changes");
@@ -37,9 +39,9 @@ public class ChangePasswordView extends JFrame {
 		newPassLbl = new JLabel("New Password");
 		oldPassLbl = new JLabel("Old Password");
 		
-		confirmTxtFld = new JTextField();
-		newPassTxtFld = new JTextField();
-		oldPassTxtFld = new JTextField();
+		confirmPwdFld = new JPasswordField();
+		newPassPwdFld = new JPasswordField();
+		oldPassPwdFld = new JPasswordField();
 		
 		showPassBox = new JCheckBox("Show Password");
 		
@@ -56,9 +58,9 @@ public class ChangePasswordView extends JFrame {
 		changeBtn.setPreferredSize(new Dimension(160,30));
 		cancelBtn.setPreferredSize(new Dimension(160,30));
 		
-		oldPassTxtFld.setPreferredSize(new Dimension(300,30));
-		newPassTxtFld.setPreferredSize(new Dimension(300,30));
-		confirmTxtFld.setPreferredSize(new Dimension(300,30));
+		oldPassPwdFld.setPreferredSize(new Dimension(300,30));
+		newPassPwdFld.setPreferredSize(new Dimension(300,30));
+		confirmPwdFld.setPreferredSize(new Dimension(300,30));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -74,19 +76,19 @@ public class ChangePasswordView extends JFrame {
 		gbc.gridwidth = 2;
 		gbc.gridx = 1;
 		gbc.gridy = 1;
-		add(oldPassTxtFld,gbc);
+		add(oldPassPwdFld,gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridwidth = 2;
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		add(newPassTxtFld,gbc);
+		add(newPassPwdFld,gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridwidth = 2;
 		gbc.gridx = 1;
 		gbc.gridy = 3;
-		add(confirmTxtFld,gbc);
+		add(confirmPwdFld,gbc);
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridwidth = 1;
@@ -127,19 +129,21 @@ public class ChangePasswordView extends JFrame {
 		gbc.gridx = 2;
 		gbc.gridy = 5;
 		add(cancelBtn,gbc);
-		
+
+		defaultEchoChar = confirmPwdFld.getEchoChar();
 	}
 	
-	public String getOldPass(){ return oldPassTxtFld.getText(); }
-	public String getNewPass(){ return newPassTxtFld.getText(); }
-	public String getConfirmNewPass(){ return confirmTxtFld.getText(); }
+	public String getOldPass(){ return new String(oldPassPwdFld.getPassword()); }
+	public String getNewPass(){ return new String(newPassPwdFld.getPassword()); }
+	public String getConfirmNewPass(){ return new String(confirmPwdFld.getPassword()); }
 	public void clear(){
-		oldPassTxtFld.setText("");
-		newPassTxtFld.setText("");
-		confirmTxtFld.setText("");
+		oldPassPwdFld.setText("");
+		newPassPwdFld.setText("");
+		confirmPwdFld.setText("");
 	}
 	public void setChangeListener(ActionListener list){changeBtn.addActionListener(list);}
 	public void setCancelListener(ActionListener list){cancelBtn.addActionListener(list);}
+	public void setShowListener(ItemListener list){showPassBox.addItemListener(list);}
 	public boolean askConfirmation(){ 
 		int confirmation = JOptionPane.showConfirmDialog(null, "Please confirm!", "Please confirm!",
 		JOptionPane.YES_NO_OPTION);
@@ -148,8 +152,29 @@ public class ChangePasswordView extends JFrame {
 		}
 		return false;
 	}
-	public void showFailed(){JOptionPane.showMessageDialog(null, "Change password failed!", "Change password failed!", JOptionPane.ERROR_MESSAGE);}
+	public void showPassword(boolean b){
+		if(b){
+			oldPassPwdFld.setEchoChar(defaultEchoChar);
+			newPassPwdFld.setEchoChar(defaultEchoChar);
+			confirmPwdFld.setEchoChar(defaultEchoChar);
+		}else{
+			oldPassPwdFld.setEchoChar((char) 0);
+			newPassPwdFld.setEchoChar((char) 0);
+			confirmPwdFld.setEchoChar((char) 0);
+		}
+	}
+	public void showError(int i){
+		String error = "";
+		if(i == 0){
+			error = "Change password failed!";
+		}else if(i == 1){
+			error = "New and confirm password not the same.";
+		}else if(i == 2){
+			error = "Wrong old password.";
+		}
+		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE);
+	}
+
 	public void showSuccess(){JOptionPane.showMessageDialog(null, "Change password is successful.", "Change password is successful.", JOptionPane.PLAIN_MESSAGE); }
-	public void showPasswordNotTheSame(){JOptionPane.showMessageDialog(null, "Password not the same.", "Password not the same.", JOptionPane.ERROR_MESSAGE); }
-	public void showWrongOldPassword(){JOptionPane.showMessageDialog(null, "Wrong Password.", "Wrong Password.", JOptionPane.ERROR_MESSAGE); }
+
 }
