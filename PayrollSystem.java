@@ -28,29 +28,31 @@ public class PayrollSystem{
 			con = DriverManager.getConnection (url, uname, pass);
 			System.out.println("Connected!");
 			String inputPass = null;
+			boolean loggedIn = false;
 			JPasswordField pwd = new JPasswordField(10);
-			pwd.addAncestorListener(new RequestFocusListener());
-			//RequestFocusListener is an External Class
-			int action = JOptionPane.showConfirmDialog(null, pwd ,"Enter Password",JOptionPane.OK_CANCEL_OPTION);  
+			int action = JOptionPane.OK_OPTION;
 			
-			inputPass = new String(pwd.getPassword());
-			if(action == JOptionPane.OK_OPTION){ 
-				Statement st = con.createStatement();	
-				ResultSet rs = st.executeQuery("select password from password where password = '"+inputPass+"'");
-				int rowCount = 0;  
-				while ( rs.next() )  {  
-					// Process the row.  
-					rowCount++;  
-				} 
-				if(rowCount==1){
-					PayrollSystemModel model = new PayrollSystemModel(con);
-					PayrollSystemView view = new PayrollSystemView(model, con);
-					view.setVisible(true);
-					PayrollSystemController controller = new PayrollSystemController(model, view, con);
-				}else{
-					JOptionPane.showMessageDialog(null, "Wrong Password. Program will now exit.", "Wrong Password. Program will now exit.", JOptionPane.ERROR_MESSAGE); 
+			while(action == JOptionPane.OK_OPTION && !loggedIn){
+				pwd = new JPasswordField(10);
+				pwd.addAncestorListener(new RequestFocusListener());
+				//RequestFocusListener is an External Class
+				action = JOptionPane.showConfirmDialog(null, pwd ,"Enter Password",JOptionPane.OK_CANCEL_OPTION);  
+				inputPass = new String(pwd.getPassword());
+				if(action == JOptionPane.OK_OPTION){ 
+					Statement st = con.createStatement();	
+					ResultSet rs = st.executeQuery("select password from password where password = '"+inputPass+"'");
+					int rowCount = 0;  
+					if(rs.next()){
+						loggedIn = true;
+						PayrollSystemModel model = new PayrollSystemModel(con);
+						PayrollSystemView view = new PayrollSystemView(model, con);
+						view.setVisible(true);
+						PayrollSystemController controller = new PayrollSystemController(model, view, con);
+					}else{
+						JOptionPane.showMessageDialog(null, "Wrong Password.", "Wrong Password.", JOptionPane.ERROR_MESSAGE); 
+					}
+					rs.close();
 				}
-				rs.close();
 			}
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(null, "Database not found! Program will now exit.", "Database not found! Program will now exit.", JOptionPane.ERROR_MESSAGE); 
