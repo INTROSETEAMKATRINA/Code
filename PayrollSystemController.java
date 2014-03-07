@@ -81,7 +81,7 @@ public class PayrollSystemController{
 		generatePayslips.setClientListener(new clientListGeneratePayslipsListener());
 		generatePayslips.setGenerateListener(new generatePayslipsButtonListener());
 		generatePayslips.setCancelListener(new cancelGeneratePayslipsButtonListener());
-		viewSummaryReport.setPeriodStartDateListener(new addPeriodStartDateListener()); //// This is going to be updated
+		viewSummaryReport.setPeriodStartDateListener(new addPeriodStartDateListener());
 		viewSummaryReport.setViewListener(new viewReportListener());
 		viewSummaryReport.backListener(new cancelViewSummaryReportListener());
 	}
