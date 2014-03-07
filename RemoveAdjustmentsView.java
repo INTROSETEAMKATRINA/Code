@@ -240,6 +240,9 @@ public class RemoveAdjustmentsView extends JFrame {
 	
 	public String getTIN(){
 		String s = (String)personnelCBox.getSelectedItem();
+		if(s == null || s.length() == 0){
+			return null;
+		}
 		int i;
 		for(i = 0;i<s.length();i++)
 			if(s.charAt(i)=='~')
