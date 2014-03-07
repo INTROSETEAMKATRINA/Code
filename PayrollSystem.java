@@ -25,7 +25,7 @@ public class PayrollSystem{
 			int action = JOptionPane.showConfirmDialog(null, pwd ,"Enter Password",JOptionPane.OK_CANCEL_OPTION);  
 			
 			inputPass = new String(pwd.getPassword());
-			if(action >= 0){ 
+			if(action == JOptionPane.OK_OPTION){ 
 				Statement st = con.createStatement();	
 				ResultSet rs = st.executeQuery("select password from password where password = '"+inputPass+"'");
 				int rowCount = 0;  
