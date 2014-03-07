@@ -179,7 +179,6 @@ CREATE TABLE `payslip` (
   `UniformAndOthers` decimal(10,2) DEFAULT NULL,
   `NetPay` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`TIN`,`PeriodStartDate`),
-  KEY `TIN_idx` (`TIN`),
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
