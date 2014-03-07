@@ -57,9 +57,15 @@ public class PayrollSystemModel {
 		String assignment = "";
         try{
 			File file = fileDirectory;
+			
+			String ext = getExtension(fileDirectory.toString());
+			if(!ext.equals("xls")){
+				return 8;
+			}
+			
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
-
+		
 			String name,position,employeeStatus,tin,taxStatus;
 			float sss, sssLoan, phic, hdmf, hdmfLoan, payrollAdvance, houseRental, uniformAndOthers;
 			float dailyRate, colaRate, monthlyRate;
@@ -229,6 +235,13 @@ public class PayrollSystemModel {
 
         try{
 			File file = fileDirectory;
+			
+			String ext = getExtension(fileDirectory.toString());
+			if(!ext.equals("xls")){
+				return 8;
+			}
+			
+			
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
 
@@ -1165,5 +1178,10 @@ public class PayrollSystemModel {
 			return 0.0f;
 		}
 		
+	}
+	
+	private static String getExtension(String s){
+		int dot = s.lastIndexOf(".");
+		return s.substring(dot + 1);
 	}
 }

@@ -243,7 +243,11 @@ public class PayrollSystemView extends JFrame {
 		fc.setFileFilter(filter);
 		//In response to a button click:
 		int returnVal = fc.showOpenDialog(this);
+		if(returnVal == JFileChooser.APPROVE_OPTION){
 			return fc.getSelectedFile();
+		}else{
+			return null;
+		}
 	}
 	
 	public void showSuccess(){
@@ -271,6 +275,8 @@ public class PayrollSystemView extends JFrame {
 			error = "Negative days worked or hours.";
 		}else if(i == 7){
 			error = "Adding dtr to a personnel not in the database.";
+		}else if(i == 8){
+			error = "File is not an excel file.";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}
@@ -291,6 +297,8 @@ public class PayrollSystemView extends JFrame {
 			error = "Negative deduction or rate.";
 		}else if(i == 7){
 			error = "No client name in excel file.";
+		}else if(i == 8){
+			error = "File is not an excel file.";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}

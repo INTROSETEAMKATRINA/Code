@@ -99,8 +99,9 @@ public class PayrollSystemController{
 				}else{
 					view.showErrorPersonnel(add);
 				}
-			}else
+			}else{
 				System.out.println("No file chosen");
+			}
 		}
 	}
 
@@ -115,8 +116,9 @@ public class PayrollSystemController{
 				}else{
 					view.showErrorDTR(i);
 				}
-			}else
+			}else{
 				System.out.println("No file chosen");
+			}
 		}
 	}
 
