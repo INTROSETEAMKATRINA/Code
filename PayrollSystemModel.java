@@ -173,6 +173,9 @@ public class PayrollSystemModel {
 					personnels.add(new Personnel(name, position, assignment,employeeStatus, tin, taxStatus,
 												 sss, sssLoan, phic, hdmf,hdmfLoan, payrollAdvance, houseRental,
 												 uniformAndOthers, dailyRate, colaRate, monthlyRate));
+				}else{
+					return 6;
+				}
 				}
 				row++;
 			}
@@ -1249,7 +1252,7 @@ public class PayrollSystemModel {
 		ArrayList<Object[]> row = new ArrayList<>();
 		Statement stmt = null;
 			try{
-				String sql = "select distinct name, tin from `payslip` where PeriodStartDate = '"+date+"'";
+				String sql = "select distinct name, tin from `payslip` where client = '"+client+"' PeriodStartDate = '"+date+"'";
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				ResultSet rs2;
