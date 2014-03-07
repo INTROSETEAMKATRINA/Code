@@ -84,27 +84,18 @@ public class PayrollSystemModel {
 					position = sheet.getCell(column,row).getContents();
 					column++;
 					employeeStatus = sheet.getCell(column,row).getContents();
-
-					column++;
-					try{
-						dailyRate = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						dailyRate = 0;
+					
+					float rates[] = new float[3];
+					for(int i = 0; i < 3;i++){
+							column++;
+						rates[i] = tryGetFloat(sheet.getCell(column,row).getContents());
+						if(rates[i] < 0){
+							return 6;
+						}
 					}
-
-					column++;
-					try{
-						colaRate = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						colaRate = 0;
-					}
-
-					column++;
-					try{
-						monthlyRate = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						monthlyRate = 0;
-					}
+					dailyRate = rates[0];
+					colaRate = rates[1];
+					monthlyRate = rates[2];
 
 					column++;
 					tin = sheet.getCell(column,row).getContents();
@@ -113,62 +104,24 @@ public class PayrollSystemModel {
 					}
 					column++;
 					taxStatus = sheet.getCell(column,row).getContents();
-
-					column++;
-					try{
-						sss = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						sss = 0;
-					}
-
-					column++;
-					try{
-						sssLoan = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						sssLoan = 0;
-					}
-
-					column++;
-					try{
-						phic = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						phic = 0;
+					
+					float deductions[] = new float[8];
+					for(int i = 0; i < 8;i++){
+						column++;
+						deductions[i] = tryGetFloat(sheet.getCell(column,row).getContents());
+						if(deductions[i]<0){
+							return 6;
+						}
 					}
 					
-					column++;
-					try{
-						hdmf = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						hdmf = 0;
-					}
-
-					column++;
-					try{
-						hdmfLoan = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						hdmfLoan = 0;
-					}
-
-					column++;
-					try{
-						payrollAdvance = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						payrollAdvance = 0;
-					}
-
-					column++;
-					try{
-						houseRental = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						houseRental = 0;
-					}
-
-					column++;
-					try{
-						uniformAndOthers = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						uniformAndOthers = 0;
-					}
+					sss = deductions[0];
+					sssLoan = deductions[1];
+					phic = deductions[2];
+					hdmf = deductions[3];
+					hdmfLoan = deductions[4];
+					payrollAdvance = deductions[5];
+					houseRental = deductions[6];
+					uniformAndOthers = deductions[7];
 
 					personnels.add(new Personnel(name, position, assignment,employeeStatus, tin, taxStatus,
 												 sss, sssLoan, phic, hdmf,hdmfLoan, payrollAdvance, houseRental,
@@ -354,95 +307,36 @@ public class PayrollSystemModel {
 					if(tin.length() == 0){
 						return 3;
 					}
-
-					column++;
-					try{
-						regularDaysWorks = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						regularDaysWorks = 0;
-					}
-
-					column++;
-					try{
-						regularOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						regularOvertime = 0;
-					}
-
-					column++;
-					try{
-						regularNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-						regularNightShiftDifferential = 0;
-					}
-
-				  	column++;
-				  	try{
-						specialHoliday = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){	
-					  	specialHoliday = 0;
-					}
-
-				  	column++;
-				  	try{
-						specialHolidayOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	specialHolidayOvertime = 0;
-					}
-
-				  	column++;
-				  	try{
-						specialHolidayNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	specialHolidayNightShiftDifferential = 0;
-					}
-
-				  	column++;
-				  	try{
-						legalHoliday = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	legalHoliday = 0;
-					}
-
-				  	column++;
-				  	try{
-						legalHolidayOvertime = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	legalHolidayOvertime = 0;
-					}
-
-				  	column++;
-				  	try{
-						legalHolidayNightShiftDifferential = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	legalHolidayNightShiftDifferential = 0;
+					
+					float timeWorked[] = new float[12];
+					
+					for(int i = 0; i < 12;i++){
+						column++;
+						timeWorked[i] = tryGetFloat(sheet.getCell(column,row).getContents());
+						if(timeWorked[i] < 0){
+							return 6;
+						}
 					}
 					
-					column++;
-				  	try{
-						specialHolidayOnRestDay = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	specialHolidayOnRestDay = 0;
-					}
-					
-					column++;
-				  	try{
-						legalHolidayOnRestDay = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	legalHolidayOnRestDay = 0;
-					}
-					
-					column++;
-				  	try{
-						late = Float.parseFloat(sheet.getCell(column,row).getContents());
-					}catch(Exception e){
-					  	late = 0;
-					}
+					regularDaysWorks = timeWorked[0];
+					regularOvertime = timeWorked[1];
+					regularNightShiftDifferential = timeWorked[2];
+					specialHoliday = timeWorked[3];
+					specialHolidayOvertime = timeWorked[4];
+					specialHolidayNightShiftDifferential = timeWorked[5];
+					legalHoliday = timeWorked[6];
+					legalHolidayOvertime = timeWorked[7];
+					legalHolidayNightShiftDifferential = timeWorked[8];
+					specialHolidayOnRestDay = timeWorked[9];
+					legalHolidayOnRestDay = timeWorked[10];
+					late = timeWorked[11];
 									
 				    dtrs.add(new DTR(name, tin, regularDaysWorks, regularOvertime, regularNightShiftDifferential,
 			   								 specialHoliday, specialHolidayOvertime,specialHolidayNightShiftDifferential,
 			   								 legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential,
 			   								 legalHolidayOnRestDay, specialHolidayOnRestDay, late, periodStartDate));
+				}else{
+					return 5;
 				}
 				row++;
 			}
@@ -1361,5 +1255,15 @@ public class PayrollSystemModel {
 	
 	public String[] getSummaryReports(){
 		return summaryReports;
+	}
+	
+	private static float tryGetFloat(String s){
+		
+		try{
+			return Float.parseFloat(s);
+		}catch(Exception e){
+			return 0.0f;
+		}
+		
 	}
 }
