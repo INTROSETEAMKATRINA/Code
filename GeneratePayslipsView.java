@@ -281,4 +281,14 @@ public class GeneratePayslipsView extends JFrame{
 			timePerCBox.addItem(t);
 		}		
 	}
+	
+	public boolean askConfirmation(){
+		int confirmation = JOptionPane.showConfirmDialog(null, "Overwrite file?", "Overwrite file?",
+		
+		JOptionPane.YES_NO_OPTION);
+		if(confirmation ==JOptionPane.YES_OPTION){
+			return true;
+		}
+		return false;
+	}
 }

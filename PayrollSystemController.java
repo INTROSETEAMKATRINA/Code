@@ -324,11 +324,17 @@ public class PayrollSystemController{
 			String psd = generatePayslips.getPeriodStartDate();
 			if(model.checkPeriodForDTR(client,psd)){
 				if(f!=null){
-					if(model.generatePayslips(f, client, psd)==0){
-						generatePayslips.showSuccess();
-						generatePayslips.setFileDirectory(null);
-					}else{
-						generatePayslips.showError(2);
+					boolean go = true;
+					if(f.exists()){
+						go = generatePayslips.askConfirmation();
+					}
+					if(go){
+						if(model.generatePayslips(f, client, psd)==0){
+							generatePayslips.showSuccess();
+							generatePayslips.setFileDirectory(null);
+						}else{
+							generatePayslips.showError(2);
+						}
 					}
 				}else{
 					generatePayslips.showError(1);
