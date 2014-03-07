@@ -265,6 +265,10 @@ public class PayrollSystemView extends JFrame {
 			error = "Lacking tin!";
 		}else if(i == 4){
 			error = "Unknown error.";
+		}else if(i == 5){
+			error = "No name in excel file!";
+		}else if(i == 6){
+			error = "Negative deduction or rate.";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}
@@ -281,6 +285,8 @@ public class PayrollSystemView extends JFrame {
 			error = "Unknown error.";
 		}else if(i == 5){
 			error = "No name in excel file!";
+		}else if(i == 6){
+			error = "Negative days worked or hours.";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}
