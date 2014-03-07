@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `payroll system` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `payroll system`;
--- MySQL dump 10.13  Distrib 5.6.12, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `Payroll System` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `Payroll System`;
+-- MySQL dump 10.13  Distrib 5.6.13, for osx10.6 (i386)
 --
--- Host: localhost    Database: payroll system
+-- Host: 127.0.0.1    Database: Payroll System
 -- ------------------------------------------------------
 -- Server version	5.6.12
 
@@ -30,18 +30,10 @@ CREATE TABLE `adjustmentsanddeductions` (
   `PeriodStartDate` date NOT NULL,
   `TIN` varchar(20) NOT NULL,
   PRIMARY KEY (`PeriodStartDate`,`TIN`,`type`),
-  KEY `PersonnelAdjustmentsAndDeductions_idx` (`TIN`)
+  KEY `PersonnelAdjustmentsAndDeductions_idx` (`TIN`),
+  CONSTRAINT `TINAdjustmentAndDeductions` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `adjustmentsanddeductions`
---
-
-LOCK TABLES `adjustmentsanddeductions` WRITE;
-/*!40000 ALTER TABLE `adjustmentsanddeductions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `adjustmentsanddeductions` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `client`
@@ -57,15 +49,6 @@ CREATE TABLE `client` (
   PRIMARY KEY (`Name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `client`
---
-
-LOCK TABLES `client` WRITE;
-/*!40000 ALTER TABLE `client` DISABLE KEYS */;
-/*!40000 ALTER TABLE `client` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `dtr`
@@ -89,18 +72,11 @@ CREATE TABLE `dtr` (
   `late` decimal(10,2) DEFAULT NULL,
   `PeriodStartDate` date NOT NULL,
   `TIN` varchar(20) NOT NULL,
-  PRIMARY KEY (`PeriodStartDate`,`TIN`)
+  PRIMARY KEY (`PeriodStartDate`,`TIN`),
+  KEY `TINDTR_idx` (`TIN`),
+  CONSTRAINT `TINDTR` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dtr`
---
-
-LOCK TABLES `dtr` WRITE;
-/*!40000 ALTER TABLE `dtr` DISABLE KEYS */;
-/*!40000 ALTER TABLE `dtr` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `password`
@@ -114,16 +90,6 @@ CREATE TABLE `password` (
   PRIMARY KEY (`Password`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `password`
---
-
-LOCK TABLES `password` WRITE;
-/*!40000 ALTER TABLE `password` DISABLE KEYS */;
-INSERT INTO `password` VALUES ('gallant2010');
-/*!40000 ALTER TABLE `password` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `payslip`
@@ -176,18 +142,10 @@ CREATE TABLE `payslip` (
   `UniformAndOthers` decimal(10,2) DEFAULT NULL,
   `NetPay` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`TIN`,`PeriodStartDate`),
-  KEY `TIN_idx` (`TIN`)
+  KEY `TIN_idx` (`TIN`),
+  CONSTRAINT `TINPayslip` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `payslip`
---
-
-LOCK TABLES `payslip` WRITE;
-/*!40000 ALTER TABLE `payslip` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payslip` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `personnel`
@@ -207,18 +165,10 @@ CREATE TABLE `personnel` (
   `TIN` varchar(20) NOT NULL,
   `TaxStatus` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`TIN`),
-  KEY `ClientPersonnel_idx` (`Assignment`)
+  KEY `ClientPersonnel_idx` (`Assignment`),
+  CONSTRAINT `TINClient` FOREIGN KEY (`Assignment`) REFERENCES `client` (`Name`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `personnel`
---
-
-LOCK TABLES `personnel` WRITE;
-/*!40000 ALTER TABLE `personnel` DISABLE KEYS */;
-/*!40000 ALTER TABLE `personnel` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `taxtable`
@@ -240,15 +190,6 @@ CREATE TABLE `taxtable` (
   `Bracket8` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `taxtable`
---
-
-LOCK TABLES `taxtable` WRITE;
-/*!40000 ALTER TABLE `taxtable` DISABLE KEYS */;
-/*!40000 ALTER TABLE `taxtable` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -259,4 +200,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-02 16:00:12
+-- Dump completed on 2014-03-07 16:05:12
