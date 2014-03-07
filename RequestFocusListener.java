@@ -1,6 +1,6 @@
 import javax.swing.*;
 import javax.swing.event.*;
-
+//External class
 /**
  *  Convenience class to request focus on a component.
  *
