@@ -1022,11 +1022,11 @@ public class PayrollSystemModel {
 		return column;
 	}
 	
-	public ArrayList<Object[]> getTableRow(String client, String date, String report){ // This is going to be updated
+	public ArrayList<Object[]> getTableRow(String client, String date, String report){
 		ArrayList<Object[]> row = new ArrayList<>();
 		Statement stmt = null;
 			try{
-				String sql = "select distinct name, tin from `payslip` where client = '"+client+"' PeriodStartDate = '"+date+"'";
+				String sql = "select distinct name, tin from `payslip` where assignment = '"+client+"' and PeriodStartDate = '"+date+"'";
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sql);
 				ResultSet rs2;
@@ -1044,7 +1044,7 @@ public class PayrollSystemModel {
 						sql = "select position,RDW,DailyRate,TranspoAllow,RegularPay,ROT,ROTPay,RNSD,RNSDPay,LH,LHPay," +
 							  "LHOT,LHOTPay,LHNSD,LHNSDPay,SH,SHPay,SHOT,SHOTPay,SHNSD,SHNSDPay," +
 							  "Adjustments,GrossPay,SSS,PHIC,HDMF,SSSLoan,PayrollAdvance,HouseRental," +
-							  "UniformAndOthers,Savings,NetPay,LHRD,LHRDPay,SHRD,SHRDPay from `payslip` where tin = '"+tin+"' and PeriodStartDate = '"+date+"'";
+							  "UniformAndOthers,Savings,NetPay,LHRD,LHRDPay,SHRD,SHRDPay from `payslip` where tin = '"+tin+"' and PeriodStartDate = '"+date+"';";
 						st = con.createStatement();
 						rs2 = st.executeQuery(sql);
 						
