@@ -1,3 +1,16 @@
+/*******************************************************
+	 *  Class name: ChangePasswordView
+ 	 *  Inheritance: JFrame
+	 *  Attributes: 
+	 *  Methods:	ChangePasswordView, getOldPass, getNewPass,
+	 *				getConfirmNewPass, clear, setChangeListener,
+	 *				setCancelListener, setShowListener, askConfirmation,
+	 *				showPassword, showError, showSuccess
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -12,7 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JOptionPane;
 
-public class ChangePasswordView extends JFrame {
+public class ChangePasswordView extends JFrame{
 	
 	private JButton changeBtn;
 	private JButton cancelBtn;
@@ -29,8 +42,8 @@ public class ChangePasswordView extends JFrame {
 	private JPasswordField oldPassPwdFld;
 	
 	char defaultEchoChar;
-	public ChangePasswordView()
-	{
+	
+	public ChangePasswordView(){
 		changeBtn = new JButton("Apply Changes");
 		cancelBtn = new JButton("Cancel");
 		
@@ -133,25 +146,46 @@ public class ChangePasswordView extends JFrame {
 		defaultEchoChar = confirmPwdFld.getEchoChar();
 	}
 	
-	public String getOldPass(){ return new String(oldPassPwdFld.getPassword()); }
-	public String getNewPass(){ return new String(newPassPwdFld.getPassword()); }
-	public String getConfirmNewPass(){ return new String(confirmPwdFld.getPassword()); }
+	public String getOldPass(){ 
+		return new String(oldPassPwdFld.getPassword()); 
+	}
+	
+	public String getNewPass(){ 
+		return new String(newPassPwdFld.getPassword()); 
+	}
+	
+	public String getConfirmNewPass(){
+		return new String(confirmPwdFld.getPassword());
+	}
+	
 	public void clear(){
 		oldPassPwdFld.setText("");
 		newPassPwdFld.setText("");
 		confirmPwdFld.setText("");
 	}
-	public void setChangeListener(ActionListener list){changeBtn.addActionListener(list);}
-	public void setCancelListener(ActionListener list){cancelBtn.addActionListener(list);}
-	public void setShowListener(ItemListener list){showPassBox.addItemListener(list);}
+	
+	public void setChangeListener(ActionListener list){
+		changeBtn.addActionListener(list);
+	}
+	
+	public void setCancelListener(ActionListener list){
+		cancelBtn.addActionListener(list);
+	}
+	
+	public void setShowListener(ItemListener list){
+		showPassBox.addItemListener(list);
+	}
+	
 	public boolean askConfirmation(){ 
 		int confirmation = JOptionPane.showConfirmDialog(null, "Please confirm!", "Please confirm!",
+		
 		JOptionPane.YES_NO_OPTION);
 		if(confirmation ==JOptionPane.YES_OPTION){
 			return true;
 		}
 		return false;
 	}
+	
 	public void showPassword(boolean b){
 		if(b){
 			oldPassPwdFld.setEchoChar(defaultEchoChar);
@@ -163,8 +197,10 @@ public class ChangePasswordView extends JFrame {
 			confirmPwdFld.setEchoChar((char) 0);
 		}
 	}
+	
 	public void showError(int i){
 		String error = "";
+		
 		if(i == 0){
 			error = "Change password failed!";
 		}else if(i == 1){
@@ -175,6 +211,8 @@ public class ChangePasswordView extends JFrame {
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE);
 	}
 
-	public void showSuccess(){JOptionPane.showMessageDialog(null, "Change password is successful.", "Change password is successful.", JOptionPane.PLAIN_MESSAGE); }
+	public void showSuccess(){
+		JOptionPane.showMessageDialog(null, "Change password is successful.", "Change password is successful.", JOptionPane.PLAIN_MESSAGE);
+	}
 
 }

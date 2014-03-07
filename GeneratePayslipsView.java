@@ -1,3 +1,16 @@
+/*******************************************************
+	 *  Class name: GeneratePayslipsView
+ 	 *  Inheritance: JFrame
+	 *  Attributes: model, file
+	 *  Methods: 	GeneratePayslipsView, setSelectFileListener, setClientListener,
+	 *				setGenerateListener, setCancelListener, fileSaver,
+	 *				getClient, showSuccess, setFileDirectory,
+	 *				getPeriodStartDate, getFileDirectory, showError,
+	 *				updateClientList, updateDateList
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+	 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -22,7 +35,7 @@ import java.io.File;
 
 import java.util.ArrayList;
 
-public class GeneratePayslipsView extends JFrame {
+public class GeneratePayslipsView extends JFrame{
 
 	private PayrollSystemModel model;
 	
@@ -204,16 +217,21 @@ public class GeneratePayslipsView extends JFrame {
 		JFileChooser fc = new JFileChooser();
 		//In response to a button click:
 		int returnVal = fc.showSaveDialog(this);
+		
 		return new File(fc.getSelectedFile()+".csv");
 	}
 	
-	public String getClient(){return (String)clientCBox.getSelectedItem();}
+	public String getClient(){
+		return (String)clientCBox.getSelectedItem();
+	}
+	
 	public void showSuccess(){
 		JOptionPane.showMessageDialog(null, "Generate payslips success!", "Generate payslips success!", JOptionPane.PLAIN_MESSAGE); 
 	}
 	
 	public void setFileDirectory(File f){
 		file = f;
+		
 		if(f!=null){
 			saveTxtLbl.setText(file.getPath());
 		}else{
@@ -225,10 +243,13 @@ public class GeneratePayslipsView extends JFrame {
 		return (String) timePerCBox.getSelectedItem();
 	}
 	
-	public File getFileDirectory(){return file;}
+	public File getFileDirectory(){
+		return file;
+	}
 	
 	public void showError(int i){
 		String error = "";
+		
 		if(i == 0){
 			error = "No personnel DTR in client!";
 		}else if(i==1){
@@ -243,14 +264,18 @@ public class GeneratePayslipsView extends JFrame {
 	public void updateClientList(){
 		clientCBox.removeAllItems();
 		ArrayList<String> clients = model.getClientList();
-		for(String t : clients)
+		
+		for(String t : clients){
 			clientCBox.addItem(t);
+		}
 	}
 	
 	public void updateDateList(){
 		timePerCBox.removeAllItems();
 		ArrayList<String> dates = model.getDateListDTR(getClient());
-		for(String t : dates)
-			timePerCBox.addItem(t);		
+		
+		for(String t : dates){
+			timePerCBox.addItem(t);
+		}		
 	}
 }

@@ -1,3 +1,23 @@
+/*******************************************************
+	 *  Class name: DTR
+ 	 *  Inheritance: 
+	 *  Attributes: name, tin, regularDaysWorks, regularOvertime,
+	 *				regularNightShiftDifferential, specialHoliday,
+	 *				specialHoliday, specialHolidayOvertime, specialHolidayNightShiftDifferential,
+	 *				legalHoliday, legalHolidayOvertime, legalHolidayNightShiftDifferential,
+	 *				legalHolidayOnRestDay, specialHolidayOnRestDay, late, periodStartDate
+	 *  Methods:	DTR, getRegularDaysWorks, setRegularDaysWorks,
+	 *				getRegularOvertime, setRegularOvertime, getRegularNightShiftDifferential
+	 *				setRegularNightShiftDifferential, getSpecialHoliday, setSpecialHoliday
+	 *				getSpecialHolidayOvertime, setSpecialHolidayOvertime, getSpecialHolidayNightShiftDifferential
+	 *				setSpecialHolidayNightShiftDifferential, getLegalHoliday, setLegalHoliday,
+	 *				getLegalHolidayOvertime, setLegalHolidayOvertime, getLegalHolidayNightShiftDifferential,
+	 *				setLegalHolidayNightShiftDifferential, getPeriodStartDate, setPeriodStartDate,
+	 *				getLegalHolidayOnRestDay, getSpecialHolidayOnRestDay, getTIN, getLate
+	 *  Functionality: Model
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.util.Date;
 
 public class DTR {
@@ -37,63 +57,83 @@ public class DTR {
 		this.late = late;
 		this.periodStartDate = periodStartDate;
 	}
+	
 	public float getRegularDaysWorks(){
 		return regularDaysWorks;
 	}
+	
 	public void setRegularDaysWorks(float regularDaysWorks){
 		this.regularDaysWorks = regularDaysWorks;
 	}
+	
 	public float getRegularOvertime(){
 		return regularOvertime;
 	}
+	
 	public void setRegularOvertime(float regularOvertime){
 		this.regularOvertime = regularOvertime;
 	}
+	
 	public float getRegularNightShiftDifferential(){
 		return regularNightShiftDifferential;
 	}
+	
 	public void setRegularNightShiftDifferential(float regularNightShiftDifferential){
 		this.regularNightShiftDifferential = regularNightShiftDifferential;
 	}
+	
 	public float getSpecialHoliday(){
 		return specialHoliday;
 	}
+	
 	public void setSpecialHoliday(float specialHoliday){
 		this.specialHoliday = specialHoliday;
 	}
+	
 	public float getSpecialHolidayOvertime(){
 		return specialHolidayOvertime;
 	}
+	
 	public void setSpecialHolidayOvertime(float specialHolidayOvertime){
 		this.specialHolidayOvertime = specialHolidayOvertime;
 	}
+	
 	public float getSpecialHolidayNightShiftDifferential(){
 		return specialHolidayNightShiftDifferential;
 	}
+	
 	public void setSpecialHolidayNightShiftDifferential(float specialHolidayNightShiftDifferential){
 		this.specialHolidayNightShiftDifferential = specialHolidayNightShiftDifferential;
 	}
+	
 	public float getLegalHoliday(){
 		return legalHoliday;
 	}
+	
 	public void setLegalHoliday(float legalHoliday){
 		this.legalHoliday = legalHoliday;
 	}
+	
 	public float getLegalHolidayOvertime(){
 		return legalHolidayOvertime;
 	}
+	
 	public void setLegalHolidayOvertime(float legalHolidayOvertime){
 		this.legalHolidayOvertime = legalHolidayOvertime;
 	}
+	
 	public float getLegalHolidayNightShiftDifferential(){
 		return legalHolidayNightShiftDifferential;
 	}
+	
 	public void setLegalHolidayNightShiftDifferential(float legalHolidayNightShiftDifferential){
 		this.legalHolidayNightShiftDifferential = legalHolidayNightShiftDifferential;
 	}
+	
 	public Date getPeriodStartDate(){
 		return periodStartDate;
 	}
+	
 	public void setPeriodStartDate(Date periodStartDate){
 		this.periodStartDate = periodStartDate;
 	}
@@ -105,6 +145,7 @@ public class DTR {
 	public float getSpecialHolidayOnRestDay(){
 		return specialHolidayOnRestDay;
 	}
+	
 	public String getTIN(){
         return tin;
     }

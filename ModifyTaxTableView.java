@@ -1,3 +1,13 @@
+/*******************************************************
+	 *  Class name: ModifyTaxTableView
+ 	 *  Inheritance: JPanel
+	 *  Attributes: model
+	 *  Methods: 	ModifyTaxTableView, getFileDirectory, setModifyListener,
+	 *				setCancelListener
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -101,7 +111,9 @@ public class ModifyTaxTableView extends JPanel {
 		add(backBtn,gbc);
 	}
 	
-	public String getFileDirectory(){ return null; }
+	public String getFileDirectory(){ 
+		return null; 
+	}
 	
 	public void setModifyListener(){}
 	public void setCancelListener(){}

@@ -1,3 +1,14 @@
+/*******************************************************
+	 *  Class name: AddAdjustmentsView
+ 	 *  Inheritance:
+	 *  Attributes: model
+	 *  Methods:	AddAdjustmentsView, askConfirmation, setAddListener, setCancelListener,
+	 * 				setClientListener, getTypeAdjustment, getAdjustment,
+	 *				getClient, getTIN, showSuccess, showWrongInput, clear,
+	 *				updatePersonnelList, updateClientList
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,7 +29,7 @@ import javax.swing.border.LineBorder;
 
 import java.util.ArrayList;
 
-public class AddAdjustmentsView extends JFrame {
+public class AddAdjustmentsView extends JFrame{
 	
 	private PayrollSystemModel model;
 	
@@ -186,6 +197,7 @@ public class AddAdjustmentsView extends JFrame {
 	
 	public boolean askConfirmation(){
 		int confirmation = JOptionPane.showConfirmDialog(null, "Please confirm!", "Please confirm!",
+		
 		JOptionPane.YES_NO_OPTION);
 		if(confirmation ==JOptionPane.YES_OPTION){
 			return true;
@@ -193,13 +205,21 @@ public class AddAdjustmentsView extends JFrame {
 		return false;
 	}
 	
-	public void setAddListener(ActionListener list){addBtn.addActionListener(list);}
+	public void setAddListener(ActionListener list){
+		addBtn.addActionListener(list);
+	}
 	
-	public void setCancelListener(ActionListener list){cancelBtn.addActionListener(list);}
+	public void setCancelListener(ActionListener list){
+		cancelBtn.addActionListener(list);
+	}
 	
-	public void setClientListener(ActionListener list){clientCBox.addActionListener(list);}
+	public void setClientListener(ActionListener list){
+		clientCBox.addActionListener(list);
+	}
 	
-	public String getTypeAdjustment(){ return reasonTextFld.getText(); }
+	public String getTypeAdjustment(){ 
+		return reasonTextFld.getText(); 
+	}
 	
 	public float getAdjustment(){
 		try{
@@ -209,14 +229,18 @@ public class AddAdjustmentsView extends JFrame {
 		}
 	}
 	
-	public String getClient(){ return (String)clientCBox.getSelectedItem(); }
+	public String getClient(){
+		return (String)clientCBox.getSelectedItem(); 
+	}
 	
 	public String getTIN(){
 		String s = (String)personnelCBox.getSelectedItem();
 		int i;
-		for(i = 0;i<s.length();i++)
+		
+		for(i = 0;i<s.length();i++){
 			if(s.charAt(i)=='~')
 				break;
+		}
 		return s.substring(i+2,s.length());
 	}
 	
@@ -236,16 +260,18 @@ public class AddAdjustmentsView extends JFrame {
 	public void updatePersonnelList(){
 		personnelCBox.removeAllItems();
 		ArrayList<String> personnel = model.getPersonnelList((String)clientCBox.getSelectedItem());
-		for(String t : personnel)
-			personnelCBox.addItem(t);
 		
+		for(String t : personnel){
+			personnelCBox.addItem(t);
+		}
 	}
 	
 	public void updateClientList(){
 		clientCBox.removeAllItems();
 		ArrayList<String> clients = model.getClientList();
-		for(String t : clients)
+		for(String t : clients){
 			clientCBox.addItem(t);
+		}
 	}
 	
 }

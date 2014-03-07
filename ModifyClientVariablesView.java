@@ -1,3 +1,13 @@
+/*******************************************************
+	 *  Class name: ModifyClientVariablesView
+ 	 *  Inheritance: JPanel
+	 *  Attributes: model
+	 *  Methods: 	ModifyClientVariablesView, getClient, getSHVariable, getLHVariable
+	 *				setModifyListener, setCancelListener
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -93,11 +103,17 @@ public class ModifyClientVariablesView extends JPanel {
 		add(backBtn,gbc);
 	}
 	
-	public String getClient(){ return null; }
+	public String getClient(){ 
+		return null;
+	}
 	
-	public float getSHVariable(){ return 0f; }
+	public float getSHVariable(){
+		return 0f; 
+	}
 	
-	public float getLHVariable(){ return 0f; }
+	public float getLHVariable(){ 
+		return 0f; 
+	}
 	
 	public void setModifyListener(){}
 	public void setCancelListener(){}

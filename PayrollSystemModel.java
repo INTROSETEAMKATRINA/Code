@@ -1,3 +1,22 @@
+/*******************************************************
+	 *  Class name: PayrollSystemModel
+ 	 *  Inheritance:
+	 *  Attributes: con, sdf, periodStartdate, model, view, removeAdjustments,
+	 *				addAdjustments, viewSummaryReport, changePassword,
+	 *				generatePayslips
+	 *  Methods:	PayrollSystemModel, setPeriodStartDate, addPersonnel
+	 *				addDTR, removePersonnel, getPersonnel,
+	 *				addAdjustment, removeAdjustment, changePassword,
+	 *				modifyTaxTable, modfyClientVariables, generatePayslips,
+	 *				generateSummaryReport, backupDate, getSummaryReport,
+	 *				getClientList, getPersonnelList, getAdjustmentsList, 
+	 *				getDateListDTR, checkPeriodForDTR, checkPeriodForPayslips,
+	 *				getDateListPayslips, getColumnName, getTableRow, 
+	 *				getSummaryReport, tryGetFloat
+	 *  Functionality: Model
+	 *  Visibility: public
+	 *******************************************************/
+	 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;

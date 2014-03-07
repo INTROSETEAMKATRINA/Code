@@ -1,7 +1,7 @@
 /*******************************************************
 	 *  Class name: PayrollSystemController
  	 *  Inheritance:
-	 *  Attributes: con, periodStartdate, model, view, removeAdjustments,
+	 *  Attributes: con, sdf, periodStartdate, model, view, removeAdjustments,
 					addAdjustments, viewSummaryReport, changePassword,
 					generatePayslips
 	 *  Methods:	PayrollSystemController
