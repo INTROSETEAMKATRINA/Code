@@ -174,8 +174,7 @@ public class PayrollSystemModel {
 												 sss, sssLoan, phic, hdmf,hdmfLoan, payrollAdvance, houseRental,
 												 uniformAndOthers, dailyRate, colaRate, monthlyRate));
 				}else{
-					return 6;
-				}
+					return 5;
 				}
 				row++;
 			}
