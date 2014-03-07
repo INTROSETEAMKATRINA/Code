@@ -211,7 +211,14 @@ public class AddAdjustmentsView extends JFrame {
 	
 	public String getClient(){ return (String)clientCBox.getSelectedItem(); }
 	
-	public String getTIN(){ return model.getTIN((String)personnelCBox.getSelectedItem()); }
+	public String getTIN(){
+		String s = (String)personnelCBox.getSelectedItem();
+		int i;
+		for(i = 0;i<s.length();i++)
+			if(s.charAt(i)=='~')
+				break;
+		return s.substring(i+2,s.length());
+	}
 	
 	public void showSuccess(){
 		JOptionPane.showMessageDialog(null, "Successfully added adjustment!", "Successfully added adjustment!", JOptionPane.PLAIN_MESSAGE); 

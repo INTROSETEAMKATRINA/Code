@@ -217,7 +217,7 @@ public class RemoveAdjustmentsView extends JFrame {
 	}	
 	public void updatePersonnelList(){
 		personnelCBox.removeAllItems();
-		ArrayList<String> personnel = model.getPersonnelList((String)clientCBox.getSelectedItem());
+		ArrayList<String> personnel = model.getPersonnelList(getClient());
 		for(String t : personnel)
 			personnelCBox.addItem(t);
 	}
@@ -238,7 +238,14 @@ public class RemoveAdjustmentsView extends JFrame {
 	
 	public String getClient(){ return (String)clientCBox.getSelectedItem(); }
 	
-	public String getTIN(){ return model.getTIN((String)personnelCBox.getSelectedItem()); }
+	public String getTIN(){
+		String s = (String)personnelCBox.getSelectedItem();
+		int i;
+		for(i = 0;i<s.length();i++)
+			if(s.charAt(i)=='~')
+				break;
+		return s.substring(i+2,s.length());
+	}
 	
 	public String getTypeAdjustment(){
 		String s = (String)adjCBox.getSelectedItem();

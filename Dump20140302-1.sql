@@ -31,7 +31,7 @@ CREATE TABLE `adjustmentsanddeductions` (
   `TIN` varchar(20) NOT NULL,
   PRIMARY KEY (`PeriodStartDate`,`TIN`,`type`),
   KEY `PersonnelAdjustmentsAndDeductions_idx` (`TIN`),
-  CONSTRAINT `TINAdjustmentAndDeductions` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `TINAdjustmentAndDeductions` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -92,7 +92,7 @@ CREATE TABLE `dtr` (
   `TIN` varchar(20) NOT NULL,
   PRIMARY KEY (`PeriodStartDate`,`TIN`),
   KEY `TINDTR_idx` (`TIN`),
-  CONSTRAINT `TINDTR` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `TINDTR` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -180,7 +180,7 @@ CREATE TABLE `payslip` (
   `NetPay` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`TIN`,`PeriodStartDate`),
   KEY `TIN_idx` (`TIN`),
-  CONSTRAINT `TINPayslip` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `TINPayslip` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -212,7 +212,7 @@ CREATE TABLE `personnel` (
   `TaxStatus` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`TIN`),
   KEY `ClientPersonnel_idx` (`Assignment`),
-  CONSTRAINT `TINClient` FOREIGN KEY (`Assignment`) REFERENCES `client` (`Name`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `TINClient` FOREIGN KEY (`Assignment`) REFERENCES `client` (`Name`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

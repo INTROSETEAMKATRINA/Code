@@ -266,9 +266,11 @@ public class PayrollSystemView extends JFrame {
 		}else if(i == 4){
 			error = "Unknown error.";
 		}else if(i == 5){
-			error = "No name in excel file!";
+			error = "Lacking name!";
 		}else if(i == 6){
-			error = "Negative deduction or rate.";
+			error = "Negative days worked or hours.";
+		}else if(i == 7){
+			error = "Adding dtr to a personnel not in the database.";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}
@@ -284,9 +286,11 @@ public class PayrollSystemView extends JFrame {
 		}else if(i == 4){
 			error = "Unknown error.";
 		}else if(i == 5){
-			error = "No name in excel file!";
+			error = "Lacking name!";
 		}else if(i == 6){
-			error = "Negative days worked or hours.";
+			error = "Negative deduction or rate.";
+		}else if(i == 7){
+			error = "No client name in excel file.";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}
