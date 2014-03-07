@@ -279,6 +279,8 @@ public class PayrollSystemView extends JFrame {
 			error = "Lacking tin!";
 		}else if(i == 4){
 			error = "Unknown error.";
+		}else if(i == 5){
+			error = "No name in excel file!";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
 	}
