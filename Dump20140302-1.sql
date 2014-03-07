@@ -180,7 +180,6 @@ CREATE TABLE `payslip` (
   `NetPay` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`TIN`,`PeriodStartDate`),
   KEY `TIN_idx` (`TIN`),
-  CONSTRAINT `TINPayslip` FOREIGN KEY (`TIN`) REFERENCES `personnel` (`TIN`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
