@@ -570,6 +570,7 @@ public class PayrollSystemModel {
 									legalHolidayNightShiftDifferentialPay +
 									specialHolidayNightShiftDifferentialPay;
 					float grossPay = regularPay + legalHolidayPay + specialHolidayPay + 
+									otPay + nsdPay +
 									adjustments + legalHolidayOnRestDayPay + specialHolidayOnRestDayPay;
 					float netPay = grossPay - totalDeductions;
 					
