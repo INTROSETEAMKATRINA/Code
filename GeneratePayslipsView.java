@@ -218,6 +218,9 @@ public class GeneratePayslipsView extends JFrame{
 		//In response to a button click:
 		int returnVal = fc.showSaveDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION){
+			if(fc.toString().contains(".csv")){
+				return fc.getSelectedFile();
+			}
 			return new File(fc.getSelectedFile()+".csv");
 		}else{
 			return null;
