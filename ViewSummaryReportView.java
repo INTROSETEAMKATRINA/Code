@@ -1,3 +1,12 @@
+/*******************************************************
+	 *  Class name: ViewSummaryReportView
+ 	 *  Inheritance: JFrame
+	 *  Attributes: model
+	 *  Methods:	ViewSummaryReportView, getClient, setPickerListener
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+	 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -190,31 +199,47 @@ public class ViewSummaryReportView extends JFrame {
 		}
 	}
 	
-	public String getClient(){ return (String)clientCBox.getSelectedItem();}
+	public String getClient(){ 
+		return (String)clientCBox.getSelectedItem();
+	}
 	
-	public String getPeriodStartDate(){ return (String)dateCBox.getSelectedItem(); }
+	public String getPeriodStartDate(){ 
+		return (String)dateCBox.getSelectedItem(); 
+	}
 	
-	public String getReport(){ return (String)viewCBox.getSelectedItem(); }
+	public String getReport(){ 
+		return (String)viewCBox.getSelectedItem(); 
+	}
 	
-	public void setPeriodStartDateListener(ActionListener list){clientCBox.addActionListener(list);}
+	public void setPeriodStartDateListener(ActionListener list){
+		clientCBox.addActionListener(list);
+	}
 	
-	public void setViewListener(ActionListener list){viewBtn.addActionListener(list);}
+	public void setViewListener(ActionListener list){
+		viewBtn.addActionListener(list);
+	}
 	
-	public void backListener(ActionListener list){backBtn.addActionListener(list);}
+	public void backListener(ActionListener list){
+		backBtn.addActionListener(list);
+	}
 	
 	public void updateTable(){
 		tableModel.setRowCount(0);
 		statusLbl.setText("Status: You are now viewing " + getReport().toLowerCase() + ".");
 		ArrayList<Object[]> row = model.getTableRow(getClient(),getPeriodStartDate(),getReport());
-		for(Object[] t : row)
+		
+		for(Object[] t : row){
 			tableModel.addRow(t);
+		}
 	}
 	
 	public void updateClientList(){
 		clientCBox.removeAllItems();
 		ArrayList<String> clients = model.getClientList();
-		for(String t : clients)
+		
+		for(String t : clients){
 			clientCBox.addItem(t);
+		}
 	}
 	
 	public void updateDateList(){

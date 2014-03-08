@@ -1,3 +1,13 @@
+/*******************************************************
+	 *  Class name: RequestFocusListener
+ 	 *  Inheritance: AncestorListener
+	 *  Attributes: removeListener
+	 *  Methods:	RequestFocusListener, ancestorAdded,
+	 *				ancestorMoved, ancestorRemoved
+	 *  Functionality: Listener
+	 *  Visibility: public
+	 *******************************************************/
+	 
 import javax.swing.*;
 import javax.swing.event.*;
 //External class
@@ -18,16 +28,14 @@ import javax.swing.event.*;
  *  AncestorListener from being removed when the event is generated. This will
  *  allow you to reuse the listener each time the event is generated.
  */
-public class RequestFocusListener implements AncestorListener
-{
+public class RequestFocusListener implements AncestorListener{
 	private boolean removeListener;
 
 	/*
 	 *  Convenience constructor. The listener is only used once and then it is
 	 *  removed from the component.
 	 */
-	public RequestFocusListener()
-	{
+	public RequestFocusListener(){
 		this(true);
 	}
 
@@ -38,14 +46,12 @@ public class RequestFocusListener implements AncestorListener
 	 *  @param removeListener when true this listener is only invoked once
 	 *                        otherwise it can be invoked multiple times.
 	 */
-	public RequestFocusListener(boolean removeListener)
-	{
+	public RequestFocusListener(boolean removeListener){
 		this.removeListener = removeListener;
 	}
 
 	@Override
-	public void ancestorAdded(AncestorEvent e)
-	{
+	public void ancestorAdded(AncestorEvent e){
 		JComponent component = e.getComponent();
 		component.requestFocusInWindow();
 
@@ -54,8 +60,8 @@ public class RequestFocusListener implements AncestorListener
 	}
 
 	@Override
-	public void ancestorMoved(AncestorEvent e) {}
+	public void ancestorMoved(AncestorEvent e){}
 
 	@Override
-	public void ancestorRemoved(AncestorEvent e) {}
+	public void ancestorRemoved(AncestorEvent e){}
 }

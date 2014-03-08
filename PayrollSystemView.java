@@ -1,3 +1,19 @@
+/*******************************************************
+	 *  Class name: PayrollSystemView
+ 	 *  Inheritance: JFrame
+	 *  Attributes: 
+	 *  Methods:	PayrollSystemView, setAddPersonnelListener, setRemovePListener,
+     *				setViewPListener, setAddDTRListener, setAddAdjustmentListener,
+     *				setRemoveAdjustmentListener, setViewSummaryReportListener,
+     *				setGenerateSummaryReportListener, setModifyTaxTableListener,
+     *				setModifyClientVarListener, setGeneratePayslipsListener,
+     *				setChangePasswordListener, setBackupDataListener, fileChooser,
+     *				showSuccess, showPeriodStartDateNotFound, showErrorDTR,
+     *				showErrorPersonnel
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;

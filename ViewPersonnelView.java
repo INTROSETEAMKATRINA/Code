@@ -1,3 +1,12 @@
+/*******************************************************
+	 *  Class name: ViewPersonnelView
+ 	 *  Inheritance: JFrame
+	 *  Attributes: model
+	 *  Methods:	ViewPersonnelView, getClient, setPickerListener
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -31,8 +40,7 @@ public class ViewPersonnelView extends JFrame {
 	private JTextPane personnelPanel;
 	private JScrollPane personnelPane;
 	
-	public ViewPersonnelView(PayrollSystemModel model)
-	{
+	public ViewPersonnelView(PayrollSystemModel model){
 		this.model = model;
 		
 		titleLbl = new JLabel("View Personnel");
@@ -142,6 +150,9 @@ public class ViewPersonnelView extends JFrame {
 		add(backBtn,gbc);
 	}
 
-	public String getClient(){ return null; }
+	public String getClient(){ 
+		return null; 
+	}
+	
 	public void setPickerListener(){}
 }

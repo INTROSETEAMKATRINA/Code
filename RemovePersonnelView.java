@@ -1,3 +1,13 @@
+/*******************************************************
+	 *  Class name: RemovePersonnelView
+ 	 *  Inheritance: JFrame
+	 *  Attributes: model
+	 *  Methods:	RemovePersonnelView, getClient, setRemoveListener
+	 *				setCancelListener
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -167,7 +177,9 @@ public class RemovePersonnelView extends JFrame {
 		add(cancelBtn,gbc);
 	}
 	
-	public String getClient(){ return null; }
+	public String getClient(){ 
+		return null; 
+	}
 	
 	public void setRemoveListener(){}
 	public void setCancelListener(){}

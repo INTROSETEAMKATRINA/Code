@@ -1,3 +1,42 @@
+/*******************************************************
+	 *  Class name: Payslip
+ 	 *  Inheritance: 
+	 *  Attributes: assignment, name, periodStartDate,
+     *				position, regularDaysWork, dailyRate,
+     *				grossPay, late, regularPay, regularOvertime,
+     *				regularOvertimePay, regularNightShiftDifferential,
+     *				regularNightShiftDifferentialPay, legalHoliday,
+     *				legalHolidayPay, legalHolidayOvertime, 
+     *				legalHolidayOvertimePay, legalHolidayNightShiftDifferential, 
+     *				legalHolidayNightShiftDifferentialPay, legalHolidayOnRestDay,
+     *				legalHolidayOnRestDayPay, specialHoliday,
+     *				specialHolidayPay, specialHolidayOvertime, specialHolidayOvertimePay,
+     *				specialHolidayNightShiftDifferential, specialHolidayNightShiftDifferentialPay,
+     *				specialHolidayOnRestDay, specialHolidayOnRestDayPay,
+     *				transpoAllow, adjustments, wTax, sss,
+     *				phic, hdmf, sssLoan, hdmfLoan, payrollAdvance,
+     *				houseRental, uniformAndOthers, netPay, tin
+	 *  Methods:	Payslip, getTIN, getAssignment, getName
+     *				getPeriodStartDate, getPosition, getRegularDaysWork
+     *				getDailyRate, getGrossPay, getLate, 
+     *				getRegularPay, getRegularOvertime, 
+     *				getRegularOvertimePay, getRegularNightShiftDifferential,
+     *				getRegularNightShiftDifferentialPay, getLegalHoliday,
+     *				getLegalHolidayPay, getLegalHolidayOvertime, getLegalHolidayOvertimePay,
+     *				getLegalHolidayNightShiftDifferential, getLegalHolidayNightShiftDifferentialPay,
+     *				getSpecialHoliday, getSpecialHolidayPay, getSpecialHolidayOvertime,
+     *				getSpecialHolidayOvertimePay, getSpecialHolidayNightShiftDifferential, 
+     *				getSpecialHolidayNightShiftDifferentialPay, getTranspoAllow,
+     *				getAdjustments, getWTax, getSSS, getPHIC, getHDMF, 
+     *				getSSSLoan, getHDMFLoan, getPayrollAdvance, 
+     *				getHouseRental, getUniformAndOthers, getNetPay, 
+     *				getLegalHolidayOnRestDay, getLegalHolidayOnRestDayPay,
+     *				getSpecialHolidayOnRestDay, getSpecialHolidayOnRestDayPay,
+     *				getTotalDeductions
+	 *  Functionality: Model
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.util.Date;
 
 class Payslip{
@@ -116,126 +155,167 @@ class Payslip{
 	public String getAssignment(){
 		return assignment;
 	}
+	
 	public String getName(){
 		return name;
 	}
+	
 	public Date getPeriodStartDate(){
 		return periodStartDate;
 	}
+	
 	public String getPosition(){
 		return position;
 	}
+	
 	public float getRegularDaysWork(){
 		return regularDaysWork;
 	}
+	
 	public float getDailyRate(){
 		return dailyRate;
 	}
+	
 	public float getGrossPay(){
 		return grossPay;
 	}
+	
 	public float getLate(){
 		return late;
 	}
+	
 	public float getRegularPay(){
 		return regularPay;
 	}
+	
 	public float getRegularOvertime(){
 		return regularOvertime;
 	}
+	
 	public float getRegularOvertimePay(){
 		return regularOvertimePay;
 	}
+	
 	public float getRegularNightShiftDifferential(){
 		return regularNightShiftDifferential;
 	}
+	
 	public float getRegularNightShiftDifferentialPay(){
 		return regularNightShiftDifferentialPay;
 	}
+	
 	public float getLegalHoliday(){
 		return legalHoliday;
 	}
+	
 	public float getLegalHolidayPay(){
 		return legalHolidayPay;
 	}
+	
 	public float getLegalHolidayOvertime(){
 		return legalHolidayOvertime;
 	}
+	
 	public float getLegalHolidayOvertimePay(){
 		return legalHolidayOvertimePay;
 	}
+	
 	public float getLegalHolidayNightShiftDifferential(){
 		return legalHolidayNightShiftDifferential;
 	}
+	
 	public float getLegalHolidayNightShiftDifferentialPay(){
 		return legalHolidayNightShiftDifferentialPay;
 	}
+	
 	public float getSpecialHoliday(){
 		return specialHoliday;
 	}
+	
 	public float getSpecialHolidayPay(){
 		return specialHolidayPay;
 	}
+	
 	public float getSpecialHolidayOvertime(){
 		return specialHolidayOvertime;
 	}
+	
 	public float getSpecialHolidayOvertimePay(){
 		return specialHolidayOvertimePay;
 	}
+	
 	public float getSpecialHolidayNightShiftDifferential(){
 		return specialHolidayNightShiftDifferential;
 	}
+	
 	public float getSpecialHolidayNightShiftDifferentialPay(){
 		return specialHolidayNightShiftDifferentialPay;
 	}
+	
 	public float getTranspoAllow(){
 		return transpoAllow;
 	}
+	
 	public float getAdjustments(){
 		return adjustments;
 	}
+	
 	public float getWTax(){
 		return wTax;
 	}
+	
 	public float getSSS(){
 		return sss;
 	}
+	
 	public float getPHIC(){
 		return phic;
 	}
+	
 	public float getHDMF(){
 		return hdmf;
 	}
+	
 	public float getSSSLoan(){
 		return sssLoan;
 	}
+	
 	public float getHDMFLoan(){
 		return hdmfLoan;
 	}
+	
 	public float getPayrollAdvance(){
 		return payrollAdvance;
 	}
+	
 	public float getHouseRental(){
 		return houseRental;
 	}
+	
 	public float getUniformAndOthers(){
 		return uniformAndOthers;
 	}
+	
 	public float getNetPay(){
 		return netPay;
 	}
+	
 	public float getLegalHolidayOnRestDay(){
 		return legalHolidayOnRestDay;
 	}
+	
 	public float getLegalHolidayOnRestDayPay(){
 		return legalHolidayOnRestDayPay;
 	}
+	
 	public float getSpecialHolidayOnRestDay(){
 		return specialHolidayOnRestDay;
 	}
+	
 	public float getSpecialHolidayOnRestDayPay(){
 		return specialHolidayOnRestDayPay;
 	}
+	
 	public float getTotalDeductions(){
 		return sss + hdmf + wTax + phic + sssLoan + hdmfLoan +
 			payrollAdvance + houseRental + uniformAndOthers;

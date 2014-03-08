@@ -1,3 +1,16 @@
+/*******************************************************
+	 *  Class name: RemoveAdjustmentsView
+ 	 *  Inheritance: JFrame
+	 *  Attributes: model
+	 *  Methods:	RemoveAdjustmentsView, askConfirmation, setRemoveListener, setCancelListener,
+     *				setClientListener, setPersonnelListener, showSuccess,
+     *				showNoAdjustments, updatePersonnelList, updateClientList,
+     *				updateAdjustmentsList, getClient, getTIN, getTypeAdjustment,
+     *				getAdjustment, getNumAdjustments
+	 *  Functionality: View
+	 *  Visibility: public
+	 *******************************************************/
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -42,6 +55,7 @@ public class RemoveAdjustmentsView extends JFrame {
 	private JComboBox<String> personnelCBox;
 	private JComboBox<String> clientCBox;
 	private JComboBox<String> adjCBox;
+	
 	public RemoveAdjustmentsView(PayrollSystemModel model)
 	{
 		this.model = model;
@@ -197,6 +211,7 @@ public class RemoveAdjustmentsView extends JFrame {
 	
 	public boolean askConfirmation(){
 		int confirmation = JOptionPane.showConfirmDialog(null, "Please confirm!", "Please confirm!",
+		
 		JOptionPane.YES_NO_OPTION);
 		if(confirmation ==JOptionPane.YES_OPTION){
 			return true;
@@ -204,20 +219,34 @@ public class RemoveAdjustmentsView extends JFrame {
 		return false;
 	}
 	
-	public void setRemoveListener(ActionListener list){removeBtn.addActionListener(list);}
-	public void setCancelListener(ActionListener list){cancelBtn.addActionListener(list);}
-	public void setClientListener(ActionListener list){clientCBox.addActionListener(list);}
-	public void setPersonnelListener(ActionListener list){personnelCBox.addActionListener(list);}
+	public void setRemoveListener(ActionListener list){
+		removeBtn.addActionListener(list);
+	}
+	
+	public void setCancelListener(ActionListener list){
+		cancelBtn.addActionListener(list);
+	}
+	
+	public void setClientListener(ActionListener list){
+		clientCBox.addActionListener(list);
+	}
+	
+	public void setPersonnelListener(ActionListener list){
+		personnelCBox.addActionListener(list);
+	}
+	
 	public void showSuccess(){
 		JOptionPane.showMessageDialog(null, "Successfully removed adjustment!", "Successfully removed adjustment!", JOptionPane.PLAIN_MESSAGE); 
 	}
 
 	public void showNoAdjustments(){
 		JOptionPane.showMessageDialog(null, "No adjustments to be removed!", "No adjustments to be removed!", JOptionPane.ERROR_MESSAGE); 
-	}	
+	}
+		
 	public void updatePersonnelList(){
 		personnelCBox.removeAllItems();
 		ArrayList<String> personnel = model.getPersonnelList(getClient());
+		
 		for(String t : personnel)
 			personnelCBox.addItem(t);
 	}
@@ -225,6 +254,7 @@ public class RemoveAdjustmentsView extends JFrame {
 	public void updateClientList(){
 		clientCBox.removeAllItems();
 		ArrayList<String> clients = model.getClientList();
+		
 		for(String t : clients)
 			clientCBox.addItem(t);
 	}
@@ -232,38 +262,52 @@ public class RemoveAdjustmentsView extends JFrame {
 	public void updateAdjustmentsList(){
 		adjCBox.removeAllItems();
 		ArrayList<String> adjustments = model.getAdjustmentsList(getTIN());
+		
 		for(String t : adjustments)
 			adjCBox.addItem(t);
 	}
 	
-	public String getClient(){ return (String)clientCBox.getSelectedItem(); }
+	public String getClient(){ 
+		return (String)clientCBox.getSelectedItem(); 
+	}
 	
 	public String getTIN(){
 		String s = (String)personnelCBox.getSelectedItem();
+		int i;
+		
 		if(s == null || s.length() == 0){
 			return null;
 		}
-		int i;
-		for(i = 0;i<s.length();i++)
-			if(s.charAt(i)=='~')
+		
+		for(i = 0;i<s.length();i++){
+			if(s.charAt(i)=='~'){
 				break;
+			}
+		}
 		return s.substring(i+2,s.length());
 	}
 	
 	public String getTypeAdjustment(){
 		String s = (String)adjCBox.getSelectedItem();
 		int i;
-		for(i = 0;i<s.length();i++)
-			if(s.charAt(i)=='~')
+		
+		for(i = 0;i<s.length();i++){
+			if(s.charAt(i)=='~'){
 				break;
+			}
+		}
+		
 		return s.substring(0,i-1);
 	}
+	
 	public float getAdjustment(){
 		String s = (String)adjCBox.getSelectedItem();
 		int i;
-		for(i = 0;i<s.length();i++)
-			if(s.charAt(i)=='~')
+		for(i = 0;i<s.length();i++){
+			if(s.charAt(i)=='~'){
 				break;
+			}
+		}
 		return Float.parseFloat(s.substring(i+2,s.length()));
 	}
 	

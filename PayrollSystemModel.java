@@ -55,9 +55,11 @@ public class PayrollSystemModel {
 	public int addPersonnel(File fileDirectory, Date periodStartDate) {
     	ArrayList<Personnel> personnels = new ArrayList<Personnel>();
 		String assignment = "";
+		
         try{
 			File file = fileDirectory;
 			
+				
 			String ext = getExtension(fileDirectory.toString());
 			if(!ext.equals("xls")){
 				return 8;
@@ -65,7 +67,7 @@ public class PayrollSystemModel {
 			
 			Workbook workbook = Workbook.getWorkbook(file);
 			Sheet sheet = workbook.getSheet(0);
-		
+
 			String name,position,employeeStatus,tin,taxStatus;
 			float sss, sssLoan, phic, hdmf, hdmfLoan, payrollAdvance, houseRental, uniformAndOthers;
 			float dailyRate, colaRate, monthlyRate;
@@ -114,7 +116,7 @@ public class PayrollSystemModel {
 					
 					float rates[] = new float[3];
 					for(int i = 0; i < 3;i++){
-							column++;
+						column++;
 						rates[i] = tryGetFloat(sheet.getCell(column,row).getContents());
 						if(rates[i] < 0){
 							return 6;
@@ -359,7 +361,7 @@ public class PayrollSystemModel {
                     stmt=con.prepareStatement(sql);
                     stmt.execute(sql);
 
-                } catch(SQLException ex) {
+                }catch(SQLException ex){
 					if(ex.getErrorCode() == 1452){
 						try{
 							sql = "ROLLBACK;";
@@ -392,6 +394,7 @@ public class PayrollSystemModel {
 
 	public void addAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
         Statement stmt = null;
+        
 	    try {
 			String sql = "REPLACE INTO `Payroll System`.`AdjustmentsAndDeductions` " +
 			"(`amount`, `type`, `PeriodStartDate`, `TIN`) VALUES " +
@@ -408,6 +411,7 @@ public class PayrollSystemModel {
 
 	public void removeAdjustment(String reason, float adjustment, String tin, Date periodStartDate) {
         Statement stmt = null;
+        
         try{
 			String sql="DELETE FROM `Payroll System`.`AdjustmentsAndDeductions`\n" +
 			"WHERE `TIN` = \""+ tin+"\" AND `PeriodStartDate` =\""+ sdf.format(periodStartDate)+"\" AND `amount` = \""+adjustment+"\" AND `TYPE` = \""+reason+"\";";
@@ -420,6 +424,7 @@ public class PayrollSystemModel {
 
 	public int changePassword(String oldPass, String newPass){
 		int x = 0;
+		
 		try{
 			Statement st = con.createStatement();
 			x = st.executeUpdate("update password set password = '"+newPass+"' where password = '"+oldPass+"'");
@@ -438,6 +443,7 @@ public class PayrollSystemModel {
 	public int generatePayslips(File directory, String client, String psd){
 		Statement stmt = null;
 		ArrayList<Payslip> payslips = new ArrayList<>();
+            
             try{
 				String sql = "Select * FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
 							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"' order by personnel.name";
@@ -498,31 +504,39 @@ public class PayrollSystemModel {
 						switch(type){
 							case "SSS":
 								sss = rs2.getFloat("amount");
-								break;
+							break;
+							
 							case "PHIC":
 								phic = rs2.getFloat("amount");
-								break;
+							break;
+							
 							case "SSS Loan":
 								sssLoan = rs2.getFloat("amount");
-								break;
+							break;
+							
 							case "HDMF":
 								hdmf = rs2.getFloat("amount");
-								break;
+							break;
+							
 							case "HDMF Loan":
 								hdmfLoan = rs2.getFloat("amount");
-								break;
+							break;
+							
 							case "Payroll Advance":
 								payrollAdvance = rs2.getFloat("amount");
-								break;
+							break;
+							
 							case "House Rental":
 								houseRental = rs2.getFloat("amount");
-								break;
+							break;
+							
 							case "Uniform and Others":
 								uniformAndOthers = rs2.getFloat("amount");
-								break;
+							break;
+							
 							default:
 								adjustments += rs2.getFloat("amount");
-								break;
+							break;
 						}
 					}
 					
@@ -643,49 +657,61 @@ public class PayrollSystemModel {
 			int day = Integer.parseInt(date.substring(8,10));
 			int year = Integer.parseInt(date.substring(0,4));
 			int sDay = 15;
+			
 			switch(month){
 				case 1:printDate += "Jan. ";
 					sDay = day == 1? 15:31;
-					break;
+				break;
+				
 				case 2:printDate += "Feb. ";
 					if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)){
 						sDay = day == 1? 15:29;
 					}else{
 						sDay = day == 1? 15:28;
 					}
-					break;
+				break;
+				
 				case 3:printDate += "March ";
 					sDay = day == 1? 15:31;
-					break;
+				break;
+				
 				case 4:printDate += "April ";
 					sDay = day == 1? 15:30;
-					break;
+				break;
+					
 				case 5:printDate += "May ";
 					sDay = day == 1? 15:31;
-					break;
+				break;
+				
 				case 6:printDate += "June ";
 					sDay = day == 1? 15:30;
-					break;
+				break;
+				
 				case 7:printDate += "July ";
 					sDay = day == 1? 15:31;
-					break;
+				break;
+				
 				case 8:printDate += "Aug. ";
 					sDay = day == 1? 15:31;
-					break;
+				break;
+				
 				case 9:printDate += "Sept. ";
 					sDay = day == 1? 15:30;
-					break;
+				break;
+				
 				case 10:printDate += "Oct. ";
 					sDay = day == 1? 15:31;
-					break;
+				break;
+				
 				case 11:printDate += "Nov. ";
 					sDay = day == 1? 15:30;
-					break;
+				break;
+				
 				case 12:printDate += "Dec. ";
 					sDay = day == 1? 15:31;
-					break;
-					
+				break;
 			}
+			
 			printDate += day + "-" + sDay;
 			printDate += ", ";
 			printDate += year;
@@ -824,6 +850,7 @@ public class PayrollSystemModel {
 	public ArrayList<String> getClientList(){
 		Statement stmt = null;
 		ArrayList<String> clients = new ArrayList<>();
+            
             try{
 				String sql="Select * FROM `client` order by name";
 				Statement st = con.createStatement();
@@ -840,6 +867,7 @@ public class PayrollSystemModel {
 	public ArrayList<String> getPersonnelList(String client){
 		Statement stmt = null;
 		ArrayList<String> personnel = new ArrayList<>();
+            
             try{
 				String sql="Select Name, TIN FROM `personnel` where assignment = '"+client+"' order by name";
 				Statement st = con.createStatement();
@@ -856,6 +884,7 @@ public class PayrollSystemModel {
 	public ArrayList<String> getAdjustmentsList(String tin){
 		Statement stmt = null;
 		ArrayList<String> adjustments = new ArrayList<>();
+            
             try{
 				String sql="Select * FROM `adjustmentsanddeductions` where `tin` = '"+tin+"' and `periodstartdate` = '"+sdf.format(periodStartDate)+"'";
 				Statement st = con.createStatement();
@@ -886,6 +915,7 @@ public class PayrollSystemModel {
 	public ArrayList<String> getDateListDTR(String client){
 		Statement stmt = null;
 		ArrayList<String> dates = new ArrayList<>();
+            
             try{
 				String sql = "Select distinct periodstartdate FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name "
 							+ " and dtr.tin = personnel.tin order by periodstartdate";
@@ -902,6 +932,7 @@ public class PayrollSystemModel {
 	
 	public boolean checkPeriodForDTR(String client, String psd){
 		Statement stmt = null;
+            
             try{
 				String sql = "Select * FROM `client`,`dtr`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
 							" and dtr.tin = personnel.tin and dtr.periodstartdate = '"+psd+"'";
@@ -918,6 +949,7 @@ public class PayrollSystemModel {
 
 	public boolean checkPeriodForPayslips(String client, String psd){
 		Statement stmt = null;
+            
             try{
 				String sql = "Select * FROM `client`,`payslip`,`personnel` where client.name = '"+client+"' and personnel.assignment = client.name " + 
 							" and payslip.tin = personnel.tin and payslip.periodstartdate = '"+psd+"'";
@@ -935,6 +967,7 @@ public class PayrollSystemModel {
 	public ArrayList<String> getDateListPayslips(String client){ ///This should be updated
 		Statement stmt = null;
 		ArrayList<String> dates = new ArrayList<>();
+            
             try{
 				String sql = "Select distinct periodstartdate FROM `payslip` where assignment = '"+client+"' order by periodstartdate";
 				Statement st = con.createStatement();
@@ -950,6 +983,7 @@ public class PayrollSystemModel {
 	
 	public ArrayList<String> getColumnName(String report){
 		ArrayList<String> column = new ArrayList<>();
+		
 		if(report.equals("Daily time record summary")){
 			column.add("Seq no.");
 			column.add("Name");
@@ -1057,6 +1091,7 @@ public class PayrollSystemModel {
 	public ArrayList<Object[]> getTableRow(String client, String date, String report){
 		ArrayList<Object[]> row = new ArrayList<>();
 		Statement stmt = null;
+			
 			try{
 				String sql = "select distinct name, tin from `payslip` where assignment = '"+client+"' and PeriodStartDate = '"+date+"'";
 				Statement st = con.createStatement();
@@ -1070,6 +1105,7 @@ public class PayrollSystemModel {
 						TLHOTPay = 0,TLHNSD = 0,TLHNSDPay = 0,TSH = 0,TSHPay = 0,TSHOT = 0,TSHOTPay = 0,
 						TSHNSD = 0,TSHNSDPay = 0,TLHRD = 0,TLHRDPay = 0,TSHRD = 0,TSHRDPay = 0,TAdjustments = 0,TGrossPay = 0,TSSS = 0,TPHIC = 0,THDMF = 0,TSSSLoan = 0,
 						TPayrollAdvance = 0,THouseRental = 0,TUniformAndOthers = 0,TSavings = 0,TNetPay = 0;
+					
 					do{
 						tin = rs.getString("tin");
 						name = rs.getString("name");
