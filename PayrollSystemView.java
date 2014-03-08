@@ -38,6 +38,7 @@ public class PayrollSystemView extends JFrame {
 	private Connection con;
 	
 	private JLabel appTitle;
+	private JLabel viewPeriodLbl;
 	
 	private JPanel mainPanel;
 	private JPanel titlePane;
@@ -65,6 +66,7 @@ public class PayrollSystemView extends JFrame {
 	private JButton removePersonnelBtn;
 	private JButton viewPersonnelBtn;
 	private JButton viewSummaryReportBtn;
+	private JButton nextTimePerBtn;
 	
 	public PayrollSystemView(PayrollSystemModel model, Connection con){
 		this.con = con;
@@ -98,8 +100,9 @@ public class PayrollSystemView extends JFrame {
 		removePersonnelBtn = new JButton("Remove Personnel");
 		viewPersonnelBtn = new JButton("View Personnel");
 		viewSummaryReportBtn = new JButton("View Summary Report");
+		nextTimePerBtn = new JButton("Next Time Period");
 		
-		/*Initialize - Panes*/
+		viewPeriodLbl = new JLabel("Date: ");
 		appTitle = new JLabel("A Payroll System");
 		
 		modifyUI();
@@ -156,6 +159,11 @@ public class PayrollSystemView extends JFrame {
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		menuPane.add(addPersonnelBtn,gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		menuPane.add(nextTimePerBtn,gbc);
 
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
@@ -207,7 +215,14 @@ public class PayrollSystemView extends JFrame {
 		gbc.gridy = 6;
 		menuPane.add(viewSummaryReportBtn,gbc);
 		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridwidth = 3;
+		gbc.gridx = 0;
+		gbc.gridy = 7;
+		menuPane.add(viewPeriodLbl,gbc);
+		
 		/*Main Panel*/
+		gbc.gridwidth = 0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0,0,30,0);
 		gbc.ipady = 0;
@@ -220,6 +235,8 @@ public class PayrollSystemView extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		mainPanel.add(menuPane,gbc);
+		
+
 		
 	}
 	
@@ -240,6 +257,9 @@ public class PayrollSystemView extends JFrame {
 	}
 	public void setViewSummaryReportListener(ActionListener list){
 		viewSummaryReportBtn.addActionListener(list);
+	}
+	public void setNextTimeListener(ActionListener list){
+		nextTimePerBtn.addActionListener(list);
 	}
 	public void setGenerateSummaryReportListener(ActionListener list){}
 	public void setModifyTaxTableListener(ActionListener list){}
@@ -317,5 +337,19 @@ public class PayrollSystemView extends JFrame {
 			error = "File is not an excel file.";
 		}
 		JOptionPane.showMessageDialog(null, error, error, JOptionPane.ERROR_MESSAGE); 
+	}
+	
+	public void updateTimePeriod(String psd){
+		viewPeriodLbl.setText("Date: " + psd);
+	}
+	
+	public boolean askConfirmation(){
+		int confirmation = JOptionPane.showConfirmDialog(null, "Please confirm!", "Please confirm!",
+		
+		JOptionPane.YES_NO_OPTION);
+		if(confirmation ==JOptionPane.YES_OPTION){
+			return true;
+		}
+		return false;
 	}
 }

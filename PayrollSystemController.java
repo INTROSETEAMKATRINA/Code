@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
+import java.io.PrintWriter;
 import java.io.File;
 
 import java.text.SimpleDateFormat;
@@ -30,7 +31,7 @@ import java.text.SimpleDateFormat;
 public class PayrollSystemController{
 
 	private Connection con;
-	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	private Date periodStartDate;
 	private PayrollSystemModel model;
 	private PayrollSystemView view;
@@ -39,16 +40,18 @@ public class PayrollSystemController{
 	private ViewSummaryReportView viewSummaryReport;
 	private ChangePasswordView changePassword;
 	private GeneratePayslipsView generatePayslips;
-
+	private String directory = "periodStartDate.txt";
+	
 	public PayrollSystemController(PayrollSystemModel model, PayrollSystemView view, Connection con){
 		this.model = model;
 		this.view = view;
 		this.con = con;
 		try{
-			Scanner in = new Scanner(this.getClass().getResourceAsStream("periodStartDate.txt"));
+			Scanner in = new Scanner(this.getClass().getResourceAsStream(directory));
 			String s = in.next();
 			periodStartDate = sdf.parse(s);
-			System.out.println(sdf.format(periodStartDate));
+			view.updateTimePeriod(sdf.format(periodStartDate));
+			in.close();
 		}catch(Exception ex){
 			System.out.println("ERROR!");
 			view.showPeriodStartDateNotFound();
@@ -67,6 +70,7 @@ public class PayrollSystemController{
 		view.setViewSummaryReportListener(new viewSummaryReportListener());
 		view.setGeneratePayslipsListener(new generatePayslipsListener());
 		view.setChangePasswordListener(new changePasswordListener());
+		view.setNextTimeListener(new nextTimePeriod());
 		changePassword.setChangeListener(new changePasswordButtonListener());
 		changePassword.setCancelListener(new cancelChangePasswordButtonListener());
 		changePassword.setShowListener(new showPasswordListener());
@@ -364,6 +368,26 @@ public class PayrollSystemController{
 	class clientListGeneratePayslipsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			generatePayslips.updateDateList();
+		}
+	}
+	
+	//next time period listener
+	class nextTimePeriod implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			if(view.askConfirmation()){
+				periodStartDate = model.nextTimePeriod();
+				System.out.println(sdf.format(periodStartDate));
+				PrintWriter writer = null;
+				try{
+					writer = new PrintWriter(directory);
+				}catch(Exception ex){
+					System.out.println(ex);
+					return ;
+				}
+				writer.println(sdf.format(periodStartDate));
+				writer.close();
+				view.updateTimePeriod(sdf.format(periodStartDate));
+			}
 		}
 	}
 }

@@ -1207,6 +1207,38 @@ public class PayrollSystemModel {
 		return summaryReports;
 	}
 	
+	public Date nextTimePeriod(){
+		String c = sdf.format(periodStartDate);
+		int month = Integer.parseInt(c.substring(5,7));
+		int day = Integer.parseInt(c.substring(8,10));
+		int year = Integer.parseInt(c.substring(0,4));
+		if(day == 1){
+			day = 16;
+		}else{
+			day = 1;
+			month++;
+			if(month>12){
+				month %= 12;
+				year ++;
+			}
+		}
+		String extraZeroForMonth = "0";
+		String extraZeroForDay = "0";
+		if(month > 9){
+			extraZeroForMonth = "";
+		}
+		if(day > 9){
+			extraZeroForDay = "";
+		}
+		String newDate = year + "-" + extraZeroForMonth + month + "-" + extraZeroForDay + day;
+		try{
+			periodStartDate = sdf.parse(newDate);
+		}catch(Exception ex){
+			System.out.println(ex);
+		}
+		return periodStartDate;
+	}
+	
 	private static float tryGetFloat(String s){
 		
 		try{
