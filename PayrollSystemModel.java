@@ -78,7 +78,7 @@ public class PayrollSystemModel {
 			column = 1;
 
 			assignment = sheet.getCell(column,row).getContents();
-			if(assignment.length() < 0){
+			if(assignment.length() <= 0){
 				return 7;
 			}
 			psd = null;
